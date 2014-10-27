@@ -48,6 +48,7 @@ DROP TABLE IF EXISTS personnel;
 DROP TABLE IF EXISTS ndcodes;
 DROP TABLE IF EXISTS druginteractions;
 DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS obstetrics;
 DROP TABLE IF EXISTS historypatients;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userprefs;
@@ -61,10 +62,10 @@ DROP TABLE IF EXISTS patientspecificinstructions;
 
 DROP TABLE IF EXISTS appointmentrequests;
 
-DROP TABLE IF EXISTS Wards;
-DROP TABLE IF EXISTS WardRooms;
-DROP TABLE IF EXISTS HCPAssignedToWard;
-DROP TABLE IF EXISTS WardRoomCheckout;
+DROP TABLE IF EXISTS wards;
+DROP TABLE IF EXISTS wardrooms;
+DROP TABLE IF EXISTS hcpassignedtoward;
+DROP TABLE IF EXISTS wardroomcheckout;
 
 DROP TABLE IF EXISTS cdcweightstats;
 DROP TABLE IF EXISTS cdcheightstats;

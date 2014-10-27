@@ -16,9 +16,9 @@ public class PatientNavigation implements Tag {
 	private Tag parent;
 	// A more elegant solution here would be to use enums and have a displayName, a name, and url
 	private String pageTitles[] = { "Health Records", "Basic Health History", "Demographics",
-			"Document Office Visit", "Risk Factors", "Prescriptions" };
+			"Document Office Visit", "Risk Factors", "Prescriptions", "Obstetrics" };
 	private String pageURLs[] = { "editPHR.jsp", "viewBasicHealth.jsp", "editPatient.jsp",
-			"documentOfficeVisit.jsp", "chronicDiseaseRisks.jsp", "getPrescriptionReport.jsp" };
+			"documentOfficeVisit.jsp", "chronicDiseaseRisks.jsp", "getPrescriptionReport.jsp", "obstetricsInfo.jsp" };
 	private String thisTitle;
 
 	/**

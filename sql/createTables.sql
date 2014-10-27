@@ -25,7 +25,7 @@ CREATE TABLE hospitals(
 	PRIMARY KEY (hospitalID)
 ) ENGINE=MyISAM;
 
-CREATE TABLE Wards(
+CREATE TABLE wards(
 	WardID BIGINT unsigned AUTO_INCREMENT primary key,
 	InHospital varchar(10) NOT NULL,
 	RequiredSpecialty varchar(128),
@@ -39,7 +39,7 @@ CREATE TABLE personnel(
 	enabled tinyint(1) unsigned NOT NULL default '0',
 	lastName varchar(20) NOT NULL default '',
 	firstName varchar(20) NOT NULL default '',
-	address1 varchar(20) NOT NULL default '',
+	address1 varchar(30) NOT NULL default '',
 	address2 varchar(20) NOT NULL default '',
 	city varchar(15) NOT NULL default '',
 	state enum('','AK','AL','AR','AZ','CA','CO','CT','DE','DC','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY') NOT NULL default '',
@@ -89,6 +89,19 @@ CREATE TABLE patients(
 	AlternateName varchar(32) default '',
 	DateOfDeactivation DATE default NULL,
 	PRIMARY KEY (MID)
+) ENGINE=MyISAM;
+
+CREATE TABLE obstetrics(
+	MID BIGINT unsigned NOT NULL,
+	yearOfConception INT NOT NULL,
+	weeksPregnant varchar(4) NOT NULL,
+	hoursLabor DOUBLE default 0,
+	deliveryMethod varchar(25) NOT NULL,
+	
+	FOREIGN KEY (MID)
+		REFERENCES patients(MID)
+		ON DELETE cascade
+		ON UPDATE cascade
 ) ENGINE=MyISAM;
 
 CREATE TABLE historypatients(
@@ -514,7 +527,7 @@ CREATE TABLE appointmentrequests(
 	accepted			BOOLEAN NOT NULL
 ) ENGINE=MyISAM;
 
-CREATE TABLE WardRooms(
+CREATE TABLE wardrooms(
 	RoomID BIGINT unsigned AUTO_INCREMENT primary key,
 	OccupiedBy BIGINT unsigned default NULL,
 	InWard BIGINT unsigned NOT NULL,
@@ -524,14 +537,14 @@ CREATE TABLE WardRooms(
 	FOREIGN KEY (OccupiedBy) REFERENCES patients (MID)
 ) ENGINE=MyISAM;
 
-CREATE TABLE HCPAssignedToWard(
+CREATE TABLE hcpassignedtoward(
 	HCP BIGINT unsigned,
 	WARD BIGINT unsigned,
 	FOREIGN KEY (WARD) REFERENCES wards (WardID),
 	FOREIGN KEY (HCP) REFERENCES personnel (MID)
 ) ENGINE=MyISAM;
 
-CREATE TABLE WardRoomCheckout(
+CREATE TABLE wardroomcheckout(
 	PID BIGINT unsigned default NULL,
 	Reason VARCHAR(120),
 	FOREIGN KEY (PID) REFERENCES patients (MID)

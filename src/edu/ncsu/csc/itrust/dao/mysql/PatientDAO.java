@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.DiagnosisBean;
+import edu.ncsu.csc.itrust.beans.ObstetricsBean;
 import edu.ncsu.csc.itrust.beans.PatientBean;
 import edu.ncsu.csc.itrust.beans.PatientHistoryBean;
 import edu.ncsu.csc.itrust.beans.PersonnelBean;
@@ -1069,6 +1071,42 @@ public class PatientDAO {
 		} finally {
 			DBUtil.closeConnection(conn, ps);
 		}
+	}
+	
+	public List<ObstetricsBean> getObstetricsForPatient(long mid) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		try {
+			conn = factory.getConnection();
+			
+			ps = conn.prepareStatement("SELECT * FROM obstetrics WHERE MID = ?");
+			ps.setLong(1, mid);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			List<ObstetricsBean> loadlist = new ArrayList<ObstetricsBean>();
+			while (rs.next()) {
+				ObstetricsBean ob = new ObstetricsBean();
+				
+				ob.setMID(rs.getLong("MID"));
+				ob.setYearOfConception(rs.getInt("yearOfConception"));
+				ob.setWeeksPregnant(rs.getString("weeksPregnant"));
+				ob.setHoursLabor(rs.getDouble("hoursLabor"));
+				ob.setDeliveryMethod(rs.getString("deliveryMethod"));
+				loadlist.add(ob);
+			}		
+			
+			rs.close();
+			ps.close();
+			return loadlist;
+		} catch (SQLException e) {
+			
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	
 	}
 
 	

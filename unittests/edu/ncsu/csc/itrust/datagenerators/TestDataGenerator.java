@@ -811,6 +811,7 @@ public class TestDataGenerator {
 		
 		uc55();
 		uc56();
+		uc63();
 		if(!checkIfZipsExists()){
 			zipCodes();
 		}
@@ -891,6 +892,10 @@ public class TestDataGenerator {
 	 */
 	public void reviews() throws SQLException, FileNotFoundException, IOException{
 		new DBBuilder(factory).executeSQLFile(DIR + "/reviews.sql");
+	}
+	
+	public void uc63() throws SQLException, FileNotFoundException, IOException {
+		new DBBuilder(factory).executeSQLFile(DIR + "/uc63.sql");
 	}
 	
 	/**

@@ -7,6 +7,7 @@
 		    <li><a href="/iTrust/auth/hcp-uap/viewPatientOfficeVisitHistory.jsp">All Patients</a>
 			<li><a href="/iTrust/auth/hcp-uap/viewBasicHealth.jsp">Basic Health Information</a>
 			<li><a href="/iTrust/auth/hcp-uap/editPatient.jsp">Patient Information</a>
+			<li><a href="/iTrust/auth/hcp-uap/obstetricsInfo.jsp">Obstetrics Information</a>
 			<li><a href="/iTrust/auth/hcp-uap/editPHR.jsp">PHR Information</a>
 			<li><a href="/iTrust/auth/hcp/editRepresentatives.jsp">Representatives</a>
 			<li><a href="/iTrust/auth/hcp-uap/viewImmunizations.jsp">Immunization Report</a>
