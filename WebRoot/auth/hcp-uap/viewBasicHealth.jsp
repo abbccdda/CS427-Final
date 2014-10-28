@@ -16,7 +16,7 @@
 <%@include file="/global.jsp" %>
 
 <%
-pageTitle = "iTrust - Edit Basic Health Record";
+pageTitle = "iTrust - View Basic Health Record";
 %>
 
 <%@include file="/header.jsp" %>

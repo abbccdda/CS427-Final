@@ -102,7 +102,6 @@ public class ViewHealthRecordsHistoryAction {
 		hrDAO = factory.getHealthRecordsDAO();
 		ovDAO = factory.getOfficeVisitDAO();
 		patientDAO = factory.getPatientDAO();
-		
 		loggingAction = new EventLoggingAction(factory);		
 	}
 	

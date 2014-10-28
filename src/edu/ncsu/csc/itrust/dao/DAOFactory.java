@@ -231,6 +231,10 @@ public class DAOFactory {
 		return new FakeEmailDAO(this);
 	}
 
+	public ObstetricsDAO getObstetricsDAO(){
+		return new ObstetricsDAO(this);
+	}
+	
 	/**
 	 * 
 	 * @return this DAOFactory's ReportRequestDAO
