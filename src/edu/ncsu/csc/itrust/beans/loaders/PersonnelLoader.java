@@ -37,6 +37,7 @@ public class PersonnelLoader implements BeanLoader<PersonnelBean> {
 		p.setZip((rs.getString("zip")));
 		p.setEmail(rs.getString("email"));
 		p.setSpecialty(rs.getString("specialty"));
+		p.setMessageFilter(rs.getString("messagefilter"));
 		return p;
 	}
 
@@ -53,6 +54,7 @@ public class PersonnelLoader implements BeanLoader<PersonnelBean> {
 		ps.setString(i++, p.getZip());
 		ps.setString(i++, p.getSpecialty());
 		ps.setString(i++, p.getEmail());
+		ps.setString(i++, p.getMessageFilter());
 		return ps;
 	}
 }

@@ -67,7 +67,7 @@ pageTitle = "iTrust - View My Message ";
 				if(request.getParameter("test") != null) {
 					response.sendRedirect("messageInbox.jsp?edit=true&testFilter="+nf);
 				} else if(request.getParameter("save") != null) {
-					f_action.editMessageFilter(nf);
+					f_action.editMessageFilter(dao.getPersonnel(loggedInMID.longValue()),nf);
 					response.sendRedirect("messageInbox.jsp?filter=true"); 
 				}
 			}
@@ -122,10 +122,13 @@ pageTitle = "iTrust - View My Message ";
 	boolean is_filtered = false;
 	if((request.getParameter("filter") != null && request.getParameter("filter").equals("true")) || request.getParameter("testFilter") != null) {
 		String filter = "";
+		System.out.println("A");
 		if(request.getParameter("testFilter") != null) {
 			filter = request.getParameter("testFilter");
+			System.out.println("B");
 		} else {
 			filter = dao.getPersonnel(loggedInMID.longValue()).getMessageFilter();
+			System.out.println("C");
 		}
 		if(!filter.equals("") && !filter.equals(",,,,,")) {
 			List<MessageBean> filtered = action.filterMessages(messages, filter);
