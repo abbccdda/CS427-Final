@@ -222,6 +222,10 @@ public class ViewMyMessagesAction {
 		return filtered;
 	}
 	
+	public String validateAndCreateFilter(String filter){
+		return filter;
+	}
+	
 	/**
 	 * Gets a patient's name from their MID
 	 * 

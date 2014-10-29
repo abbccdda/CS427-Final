@@ -122,13 +122,13 @@ pageTitle = "iTrust - View My Message ";
 	boolean is_filtered = false;
 	if((request.getParameter("filter") != null && request.getParameter("filter").equals("true")) || request.getParameter("testFilter") != null) {
 		String filter = "";
-		System.out.println("A");
+		
 		if(request.getParameter("testFilter") != null) {
 			filter = request.getParameter("testFilter");
-			System.out.println("B");
+			
 		} else {
 			filter = dao.getPersonnel(loggedInMID.longValue()).getMessageFilter();
-			System.out.println("C");
+			
 		}
 		if(!filter.equals("") && !filter.equals(",,,,,")) {
 			List<MessageBean> filtered = action.filterMessages(messages, filter);
@@ -226,7 +226,7 @@ pageTitle = "iTrust - View My Message ";
 	</form>
 	<br />
 	<%if(messages.size() > 0) { %>
-	<table class="fancyTable">
+	<table class="fancyTable" id="mailbox">
 		<tr>
 			<th>Sender</th>
 			<th>Subject</th>
@@ -235,19 +235,21 @@ pageTitle = "iTrust - View My Message ";
 		</tr>
 <%		int index = 0; 
 		for(MessageBean message : messages) {
-		if(message.getRead() == 0) {%>
+			String style = "";
+		if(message.getRead() == 0) {
+		style = "style=\"font-weight: bold;\"";%>
 		<tr style="font-weight: bold;" <%=(index%2 == 1)?"class=\"alt\"":"" %>>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( action.getName(message.getFrom()) )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSubject() )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSentDate() )) %></td>
-			<td><a href="viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
+			<td><a href="/iTrust/auth/hcp-patient/viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
 		</tr>
 <% 			   } else { %>
 		<tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( action.getName(message.getFrom()) )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSubject() )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSentDate() )) %></td>
-			<td><a href="viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
+			<td><a href="/iTrust/auth/hcp-patient/viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
 		</tr>
 <% 			  } %>
 <%			index ++; %>

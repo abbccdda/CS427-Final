@@ -207,13 +207,34 @@ public class PatientDAO {
 					+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 					+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 					+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-					+ "AlternateName=?, DateOfDeactivation=? WHERE MID=?");
+					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=?, WHERE MID=?");
 
 			patientLoader.loadParameters(ps, p);
-			ps.setLong(37, p.getMID());
+			ps.setLong(38, p.getMID());
 			ps.executeUpdate();
 			
 			addHistory(p.getMID(), hcpid);
+			ps.close();
+			
+		} catch (SQLException e) {
+			
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	
+	public void editPatientFilter(PatientBean p) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("UPDATE patients SET messagefilter=? WHERE MID=?");
+
+			ps.setString(1, p.getMessageFilter());
+			ps.setLong(2, p.getMID());
+			ps.executeUpdate();
+			
 			ps.close();
 			
 		} catch (SQLException e) {

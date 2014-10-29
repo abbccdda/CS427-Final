@@ -161,4 +161,11 @@ public class EditPatientAction extends PatientBaseAction {
 		
 		return true;
 	}
+	
+	public void editMessageFilter(PatientBean pb, String filter)throws ITrustException,
+	FormValidationException {
+		pb.setMessageFilter(filter);
+		validator.validate(pb);
+		patientDAO.editPatientFilter(pb);
+	}
 }

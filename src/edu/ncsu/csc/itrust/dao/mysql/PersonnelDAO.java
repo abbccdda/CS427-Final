@@ -200,6 +200,7 @@ public class PersonnelDAO {
 					+ "phone=?, address1=?,address2=?,city=?, state=?, zip=?, specialty=?, email=?, messagefilter=?"
 					+ " WHERE MID=?");
 			personnelLoader.loadParameters(pstmt, pBean);
+			
 			pstmt.setLong(13, pBean.getMID());
 			pstmt.executeUpdate();
 			pstmt.close();

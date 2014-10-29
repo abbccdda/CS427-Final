@@ -59,8 +59,8 @@
 	<div class="panel-body" id="msg-menu">
 		<ul class="nav nav-sidebar">
 			<li><a href="/iTrust/auth/hcp/sendMessage.jsp">Compose a Message</a>
-			<li><a href="/iTrust/auth/hcp/messageInbox.jsp">Message Inbox</a>
-			<li><a href="/iTrust/auth/hcp/messageOutbox.jsp">Message Outbox</a>
+			<li><a href="/iTrust/auth/hcp-patient/messageInbox.jsp">Message Inbox</a>
+			<li><a href="/iTrust/auth/hcp-patient/messageOutbox.jsp">Message Outbox</a>
 		    <li><a href="/iTrust/auth/hcp-uap/showEmailHistory.jsp">Email History</a>
 		</ul>
 	</div>
