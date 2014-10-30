@@ -64,7 +64,7 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 				//.getParameterMap(), new ObstetricsBean());
 				obstetricsAction.addObstetricsInfo(b);
 				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-
+			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
 
 %>
 <br />
