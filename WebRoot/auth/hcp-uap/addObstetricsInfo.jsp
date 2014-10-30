@@ -33,8 +33,8 @@ if (pidString == null || 1 > pidString.length()) {
 	return;
 }
 
-String mid = request.getParameter("MID");
-session.setAttribute("mid", mid);
+//String mid = request.getParameter("MID");
+//session.setAttribute("mid", mid);
 
 String firstName = request.getParameter("FIRST_NAME");
 String lastName = request.getParameter("LAST_NAME");
@@ -53,10 +53,15 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 	
 		if (formIsFilled) {
 			System.out.println("Form is filled");
-			//b = new ObstetricsBean();
+			b = new ObstetricsBean();
+			b.setMID(obstetricsAction.getPatientMID());
+			b.setYearOfConception(Integer.parseInt(request.getParameter("yearOfConception")));
+			b.setWeeksPregnant(request.getParameter("weeksPregnant"));
+			b.setHoursLabor(Double.parseDouble(request.getParameter("hoursLabor")));
+			b.setDeliveryMethod(request.getParameter("deliveryMethod"));
 			//Map m = request.getParameterMap();
-			b = new BeanBuilder<ObstetricsBean>().build(request
-				.getParameterMap(), new ObstetricsBean());
+			//b = new BeanBuilder<ObstetricsBean>().build(request
+				//.getParameterMap(), new ObstetricsBean());
 				obstetricsAction.addObstetricsInfo(b);
 				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 
@@ -70,8 +75,9 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 <%
 		} else {
 			System.out.println("Form not filled");
-			b = new BeanBuilder<ObstetricsBean>().build(request
-					.getParameterMap(), new ObstetricsBean());
+			b = new ObstetricsBean();
+//			b = new BeanBuilder<ObstetricsBean>().build(request
+	//				.getParameterMap(), new ObstetricsBean());
 			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 		}
 %>

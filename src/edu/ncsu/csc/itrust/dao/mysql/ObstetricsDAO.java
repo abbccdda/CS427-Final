@@ -38,9 +38,8 @@ public class ObstetricsDAO {
 		
 		try{
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO obstetrics (YearOfConception, WeeksPregnant, HoursLabor, DeliveryMethod) VALUES (?,?,?,?)");
+			ps = conn.prepareStatement("INSERT INTO obstetrics (MID, yearOfConception, weeksPregnant, hoursLabor, deliveryMethod) VALUES (?,?,?,?,?)");
 			setValues(ps, ob);
-			
 			ps.executeUpdate();
 			ps.close();
 			return DBUtil.getLastInsert(conn);
@@ -70,10 +69,11 @@ public class ObstetricsDAO {
 	}
 	
 	private void setValues(PreparedStatement ps, ObstetricsBean ob) throws SQLException {
-		ps.setInt(1, ob.getYearOfConception());
-		ps.setString(2, ob.getWeeksPregnant());
-		ps.setDouble(3, ob.getHoursLabor());
-		ps.setString(4, ob.getDeliveryMethod());
+		ps.setLong(1, ob.getMID());
+		ps.setInt(2, ob.getYearOfConception());
+		ps.setString(3, ob.getWeeksPregnant());
+		ps.setDouble(4, ob.getHoursLabor());
+		ps.setString(5, ob.getDeliveryMethod());
 	}
 
 	/**

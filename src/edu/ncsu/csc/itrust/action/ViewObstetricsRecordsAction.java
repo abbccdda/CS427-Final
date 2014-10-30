@@ -53,6 +53,10 @@ public class ViewObstetricsRecordsAction {
 		return patientDAO.getPatient(patientMID);
 	}
 	
+	public long getPatientMID() throws DBException {
+		return this.patientMID;
+	}
+	
 	public String getPersonnelSpecialty() throws ITrustException{
 		return personnelDAO.getPersonnel(loggedInMID).getSpecialty();
 	}
