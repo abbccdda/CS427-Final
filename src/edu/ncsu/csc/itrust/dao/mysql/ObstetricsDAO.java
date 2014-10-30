@@ -10,11 +10,13 @@ import java.util.List;
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.HealthRecord;
 import edu.ncsu.csc.itrust.beans.ObstetricsBean;
+import edu.ncsu.csc.itrust.beans.OfficeVisitBean;
 import edu.ncsu.csc.itrust.beans.PatientHistoryBean;
 import edu.ncsu.csc.itrust.beans.PersonnelBean;
 import edu.ncsu.csc.itrust.beans.loaders.ObstetricsLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
 
 /**
  * This is the Data Access Object used to represent/communicate with the Obstetrics Database
@@ -28,6 +30,50 @@ public class ObstetricsDAO {
 	public ObstetricsDAO(DAOFactory factory){
 		this.factory = factory;
 		this.obstetricsLoader = new ObstetricsLoader();
+	}
+	
+	public long add(ObstetricsBean ob) throws DBException, ITrustException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		try{
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("INSERT INTO obstetrics (MID, yearOfConception, weeksPregnant, hoursLabor, deliveryMethod) VALUES (?,?,?,?,?)");
+			setValues(ps, ob);
+			ps.executeUpdate();
+			ps.close();
+			return DBUtil.getLastInsert(conn);
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	
+	public void edit(ObstetricsBean ob) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		try{
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("UPDATE obstetrics SET YearOfConception=?, WeeksPregnant=?, HoursLabor=?, DeliveryMethod=? WHERE MID=?");
+			setValues(ps, ob);
+			ps.setLong(5, ob.getMID());
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	
+	private void setValues(PreparedStatement ps, ObstetricsBean ob) throws SQLException {
+		ps.setLong(1, ob.getMID());
+		ps.setInt(2, ob.getYearOfConception());
+		ps.setString(3, ob.getWeeksPregnant());
+		ps.setDouble(4, ob.getHoursLabor());
+		ps.setString(5, ob.getDeliveryMethod());
 	}
 
 	/**

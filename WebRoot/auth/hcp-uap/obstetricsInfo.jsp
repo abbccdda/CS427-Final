@@ -43,7 +43,8 @@ String patientName = obstetricsAction.getPatientName();
 List<ObstetricsBean> records = obstetricsAction.getAllObstetricsRecords();
 //Save the list of health records in the session
 session.setAttribute("obstetricsRecords", records);
-System.out.println("here");
+System.out.println("here"); //found it!
+boolean isOBGYN = obstetricsAction.getPersonnelSpecialty().equalsIgnoreCase("OB/GYN");
 
 %>
 
@@ -57,6 +58,12 @@ System.out.println("here");
 		%>
 			<p style="font-size:20px"><i>No Obstetric Information</i></p>
 		<%
+		if (isOBGYN){
+			%>			
+				<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
+				onclick="window.location='addObstetricsInfo.jsp'">
+			<%
+		}
 	}
 	else{
 		%>
@@ -83,6 +90,12 @@ System.out.println("here");
 					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getHoursLabor())) %></td>
 				</tr>
 				<%
+		}
+		if (isOBGYN){
+			%>
+				<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
+				onclick="window.location='addObstetricsInfo.jsp'">
+			<%
 		}
 	}
 

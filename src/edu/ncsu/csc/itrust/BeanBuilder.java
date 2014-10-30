@@ -38,6 +38,7 @@ public class BeanBuilder<T> {
 			// if object is null, either it was ignored or empty - just go with
 			// bean's default
 			String[] value = (String[]) map.get(descriptor.getName());
+			//System.out.println(descriptor.getName());
 			Method writeMethod = descriptor.getWriteMethod();
 			if (!"class".equals(descriptor.getName()) && value != null && writeMethod != null) {
 				// descriptor's name is the name of your property; like
