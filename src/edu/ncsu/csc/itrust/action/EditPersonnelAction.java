@@ -20,7 +20,8 @@ public class EditPersonnelAction extends PersonnelBaseAction {
 	private PersonnelDAO personnelDAO;
 	private AuthDAO authDAO;
 	private PersonnelValidator validator = new PersonnelValidator();;
-
+	
+	
 	/**
 	 * Super class validates the patient id
 	 * 
@@ -60,5 +61,13 @@ public class EditPersonnelAction extends PersonnelBaseAction {
 		validator.validate(personnelForm);
 		personnelDAO.editPersonnel(personnelForm);
 	}
+	
+	public void editMessageFilter(PersonnelBean personnelForm, String filter)throws ITrustException,
+	FormValidationException {
+		personnelForm.setMessageFilter(filter);
+		validator.validate(personnelForm);
+		personnelDAO.editPersonnel(personnelForm);
+	}
+	
 	
 }

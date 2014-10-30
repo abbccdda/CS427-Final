@@ -19,8 +19,12 @@ loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, 
 <%@include file="/header.jsp" %>
 
 <div align=center>
-	<h2>My Messages</h2>
-	<%@include file="/auth/hcp-patient/mailbox.jsp" %>
+	<%if(session.getAttribute("isHCP").toString().equals("true")){
+		response.sendRedirect("/iTrust/auth/hcp/messageInbox.jsp");
+	}
+		else{
+			response.sendRedirect("/iTrust/auth/patient/messageInbox.jsp");
+		}%>
 
 </div>
 

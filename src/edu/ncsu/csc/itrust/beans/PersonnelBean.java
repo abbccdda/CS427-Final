@@ -1,6 +1,7 @@
 package edu.ncsu.csc.itrust.beans;
 
 import edu.ncsu.csc.itrust.enums.Role;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class PersonnelBean implements Serializable {
 	private String phone = "";
 	private String email = "";
 	private String specialty = "";
+	private String messagefilter = "";
 
 	public String getEmail() {
 		return email;
@@ -204,6 +206,14 @@ public class PersonnelBean implements Serializable {
 	public int hashCode() {
 		assert false : "hashCode not designed";
 		return 0;
+	}
+	
+	public String getMessageFilter(){
+		return messagefilter;
+	}
+	
+	public void setMessageFilter(String filter){
+		messagefilter= filter;
 	}
 
 }

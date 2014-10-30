@@ -61,6 +61,7 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 	private String spiritualPractices = "";
 	private String alternateName = "";
 	private String dateOfDeactivationStr = "";
+	private String messagefilter="";
 
 
 	public BloodType getBloodType() {
@@ -499,4 +500,11 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 		return 42; // any arbitrary constant will do
 	}
 	
+	public String getMessageFilter(){
+		return messagefilter;
+	}
+	
+	public void setMessageFilter(String filter){
+		messagefilter = filter;
+	}
 }

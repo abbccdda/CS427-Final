@@ -25,6 +25,7 @@ pageTitle = "iTrust - View My Message ";
 	<h2>My Messages</h2>
 	
 <%
+	loggingAction.logEvent(TransactionType.INBOX_VIEW, loggedInMID.longValue(), 0L, "");
 	ViewMyMessagesAction action = new ViewMyMessagesAction(prodDAO, loggedInMID.longValue());
 	EditPatientAction f_action = new EditPatientAction(prodDAO, loggedInMID.longValue(), loggedInMID.toString());
 	PatientDAO dao = new PatientDAO(prodDAO);
@@ -65,7 +66,7 @@ pageTitle = "iTrust - View My Message ";
 				if(request.getParameter("test") != null) {
 					response.sendRedirect("messageInbox.jsp?edit=true&testFilter="+nf);
 				} else if(request.getParameter("save") != null) {
-					f_action.editMessageFilter(nf);
+					f_action.editMessageFilter(dao.getPatient(loggedInMID.longValue()),nf);
 					response.sendRedirect("messageInbox.jsp?filter=true"); 
 				}
 			}
@@ -225,7 +226,7 @@ pageTitle = "iTrust - View My Message ";
 	</form>
 	<br />
 	<%if(messages.size() > 0) { %>
-	<table class="fancyTable">
+	<table class="fancyTable" id="mailbox">
 		<tr>
 			<th>Sender</th>
 			<th>Subject</th>
@@ -239,14 +240,14 @@ pageTitle = "iTrust - View My Message ";
 			<td><%= StringEscapeUtils.escapeHtml("" + ( action.getName(message.getFrom()) )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSubject() )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSentDate() )) %></td>
-			<td><a href="viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
+			<td><a href="/iTrust/auth/hcp-patient/viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
 		</tr>
 <% 			   } else { %>
 		<tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( action.getName(message.getFrom()) )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSubject() )) %></td>
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSentDate() )) %></td>
-			<td><a href="viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
+			<td><a href="/iTrust/auth/hcp-patient/viewMessageInbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Read</a></td>
 		</tr>
 <% 			  } %>
 <%			index ++; %>
