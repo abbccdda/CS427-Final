@@ -1,7 +1,8 @@
 package edu.ncsu.csc.itrust.enums;
 
 public enum DeliveryMethod {
-	Vaginal_Delivery("Vaginal Delivery"), Caesarean_Section("Caesarean Section"), NS("N/S");
+	Vaginal_Delivery("Vaginal Delivery"), Caesarean_Section("Caesarean Section"), Miscarriage("Miscarriage"),
+	NS("N/S");
 	
 	private String name;
 

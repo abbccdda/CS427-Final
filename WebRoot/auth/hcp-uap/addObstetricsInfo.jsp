@@ -33,39 +33,23 @@ if (pidString == null || 1 > pidString.length()) {
 	return;
 }
 
-//String mid = request.getParameter("MID");
-//session.setAttribute("mid", mid);
-
-String firstName = request.getParameter("FIRST_NAME");
-String lastName = request.getParameter("LAST_NAME");
-if(firstName == null)
-	firstName = "";
-if(lastName == null)
-	lastName = "";
-
 ViewObstetricsRecordsAction obstetricsAction = new ViewObstetricsRecordsAction(prodDAO,pidString,loggedInMID.longValue());
 String patientName = obstetricsAction.getPatientName();
-boolean isAudit = request.getParameter("forward") != null && request.getParameter("forward").contains("hcp/auditPage.jsp");
 
 boolean formIsFilled = request.getParameter("formIsFilled") != null
 	&& request.getParameter("formIsFilled").equals("true");
 	ObstetricsBean b;
 	
 		if (formIsFilled) {
-			System.out.println("Form is filled");
 			b = new ObstetricsBean();
 			b.setMID(obstetricsAction.getPatientMID());
 			b.setYearOfConception(Integer.parseInt(request.getParameter("yearOfConception")));
 			b.setWeeksPregnant(request.getParameter("weeksPregnant"));
 			b.setHoursLabor(Double.parseDouble(request.getParameter("hoursLabor")));
 			b.setDeliveryMethod(request.getParameter("deliveryMethod"));
-			//Map m = request.getParameterMap();
-			//b = new BeanBuilder<ObstetricsBean>().build(request
-				//.getParameterMap(), new ObstetricsBean());
-				obstetricsAction.addObstetricsInfo(b);
-				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-
-
+			obstetricsAction.addObstetricsInfo(b);
+			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
 %>
 <br />
 	<div align=center>
@@ -74,10 +58,7 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 <br />
 <%
 		} else {
-			System.out.println("Form not filled");
 			b = new ObstetricsBean();
-//			b = new BeanBuilder<ObstetricsBean>().build(request
-	//				.getParameterMap(), new ObstetricsBean());
 			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 		}
 %>
