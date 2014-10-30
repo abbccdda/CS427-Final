@@ -13,6 +13,7 @@
 <%@page import="edu.ncsu.csc.itrust.beans.DiagnosisBean"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException" %>
 
+
 <%@include file="/global.jsp"%>
 
 <%
@@ -22,31 +23,127 @@
 <%@include file="/header.jsp"%>
 <itrust:patientNav thisTitle="Obstetrics" />
 <%
-	/* Require a Patient ID first */
-	String pidString = (String) session.getAttribute("pid");
-	if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
-		out.println("pidstring is null");
-		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricsInfo.jsp");
-		return;
-	}
+//Require a Patient ID first
+String pidString = (String)session.getAttribute("pid");
+if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
+	out.println("pidstring is null");
+	response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricsInfo.jsp");
+	return;
+}
+
+//Create ViewHealthRecordsHistoryAction object to interact with patient's historical health metric history
+//ViewHealthRecordsHistoryAction historyAction = new ViewHealthRecordsHistoryAction(prodDAO,pidString,loggedInMID.longValue());
+ObstetricsInfoAction obstetricsAction = new ObstetricsInfoAction(prodDAO,pidString);
+
+//Get the patient's name
+String patientName = obstetricsAction.getPatientName();
+
+//Get all of the patient's health records
+List<ObstetricsBean> records = obstetricsAction.getAllObstetrics();
+//System.out.println("getMid" + records[0].getMID());
+
+//Save the list of health records in the session
+session.setAttribute("obstetricsRecords", records);
+System.out.println("here");
+
+String day = request.getParameter("userSer");
+
+
+
+	
+	
+	
 	
 	try {
 		/* If the patient id doesn't check out, then kick 'em out to the exception handler */
 		ObstetricsInfoAction action = new ObstetricsInfoAction(prodDAO, pidString);
-		List<ObstetricsBean> records = action.getAllObstetrics();
 		%>
 		
 		
 		<br />
 		<div align=center>
 			<table id="HealthRecordsTable" align="center" class="fTable">
-			<%
-				if(records.isEmpty()){
-			%>
-				<p style="font-size:20px"><i>No obstetrics records available</i></p>
+			
+			
+			
+	<%
+	
+	if(records.isEmpty()){
+		%>
+			<p style="font-size:20px"><i>No Obstetric Information</i></p>
+		<%
+	}
+	else{
+		%>
+		<%
+			//Modified part!! added the day variable to detect the input
+			if(day == null){
+				%>
+				<form id="userSearchForm" action="obstetricsInfo.jsp" >
+				<td><input type="submit" value="Calculate" /></td>
+				<td><input name = "userSer" type="text" maxlength="20" size="50" value="enter a valid date: dd/mm/yy" /></td>
+			</form>
 			<%
 				}
+					else{
+						String[] res = ObstetricsInfoAction.calculateEDDAndWeek(day);
+						if(res[0].equals("invalid input, try again")){
+							%>
+	
+							<p style="font-size:20px"><i><%= res[0] %></i></p>
+							<form id="again" action="obstetricsInfo.jsp" >
+								<td><input type="submit" value="Calculate another date" /></td>
+							</form>
+							<%
+						}
+						else{
+			
 			%>
+								<p style="font-size:20px"><i> EDD(estimated due date) is <%= res[0] %></i></p>
+								<p style="font-size:20px"><i> weeks of pregnant is <%= res[1] %></i></p>
+								<p style="font-size:20px"><i> days difference is <%= res[2] %></i></p>
+								<form id="again" action="obstetricsInfo.jsp" >
+								<td><input type="submit" value="Calculate another date" /></td>
+							</form>
+		<%
+						}
+			}
+		//end of modified part, I just put an extra option here
+		%>
+		
+		
+		
+		
+		<tr>
+			<th colspan="4" style="text-align: center;">Obstetric History</th>
+		</tr>
+		<tr class = "subHeader">
+			<td>Delivery Method</td>
+			<td>Weeks Pregnant - Days</td>
+			<td>Year of Conception</td>
+			<td>Hours of Labor</td>
+			
+			
+		</tr>
+		<%
+		for(ObstetricsBean bean : records){
+				%>
+				<!-- 
+				Get the year of contraception, the number of weeks pregnant, the hours in labor, and the delivery method in a table
+				-->
+				<tr>
+					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getDeliveryMethod())) %></td>
+					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getWeeksPregnant())) %></td>
+					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getYearOfConception())) %></td>
+					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getHoursLabor())) %></td>
+				</tr>
+				<%
+		}
+	}
+
+	%>
+			
+			
 			</table>
 		</div>
 			
@@ -61,17 +158,7 @@
 		<%
 	}
 	
-	/* Now take care of updating information */
 	
-// 	boolean formIsFilled = request.getParameter("formIsFilled") != null
-// 			&& request.getParameter("formIsFilled").equals("true");
-// 	PatientBean p;
-// 	if (formIsFilled) {
-// 		p = new BeanBuilder<PatientBean>().build(request
-// 				.getParameterMap(), new PatientBean());
-// 		try {
-// 			action.updateInformation(p);
-// 			loggingAction.logEvent(TransactionType.DEMOGRAPHICS_EDIT, loggedInMID.longValue(), p.getMID(), "");
 %>
 
 <itrust:patientNav thisTitle="Obstetrics" />
