@@ -43,15 +43,16 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 		if (formIsFilled) {
 			b = new ObstetricsBean();
 			b.setMID(obstetricsAction.getPatientMID());
-			b.setYearOfConception(Integer.parseInt(request.getParameter("yearOfConception")));
+			String year = request.getParameter("yearOfConception");
+			if(year.length()>4){
+				year = year.substring(year.length()-4);	
+			}
+			b.setYearOfConception(Integer.parseInt(year));
 			b.setWeeksPregnant(request.getParameter("weeksPregnant"));
 			b.setHoursLabor(Double.parseDouble(request.getParameter("hoursLabor")));
 			b.setDeliveryMethod(request.getParameter("deliveryMethod"));
 			obstetricsAction.addObstetricsInfo(b);
 			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
-				obstetricsAction.addObstetricsInfo(b);
-				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
 
 %>
@@ -63,6 +64,7 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 <%
 		} else {
 			b = new ObstetricsBean();
+			System.out.println(b.getMID());
 			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 		}
 %>
