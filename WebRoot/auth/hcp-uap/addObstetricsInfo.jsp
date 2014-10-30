@@ -50,6 +50,10 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 			obstetricsAction.addObstetricsInfo(b);
 			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
+				obstetricsAction.addObstetricsInfo(b);
+				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
+
 %>
 <br />
 	<div align=center>
