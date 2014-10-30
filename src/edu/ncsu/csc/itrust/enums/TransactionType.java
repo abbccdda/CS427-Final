@@ -418,7 +418,9 @@ public enum TransactionType {
 	/**SUBMIT_REVIEW*/
 	SUBMIT_REVIEW(6102, "Patient submitted a review for an HCP.", "submitted review", true),
 	/**VIEW_OBSTETRICS*/
-	VIEW_OBSTETRICS(6301,"HCP View of Obstetrics Information","viewed obstetrics",true);
+	VIEW_OBSTETRICS(6301,"HCP View of Obstetrics Information","viewed obstetrics",true),
+	/**ADD_OBSTETRICS*/
+	ADD_OBSTETRICS(6302,"HCP Added Obstetrics Information","added obstetrics",true);
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
 	 * display in a patient's Access Log

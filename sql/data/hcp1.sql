@@ -25,7 +25,7 @@ null,
 'NC',
 '27614',
 '999-888-7777',
-'Neurologist',
+'OB/GYN',
 'tarehart@iTrust.org'
 ) ON DUPLICATE KEY UPDATE mid = mid;
 
