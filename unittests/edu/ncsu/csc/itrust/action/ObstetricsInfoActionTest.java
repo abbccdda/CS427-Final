@@ -51,7 +51,7 @@ public class ObstetricsInfoActionTest extends TestCase {
 	
 	public void testGetAllObstetrics() throws DBException {
 		List<ObstetricsBean> obstetrics = action.getAllObstetrics();
-		assertEqual(obstetrics.size(), 11);
+		assertTrue(obstetrics.size() == 11);
 	}
 
 }

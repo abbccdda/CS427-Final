@@ -24,7 +24,7 @@ pageTitle = "iTrust - View Obstetric Record";
 %>
 
 <%@include file="/header.jsp" %>
-<itrust:patientNav thisTitle="Obstetric Record" />
+<itrust:patientNav thisTitle="Obstetrics" />
 <%
 // Require a Patient ID first
 String pidString = (String)session.getAttribute("pid");
