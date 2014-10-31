@@ -145,7 +145,7 @@ public class AddObstetricsRecordTest extends iTrustHTTPTest {
 		form.setParameter("deliveryMethod", "Vaginal Delivery");
 		form.getSubmitButtons()[0].click();
 		
-		//Verify info was not submitted
+		//Verify info was not submitted because
 		wr = wc.getCurrentPage();
 		wt = wr.getTableStartingWith("Obstetric History for Random Person");
 		assertEquals(wt.getCellAsText(0,0), "Obstetric History for Random Person");
