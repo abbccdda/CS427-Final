@@ -14,6 +14,7 @@
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.beans.ObstetricsBean"%>
+<%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException" %>
 
@@ -66,9 +67,9 @@ String day = request.getParameter("userSer");
 		<%
 	}
 	
-	if(records.isEmpty()){
+	if(obstetricsAction.getPatient().getGender()==Gender.Male){
 		%>
-			<p style="font-size:20px"><i>No Obstetric Information</i></p>
+			<p style="font-size:20px"><i>No Obstetric Information, Male Patient</i></p>
 		<%
 		
 	}
@@ -83,7 +84,7 @@ String day = request.getParameter("userSer");
 		
 		<br />
 		<div align=center>
-			<table id="HealthRecordsTable" align="center" class="fTable">
+			<table id="ObstetricsRecordsTable" align="center" class="fTable">
 			
 			
 			
