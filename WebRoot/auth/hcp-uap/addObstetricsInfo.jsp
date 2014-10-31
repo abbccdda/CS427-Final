@@ -43,25 +43,46 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 		if (formIsFilled) {
 			b = new ObstetricsBean();
 			b.setMID(obstetricsAction.getPatientMID());
-			String year = request.getParameter("yearOfConception");
-			if(year.length()>4){
-				year = year.substring(year.length()-4);	
+			int year = Integer.parseInt(request.getParameter("yearOfConception"));
+			boolean yearIsValid = (year >= 1900) && (year < 2050);
+			String weeks = request.getParameter("weeksPregnant");
+			boolean weeksIsValid = (weeks.charAt(2) == '-') && (weeks.length() == 4);
+			double hours = Double.parseDouble(request.getParameter("hoursLabor"));
+			boolean hoursIsValid = (hours >= 0.0) && (hours < 250.0);
+			boolean allAreValid = yearIsValid && weeksIsValid && hoursIsValid;
+			
+			if (allAreValid){
+				b.setYearOfConception(year);
+				b.setWeeksPregnant(weeks);
+				b.setHoursLabor(hours);
+				b.setDeliveryMethod(request.getParameter("deliveryMethod"));
+				obstetricsAction.addObstetricsInfo(b);
+				loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+				response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
+			} else {
+				if (!yearIsValid){
+					loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+					%>
+					<div align=center>
+						<span class="iTrustMessage" style="color:red">Error: invalid year of conception</span>
+					</div>
+					<%
+				} if (!weeksIsValid){
+					loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+					%>
+					<div align=center>
+						<span class="iTrustMessage" style="color:red">Error: invalid weeks pregnant</span>
+					</div>
+					<%
+				} if (!hoursIsValid){
+					loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
+					%>
+					<div align=center>
+						<span class="iTrustMessage" style="color:red">Error: invalid hours labor</span>
+					</div>
+					<%
+				}
 			}
-			b.setYearOfConception(Integer.parseInt(year));
-			b.setWeeksPregnant(request.getParameter("weeksPregnant"));
-			b.setHoursLabor(Double.parseDouble(request.getParameter("hoursLabor")));
-			b.setDeliveryMethod(request.getParameter("deliveryMethod"));
-			obstetricsAction.addObstetricsInfo(b);
-			loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-			response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
-
-%>
-<br />
-	<div align=center>
-		<span class="iTrustMessage">Information Successfully Updated</span>
-	</div>
-<br />
-<%
 		} else {
 			b = new ObstetricsBean();
 			System.out.println(b.getMID());

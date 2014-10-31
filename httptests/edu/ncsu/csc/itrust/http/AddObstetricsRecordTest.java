@@ -103,8 +103,8 @@ public class AddObstetricsRecordTest extends iTrustHTTPTest {
 				
 		//Select Obstetrics
 		wr = wr.getLinkWith("Obstetrics").click();
-		WebTable wt = wr.getTableStartingWith("Random Person's Obstetric History");
-		assertEquals("Random Person's Obstetric History", wt.getCellAsText(0, 0));
+		WebTable wt = wr.getTableStartingWith("Obstetric History");
+		assertEquals("Obstetric History", wt.getCellAsText(0, 0));
 		
 		//Click Add Obstetrics Info
 		WebForm form = wr.getForms()[0];
@@ -160,7 +160,7 @@ public class AddObstetricsRecordTest extends iTrustHTTPTest {
 		
 		//Verify info was saved
 		wr = wc.getCurrentPage();
-		wt = wr.getTableStartingWith("Random Person's Obstetric History");
+		wt = wr.getTableStartingWith("Obstetric History");
 		assertEquals("1985", wt.getCellAsText(wt.getRowCount()-1, 2));
 		assertEquals("37-5", wt.getCellAsText(wt.getRowCount()-1, 1));
 		assertEquals("25.0", wt.getCellAsText(wt.getRowCount()-1, 3));
