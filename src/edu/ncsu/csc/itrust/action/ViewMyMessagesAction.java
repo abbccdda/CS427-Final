@@ -223,7 +223,27 @@ public class ViewMyMessagesAction {
 	}
 	
 	public String validateAndCreateFilter(String filter){
-		return filter;
+		List<MessageBean> filtered = new ArrayList<MessageBean>();
+		String[] f = filter.split(",", -1);
+		if(!f[4].equals("")) {
+			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+			try{
+				Date s = format.parse(f[4]);
+			}
+			catch(IllegalArgumentException e){
+				return "Error"+filter
+			}
+		}
+		if(!f[5].equals("")) {
+			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+			try{
+				Date s = format.parse(f[5]);
+			}
+			catch(IllegalArgumentException e){
+				return "Error"+filter
+			}
+		}
+		return filtered;
 	}
 	
 	/**
