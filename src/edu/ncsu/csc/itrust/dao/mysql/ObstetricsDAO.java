@@ -38,8 +38,8 @@ public class ObstetricsDAO {
 		
 		try{
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO obstetrics (MID, yearOfConception, weeksPregnant, hoursLabor, deliveryMethod) VALUES (?,?,?,?,?)");
-			setValues(ps, ob);
+			ps = conn.prepareStatement("INSERT INTO obstetrics (yearOfConception, weeksPregnant, hoursLabor, deliveryMethod, MID) VALUES (?,?,?,?,?)");
+			ps = obstetricsLoader.loadParameters(ps, ob);
 			ps.executeUpdate();
 			ps.close();
 			return DBUtil.getLastInsert(conn);
@@ -56,24 +56,15 @@ public class ObstetricsDAO {
 		
 		try{
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("UPDATE obstetrics SET YearOfConception=?, WeeksPregnant=?, HoursLabor=?, DeliveryMethod=? WHERE MID=?");
-			setValues(ps, ob);
-			ps.setLong(5, ob.getMID());
+			ps = conn.prepareStatement("UPDATE obstetrics SET yearOfConception=?, weeksPregnant=?, hoursLabor=?, deliveryMethod=? WHERE MID=?");
+			ps = obstetricsLoader.loadParameters(ps, ob);
 			ps.executeUpdate();
-			ps.close();
 		} catch (SQLException e) {
+			System.out.println(e.getLocalizedMessage());
 			throw new DBException(e);
 		} finally {
 			DBUtil.closeConnection(conn, ps);
 		}
-	}
-	
-	private void setValues(PreparedStatement ps, ObstetricsBean ob) throws SQLException {
-		ps.setLong(1, ob.getMID());
-		ps.setInt(2, ob.getYearOfConception());
-		ps.setString(3, ob.getWeeksPregnant());
-		ps.setDouble(4, ob.getHoursLabor());
-		ps.setString(5, ob.getDeliveryMethod());
 	}
 
 	/**

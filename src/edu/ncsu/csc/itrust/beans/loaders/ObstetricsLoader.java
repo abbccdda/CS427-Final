@@ -31,9 +31,13 @@ public class ObstetricsLoader implements BeanLoader<ObstetricsBean> {
 	}
 
 	@Override
-	public PreparedStatement loadParameters(PreparedStatement ps,
-			ObstetricsBean bean) throws SQLException {
-		throw new IllegalStateException("unimplemented!");
+	public PreparedStatement loadParameters(PreparedStatement ps, ObstetricsBean ob) throws SQLException {
+		ps.setInt(1, ob.getYearOfConception());
+		ps.setString(2, ob.getWeeksPregnant());
+		ps.setDouble(3, ob.getHoursLabor());
+		ps.setString(4, ob.getDeliveryMethod());
+		ps.setLong(5, ob.getMID());
+		return ps;
 	}
 
 }

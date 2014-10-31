@@ -22,6 +22,7 @@ DELETE FROM billing;
 DELETE FROM reviews;
 DELETE FROM appointment;
 DELETE FROM appointmenttype;
+DELETE FROM obstetrics;
 
 DELETE FROM personalallergies;
 DELETE FROM personalhealthinformation;
