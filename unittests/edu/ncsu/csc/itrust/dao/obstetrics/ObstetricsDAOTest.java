@@ -51,7 +51,6 @@ public class ObstetricsDAOTest extends TestCase{
 	
 	
 	/**
-	 * @Todo - for some reason this test is broken. The database is not editing like it should be. 3.0 is the default value.
 	 * Tests that the obstetrics information for an invidividual patient can be edited in the database.
 	 * @throws Exception
 	 */

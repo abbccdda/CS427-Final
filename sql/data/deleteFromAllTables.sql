@@ -23,7 +23,7 @@ DELETE FROM reviews;
 DELETE FROM appointment;
 DELETE FROM appointmenttype;
 DELETE FROM obstetrics;
-
+DELETE FROM obstetricsvisit;
 DELETE FROM personalallergies;
 DELETE FROM personalhealthinformation;
 DELETE FROM personalrelations;

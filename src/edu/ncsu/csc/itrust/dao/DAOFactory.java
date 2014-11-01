@@ -235,6 +235,10 @@ public class DAOFactory {
 		return new ObstetricsDAO(this);
 	}
 	
+	public ObstetricsVisitDAO getObstetricsVisitDAO(){
+		return new ObstetricsVisitDAO(this);
+	}
+	
 	/**
 	 * 
 	 * @return this DAOFactory's ReportRequestDAO
