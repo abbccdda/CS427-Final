@@ -239,6 +239,10 @@ public class ViewMyMessagesAction {
 			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 			try{
 				Date s = format.parse(f[5]);
+				if(!f[4].equals("")) {
+						Date s2 = format.parse(f[4]);
+						if(s.before(s2)) return "Error saving filter[END DATE BEFORE START DATE]: "+filter;
+					}
 			}
 			catch (ParseException e) {
 				return "Error saving filter: "+filter;

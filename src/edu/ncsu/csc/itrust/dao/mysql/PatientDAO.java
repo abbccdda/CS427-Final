@@ -255,7 +255,6 @@ public class PatientDAO {
 			ps = conn.prepareStatement("INSERT INTO historypatients SELECT null, CURDATE(), ?, p.* FROM patients p WHERE p.mid=?");
 			ps.setLong(1, hcpid);
 			ps.setLong(2, pid);
-			System.out.println(ps);
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
