@@ -41,7 +41,7 @@ public class EditPatientActionTest extends TestCase {
 	public void testEditRepresentatives() throws Exception {
 		action = new EditPatientAction(factory, 2l, "2");
 		PatientDAO po = new PatientDAO(factory);
-		PatientBean pb = po.getPatient(2);
+		PatientBean pb = po.getPatient(2l);
 		assertEquals("Andy", pb.getFirstName());
 		assertEquals("Programmer", pb.getLastName());
 		assertEquals("0", pb.getFatherMID());
@@ -171,5 +171,17 @@ public class EditPatientActionTest extends TestCase {
 		
 		//Check that patient 2 is not a dependent
 		assertFalse(authDAO.isDependent(2L));
+	}
+	
+	public void testEditMessageFilter() throws Exception{
+		gen.patient1();
+		action = new EditPatientAction(factory, 1L, "1");
+		PatientDAO po = TestDAOFactory.getTestInstance().getPatientDAO();
+		PatientBean pb1 = po.getPatient(1l);
+		//pb1.setMessageFilter("Andy Programmer,Scratchy Throat,,,,");
+		//action.updateInformation(pb1);
+		action.editMessageFilter(pb1, "Andy Programmer,Scratchy Throat,,,,");
+		pb1 = po.getPatient(1l);
+		assertEquals("Andy Programmer,Scratchy Throat,,,,", pb1.getMessageFilter());
 	}
 }

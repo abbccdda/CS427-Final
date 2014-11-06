@@ -79,5 +79,14 @@ public class EditPersonnelActionTest extends TestCase {
 		assertEquals("second line", j.getStreetAddress2());
 	}
 	
+	public void testEditMessageFilter() throws Exception {
+		gen.hcp0();
+		personnelEditor = new EditPersonnelAction(factory, 9000000000L, "9000000000");
+		PersonnelBean j = factory.getPersonnelDAO().getPersonnel(9000000000l);
+		j.setMessageFilter("Andy Programmer,Scratchy Throat,,,,");
+		personnelEditor.updateInformation(j);
+		j = factory.getPersonnelDAO().getPersonnel(9000000000l);
+		assertEquals("Andy Programmer,Scratchy Throat,,,,", j.getMessageFilter());
+	}
 	
 }

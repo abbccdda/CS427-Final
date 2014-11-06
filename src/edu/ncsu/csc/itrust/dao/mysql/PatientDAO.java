@@ -209,7 +209,7 @@ public class PatientDAO {
 					+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 					+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 					+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=?, WHERE MID=?");
+					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=? where MID=?");
 
 			patientLoader.loadParameters(ps, p);
 			ps.setLong(38, p.getMID());
@@ -255,6 +255,7 @@ public class PatientDAO {
 			ps = conn.prepareStatement("INSERT INTO historypatients SELECT null, CURDATE(), ?, p.* FROM patients p WHERE p.mid=?");
 			ps.setLong(1, hcpid);
 			ps.setLong(2, pid);
+			System.out.println(ps);
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {

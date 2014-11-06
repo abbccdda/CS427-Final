@@ -228,10 +228,11 @@ public class ViewMyMessagesAction {
 		if(!f[4].equals("")) {
 			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 			try{
+				
 				Date s = format.parse(f[4]);
 			}
-			catch(IllegalArgumentException e){
-				return "Error"+filter
+			catch(ParseException e){
+				return "Error saving filter: "+filter;
 			}
 		}
 		if(!f[5].equals("")) {
@@ -239,11 +240,11 @@ public class ViewMyMessagesAction {
 			try{
 				Date s = format.parse(f[5]);
 			}
-			catch(IllegalArgumentException e){
-				return "Error"+filter
+			catch (ParseException e) {
+				return "Error saving filter: "+filter;
 			}
 		}
-		return filtered;
+		return filter;
 	}
 	
 	/**
