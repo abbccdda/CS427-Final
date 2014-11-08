@@ -45,6 +45,7 @@
 	<div class="panel-body" id="ov-menu">
 		<ul class="nav nav-sidebar">
 		   <li><a href="/iTrust/auth/hcp-uap/documentOfficeVisit.jsp">Document Office Visit</a>
+		   <li><a href="/iTrust/auth/hcp-uap/viewObstetricsVisitHistory.jsp">Obstetrics Visits</a>
 		   <li><a href="/iTrust/auth/hcp/visitReminders.jsp">Office Visit Reminders</a>
 		   <li><a href="/iTrust/auth/hcp/LabProcHCP.jsp">Laboratory Procedures</a>
 		   <li><a href="/iTrust/auth/hcp-uap/viewSentReferrals.jsp">Sent Referrals</a>

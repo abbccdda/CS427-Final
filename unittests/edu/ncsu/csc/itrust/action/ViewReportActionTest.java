@@ -65,7 +65,7 @@ public class ViewReportActionTest extends TestCase {
 	public void testGetPersonnel() throws ITrustException {
 		PersonnelBean bean = action.getPersonnel(9000000000L);
 		assertEquals("Kelly Doctor", bean.getFullName());
-		assertEquals("surgeon", bean.getSpecialty());
+		assertEquals("OB/GYN", bean.getSpecialty());
 	}
 
 	public void testGetPatientl() throws ITrustException {

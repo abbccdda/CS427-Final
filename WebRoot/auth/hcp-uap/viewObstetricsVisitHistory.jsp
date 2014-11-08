@@ -6,6 +6,7 @@
 <%@page import="edu.ncsu.csc.itrust.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.beans.ObstetricsVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.ObstetricsInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPatientOfficeVisitHistoryAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricsVisitHistoryAction"%>
 
@@ -22,10 +23,10 @@ pageTitle = "iTrust - View Obstetrics Office Visit";
 String pidString = (String) session.getAttribute("pid");
 
 /* If the patient id doesn't check out, then kick 'em out to the exception handler in the Action Class*/
-ViewObstetricsVisitHistoryAction action = new ViewObstetricsVisitHistoryAction(prodDAO,pidString,loggedInMID.longValue());
-
+ObstetricsInfoAction action = new ObstetricsInfoAction(prodDAO,pidString,loggedInMID.longValue());
 List<ObstetricsVisitBean> obstetricsVisits = action.getObstetricsVisits();
 loggingAction.logEvent(TransactionType.PATIENT_LIST_VIEW, loggedInMID, 0, "");
+
 %>
 
 <%@include file="/footer.jsp" %>

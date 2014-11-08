@@ -1,12 +1,9 @@
 <%@taglib uri="/WEB-INF/tags.tld" prefix="itrust"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
-
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="edu.ncsu.csc.itrust.dao.DAOFactory"%>
-<%@page import="edu.ncsu.csc.itrust.action.ViewHealthRecordsHistoryAction"%>
-<%@page import="edu.ncsu.csc.itrust.action.ViewObstetricsRecordsAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ObstetricsInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.beans.HealthRecord"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
@@ -17,9 +14,7 @@
 <%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException" %>
-
 <%@include file="/global.jsp"%>
-
 <%
 pageTitle = "iTrust - View Obstetric Record";
 %>
@@ -34,13 +29,7 @@ if (pidString == null || 1 > pidString.length()) {
    	return;
 }
 
-//Create ViewHealthRecordsHistoryAction object to interact with patient's historical health metric history
-//ViewHealthRecordsHistoryAction historyAction = new ViewHealthRecordsHistoryAction(prodDAO,pidString,loggedInMID.longValue());
-
-ViewObstetricsRecordsAction obstetricsAction = new ViewObstetricsRecordsAction(prodDAO,pidString,loggedInMID.longValue());
-
-
-
+ObstetricsInfoAction obstetricsAction = new ObstetricsInfoAction(prodDAO,pidString,loggedInMID.longValue());
 //Get the patient's name
 String patientName = obstetricsAction.getPatientName();
 
@@ -48,94 +37,65 @@ String patientName = obstetricsAction.getPatientName();
 List<ObstetricsBean> records = obstetricsAction.getAllObstetricsRecords();
 //Save the list of health records in the session
 session.setAttribute("obstetricsRecords", records);
-System.out.println("here"); //found it!
+//Get specialty
 boolean isOBGYN = obstetricsAction.getPersonnelSpecialty().equalsIgnoreCase("OB/GYN");
 String day = request.getParameter("userSer");
-
 %>
-
-<br />
-<div align=center>
+	<br />
+	<div align=center>
 	<table id="ObstetricsTable" align="center" class="fTable">
+	<%
+if (isOBGYN){
+	%>			
+	<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
+	onclick="window.location='addObstetricsInfo.jsp'">
+	<%
+}
 
+if(obstetricsAction.getPatient().getGender()==Gender.Male){
+	%>
+		<p style="font-size:20px"><i>No Obstetric Information, Male Patient</i></p>
 	<%
-	
-	if (isOBGYN){
-		%>			
-			<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
-			onclick="window.location='addObstetricsInfo.jsp'">
-		<%
-	}
-	
-	if(obstetricsAction.getPatient().getGender()==Gender.Male){
-		%>
-			<p style="font-size:20px"><i>No Obstetric Information, Male Patient</i></p>
-		<%
-		
-	}
-	else{
-	
-	
-	try {
-		/* If the patient id doesn't check out, then kick 'em out to the exception handler */
-		ObstetricsInfoAction action = new ObstetricsInfoAction(prodDAO, pidString);
-		%>
-		
-		
-		<br />
-		<div align=center>
-			<table id="ObstetricsRecordsTable" align="center" class="fTable">
-			
-			
-			
+}
+else{
+	%>
+	<br />
+	<div align=center>
+	<table id="ObstetricsRecordsTable" align="center" class="fTable">
 	<%
-	
-	if(records.isEmpty()){
-		%>
-			<p style="font-size:20px"><i>No Obstetric Information</i></p>
-		<%
-	}
-	else{
-		%>
-		<%
-			//Modified part!! added the day variable to detect the input
-			if(day == null){
-				%>
-				<form id="userSearchForm" action="obstetricsInfo.jsp" >
+	if(!records.isEmpty()){	
+		if(day == null){
+			%>
+			<form id="userSearchForm" action="obstetricsInfo.jsp" >
 				<td><input type="submit" value="Calculate" /></td>
 				<td><input name = "userSer" type="text" maxlength="20" size="50" value="enter a valid date: dd/mm/yy" /></td>
 			</form>
 			<%
-				}
-					else{
-						String[] res = ObstetricsInfoAction.calculateEDDAndWeek(day);
-						if(res[0].equals("invalid input, try again")){
-							%>
-	
-							<p style="font-size:20px"><i><%= res[0] %></i></p>
-							<form id="again" action="obstetricsInfo.jsp" >
-								<td><input type="submit" value="Calculate another date" /></td>
-							</form>
-							<%
-						}
-						else{
-			
-			%>
-								<p style="font-size:20px"><i> EDD(estimated due date) is <%= res[0] %></i></p>
-								<p style="font-size:20px"><i> weeks of pregnant is <%= res[1] %></i></p>
-								<p style="font-size:20px"><i> days difference is <%= res[2] %></i></p>
-								<form id="again" action="obstetricsInfo.jsp" >
-								<td><input type="submit" value="Calculate another date" /></td>
-							</form>
-		<%
-						}
+		}
+		else{
+			String[] res = null;
+			try{
+				res=ObstetricsInfoAction.calculateEDDAndWeek(day);
 			}
-		//end of modified part, I just put an extra option here
+			catch(Exception e){
+				%>
+				<p style="font-size:20px"><i><%= "Invalid Input, Please try again" %></i></p>
+				<form id="again" action="obstetricsInfo.jsp" >
+					<td><input type="submit" value="Calculate another date" /></td>
+				</form>
+				<%
+				throw e;
+			}
+				%>
+					<p style="font-size:20px"><i> EDD(estimated due date) is <%= res[0] %></i></p>
+					<p style="font-size:20px"><i> weeks of pregnant is <%= res[1] %></i></p>
+					<p style="font-size:20px"><i> days difference is <%= res[2] %></i></p>
+					<form id="again" action="obstetricsInfo.jsp" >
+						<td><input type="submit" value="Calculate another date" /></td>
+					</form>
+				<%
+		}
 		%>
-		
-		
-		
-		
 		<tr>
 			<th colspan="4" style="text-align: center;">Obstetric History</th>
 		</tr>
@@ -144,8 +104,6 @@ String day = request.getParameter("userSer");
 			<td>Weeks Pregnant - Days</td>
 			<td>Year of Conception</td>
 			<td>Hours of Labor</td>
-			
-			
 		</tr>
 		<%
 		for(ObstetricsBean bean : records){
@@ -162,55 +120,20 @@ String day = request.getParameter("userSer");
 				<%
 		}
 	}
-
-	%>
-			
-			
-			</table>
-		</div>
-			
-	
-	<%
-	} catch (ITrustException e) {
+	else{
+		//Records was empty 
 		%>
-		
-		<tr>
-			<th colspan="4" style="text-align: center;"><%= patientName %>'s Obstetric History</th>
-		</tr>
-		<tr class = "subHeader">
-			<td>Delivery Method</td>
-			<td>Weeks Pregnant - Days</td>
-			<td>Year of Conception</td>
-			<td>Hours of Labor</td>
-		</tr>
+		<p style="font-size:20px"><i>No Obstetric Information</i></p>
 		<%
-		for(ObstetricsBean bean : records){
-				%>
-				<!-- 
-				Get the year of contraception, the number of weeks pregnant, the hours in labor, and the delivery method in a table
-				-->
-				<tr>
-					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getDeliveryMethod())) %></td>
-					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getWeeksPregnant())) %></td>
-					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getYearOfConception())) %></td>
-					<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getHoursLabor())) %></td>
-				</tr>
-				<%
-		}
-		if (isOBGYN){
-			%>
-				<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
-				onclick="window.location='addObstetricsInfo.jsp'">
-			<%
-		}
 	}
 }
 %>
+		</table>
+		</div>
 	</table>
 	<br />
 </div>
 <br />
-
 <br />
 <br />
 <br />
