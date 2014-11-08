@@ -1,6 +1,5 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
-
 <%@page import="edu.ncsu.csc.itrust.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PatientHistoryBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
@@ -11,7 +10,6 @@
 <%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.beans.DiagnosisBean"%>
 <%@page import="java.util.List" %>
-
 <%@include file="/global.jsp"%>
 
 <%
@@ -28,7 +26,6 @@
 	/* If the patient id doesn't check out, then kick 'em out to the exception handler */
 	EditPatientAction action = new EditPatientAction(prodDAO,
 		loggedInMID.longValue(), pidString);
-	
 	List<PatientHistoryBean> pList = action.getHistory();
 %>
 
