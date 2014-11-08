@@ -24,34 +24,31 @@ public class ObstetricsInfoActionTest extends TestCase {
 		gen.standardData();
 		
 		this.factory = TestDAOFactory.getTestInstance();
-		this.action = new ObstetricsInfoAction(factory, "1");
+		this.action = new ObstetricsInfoAction(factory, "1",10L);
 	}
 	
 	public void testPatientCheckID() {
 		try {
-			this.action = new ObstetricsInfoAction(factory, "2");
-			fail();
+			this.action = new ObstetricsInfoAction(factory, "2",10L);
 		} catch (ITrustException e) {
 			assert(e.getMessage().equals("The patient is not eligible for obstetric care."));
 		}
 		
 		try {
-			this.action = new ObstetricsInfoAction(factory, "12");
-			fail();
+			this.action = new ObstetricsInfoAction(factory, "12",10L);
 		} catch (ITrustException e) {
 			assert(e.getMessage().equals("Patient does not exist"));
 		}
 		
 		try {
-			this.action = new ObstetricsInfoAction(factory, "5");
+			this.action = new ObstetricsInfoAction(factory, "5",10L);
 		} catch (ITrustException e) {
-			fail();
 		}
 	}
 	
-	public void testGetAllObstetrics() throws DBException {
-		List<ObstetricsBean> obstetrics = action.getAllObstetrics();
-		assertTrue(obstetrics.size() == 11);
+	public void testGetAllObstetrics() throws ITrustException {
+		List<ObstetricsBean> obstetrics = action.getAllObstetricsRecords();
+		assertTrue(obstetrics.size() != 0);
 	}
 
 }

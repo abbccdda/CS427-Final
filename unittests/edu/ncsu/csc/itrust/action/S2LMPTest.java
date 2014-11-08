@@ -1,17 +1,18 @@
 package edu.ncsu.csc.itrust.action;
-
-import static org.junit.Assert.*;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import junit.framework.TestCase;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import edu.ncsu.csc.itrust.action.ObstetricsInfoAction;
 
 public class S2LMPTest extends TestCase{
+	@Rule
+  	public ExpectedException exception = ExpectedException.none();
 
 	private Calendar cal;
 	private SimpleDateFormat formatter;
@@ -21,27 +22,36 @@ public class S2LMPTest extends TestCase{
 		formatter = new SimpleDateFormat("dd/MM/yyyy");
 	}
 
-	@Test
-	public void testInvalidReturn() {
-		assertEquals(ObstetricsInfoAction.errorResult()[0], "invalid input, try again");
+	public void testInvalidDate1(){
+		try{
+			ObstetricsInfoAction.calculateEDDAndWeek("abcsdw");
+			fail("No Exception Thrown");
+		}catch(Exception e){
+			//Not a date format
+		}
 	}
 	
-	@Test
-	public void testInvalidDate() {
-		//not date format
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek("abcsdw")[0], "invalid input, try again");
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek("-2/11/2032")[0], "invalid input, try again");
+	public void testInvalidDate2(){
+		try{
+			ObstetricsInfoAction.calculateEDDAndWeek("-2/11/2032");
+			fail("No Exception Thrown");
+		}catch(Exception e){
+			//Not a date format
+		}
+	}
+	
+	public void testInvalidDate3(){
+		try{
+			ObstetricsInfoAction.calculateEDDAndWeek("23/13/2012");
+			fail("No Exception Thrown");
+		}catch(Exception e){
+			//Not a proper date
+		}
+	}
 
-		//date format but not satisfying the requirement
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek("23/4")[0], "invalid input, try again");
-		//date format but not satisfying the requirement
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek("23/13/2012")[0], "invalid input, try again");
-		
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek("23/10/-2012")[0], "invalid input, try again");
-	}
 	
 	@Test
-	public void testvalidDateSame() {
+	public void testvalidDateSame() throws Exception {
 		//same date testing
 		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek(formatter.format(cal.getTime()))[2], "0");
 		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek(formatter.format(cal.getTime()))[1], "0");
@@ -52,11 +62,16 @@ public class S2LMPTest extends TestCase{
 	}
 	
 	@Test
-	public void testvalidDateDiff() {
+	public void testvalidDateDiff() throws Exception {
 		cal.add(Calendar.DATE, 25);
 		String curr = formatter.format(cal.getTime());
-		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek(curr)[1], null);
-		
+		try{
+			ObstetricsInfoAction.calculateEDDAndWeek(curr);
+			fail("No Exception Thrown");
+		}
+		catch(Exception e){
+			//Invalid Date difference
+		}
 		cal.add(Calendar.DATE, -25);
 		curr = formatter.format(cal.getTime());
 		assertEquals(ObstetricsInfoAction.calculateEDDAndWeek(curr)[1], "0");

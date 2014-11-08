@@ -106,6 +106,19 @@ CREATE TABLE obstetrics(
 		ON UPDATE cascade
 ) ENGINE=MyISAM;
 
+CREATE TABLE obstetricsvisit(
+	MID BIGINT unsigned NOT NULL,
+	visitDate varchar(8) NOT NULL,
+	weeksPregnant varchar(4) NOT NULL,
+	bloodPressure INT NOT NULL,
+	fetalHeartRate INT NOT NULL,
+	fundalHeightUterus BIGINT unsigned NOT NULL,
+	FOREIGN KEY (MID) REFERENCES patients(MID) ON DELETE cascade ON UPDATE cascade,
+	FOREIGN KEY (weeksPregnant) REFERENCES obstetrics(weeksPregnant)
+) ENGINE=MyISAM;
+
+
+
 CREATE TABLE historypatients(
 	ID BIGINT unsigned  auto_increment,
 	changeDate DATE NOT NULL,
