@@ -29,15 +29,17 @@ public class ObstetricsVisitDAO {
 	public long add(ObstetricsVisitBean ob) throws DBException, ITrustException {
 		Connection conn = null;
 		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
 		
 		try{
 			conn = factory.getConnection();
 			//Insert into the database, and update weeksPregnant in obstetrics
 			ps = conn.prepareStatement(""
-					+ "INSERT INTO obstetricsvisit (visitDate, weeksPregnant, hoursLabor, deliveryMethod, MID) VALUES (?,?,?,?,?);"
-					+ "UPDATE obstetrics,obstetricsvisit SET obstetrics.weeksPregnant = obstetricsvisit.weeksPregnant"
-					+ " where obstetrics.MID=obstetricsvisit.MID");
+					+ "INSERT INTO obstetricsvisit (visitDate, weeksPregnant, bloodPressure, fetalHeartRate, fundalHeightUterus, MID) VALUES (?,?,?,?,?,?);");
 			ps = obstetricsVisitLoader.loadParameters(ps, ob);
+			ps2 = conn.prepareStatement("UPDATE obstetrics,obstetricsvisit SET obstetrics.weeksPregnant = obstetricsvisit.weeksPregnant where obstetrics.MID=?");
+			ps2.setLong(1, ob.getMID());
+			ps2.executeUpdate();
 			ps.executeUpdate();
 			ps.close();
 			return DBUtil.getLastInsert(conn);
@@ -76,7 +78,7 @@ public class ObstetricsVisitDAO {
 	 * @return A java.util.List of HealthRecords.
 	 * @throws DBException
 	 */
-	public List<ObstetricsVisitBean> getAllObstetricsRecords(long mid) throws DBException {
+	public List<ObstetricsVisitBean> getAllObstetricsVisitRecords(long mid) throws DBException {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		List<ObstetricsVisitBean> records = null;

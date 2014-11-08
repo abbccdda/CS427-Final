@@ -42,8 +42,15 @@ boolean formIsFilled = request.getParameter("formIsFilled") != null
 if (formIsFilled) {
     b = new ObstetricsBean();
     b.setMID(obstetricsAction.getPatientMID());
-    int year = Integer.parseInt(request.getParameter("yearOfConception"));
-    boolean yearIsValid = (year >= 1900) && (year < 2050);
+    //Validate Year 
+    boolean yearIsValid = false;
+    int year=0;
+    try{
+    	year = Integer.parseInt(request.getParameter("yearOfConception"));
+    	yearIsValid = (year >= 1900) && (year < 2050);
+    }catch(Exception e){
+    	yearIsValid = false;
+    }
     String weeks = request.getParameter("weeksPregnant");
     boolean weeksIsValid = (weeks.charAt(2) == '-') && (weeks.length() == 4);
     double hours = Double.parseDouble(request.getParameter("hoursLabor"));
@@ -63,21 +70,21 @@ if (formIsFilled) {
             loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
             %>
             <div align=center>
-                <span class="iTrustMessage" style="color:red">Error: invalid year of conception</span>
+                <span class="iTrustMessage" style="color:red">Error: Invalid year of conception</span>
             </div>
             <%
         } if (!weeksIsValid){
             loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
             %>
             <div align=center>
-                <span class="iTrustMessage" style="color:red">Error: invalid weeks pregnant</span>
+                <span class="iTrustMessage" style="color:red">Error: Invalid weeks pregnant</span>
             </div>
             <%
         } if (!hoursIsValid){
             loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
             %>
             <div align=center>
-                <span class="iTrustMessage" style="color:red">Error: invalid hours labor</span>
+                <span class="iTrustMessage" style="color:red">Error: Invalid hours labor</span>
             </div>
             <%
         }
@@ -100,9 +107,7 @@ if (formIsFilled) {
 		<tr>
 			<td class="subHeaderVertical">Year Of Conception:</td>
 			<td><input type=text name="yearOfConception" maxlength="10"
-				size="10" value="<%= StringEscapeUtils.escapeHtml("" + (b.getYearOfConception())) %>"> <input
-				type=button value="Select Date"
-				onclick="displayDatePicker('yearOfConception');"></td>
+				size="10" value="<%= StringEscapeUtils.escapeHtml("" + (b.getYearOfConception())) %>"> </td>
 		</tr>
 		<tr>
 			<td class="subHeaderVertical">Weeks Pregnant-Days:</td>

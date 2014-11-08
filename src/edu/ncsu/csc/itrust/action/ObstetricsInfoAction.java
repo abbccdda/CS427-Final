@@ -51,7 +51,7 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	 * @throws DBException
 	 */
 	public List<ObstetricsVisitBean> getObstetricsVisits() throws DBException{
-		return obstetricsVisitDAO.getAllObstetricsRecords(patientMID);
+		return obstetricsVisitDAO.getAllObstetricsVisitRecords(patientMID);
 	}
 	
 	/**
@@ -87,6 +87,12 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 		obstetricsDAO.add(ob);
 	}
 	
+	public void addObstetricsVisitInfo(ObstetricsVisitBean ob) throws ITrustException{
+		ob.setMID(patientMID);
+		obstetricsVisitDAO.add(ob);
+	}
+	
+	
 	/**
 	 * Calculate the EED by input LMP
 	 * @param input LMP to be processed
@@ -95,13 +101,13 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	 */
 	public static String[]  calculateEDDAndWeek(String LMP) throws Exception{
 		String result[] = new String[3];
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 		try {
 			java.util.Date date = formatter.parse(LMP);
 			Calendar cal = Calendar.getInstance();
 			String[] tokens = LMP.split("/");
-			int d = Integer.parseInt(tokens[0]);
-			int m = Integer.parseInt(tokens[1]);
+			int m = Integer.parseInt(tokens[0]);
+			int d = Integer.parseInt(tokens[1]);
 			int y = Integer.parseInt(tokens[2]);
 			
 			if(date.after(cal.getTime()) || d > 31 || d < 0 || m < 0 ||m > 12 || y < 0){

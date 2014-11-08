@@ -110,7 +110,7 @@ CREATE TABLE obstetricsvisit(
 	MID BIGINT unsigned NOT NULL,
 	visitDate varchar(8) NOT NULL,
 	weeksPregnant varchar(4) NOT NULL,
-	bloodPressure INT NOT NULL,
+	bloodPressure varchar(7) NOT NULL,
 	fetalHeartRate INT NOT NULL,
 	fundalHeightUterus BIGINT unsigned NOT NULL,
 	FOREIGN KEY (MID) REFERENCES patients(MID) ON DELETE cascade ON UPDATE cascade,
