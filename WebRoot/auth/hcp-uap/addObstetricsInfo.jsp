@@ -88,35 +88,6 @@ if (formIsFilled) {
     loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 }
 
-ObstetricsBean b;
-
-if (formIsFilled) {
-b = new ObstetricsBean();
-	b.setMID(obstetricsAction.getPatientMID());
-	String year = request.getParameter("yearOfConception");
-	if(year.length()>4){
-		year = year.substring(year.length()-4);	
-	}
-	b.setYearOfConception(Integer.parseInt(year));
-	b.setWeeksPregnant(request.getParameter("weeksPregnant"));
-	b.setHoursLabor(Double.parseDouble(request.getParameter("hoursLabor")));
-	b.setDeliveryMethod(request.getParameter("deliveryMethod"));
-	obstetricsAction.addObstetricsInfo(b);
-	loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-	response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
-	%>
-	<br />
-		<div align=center>
-			<span class="iTrustMessage">Information Successfully Updated</span>
-		</div>
-	<br />
-	<%
-} else {
-	b = new ObstetricsBean();
-	System.out.println(b.getMID());
-	loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
-}
->>>>>>> master
 %>
 <form id="editForm" action="addObstetricsInfo.jsp" method="post"><input type="hidden"
 	name="formIsFilled" value="true">
