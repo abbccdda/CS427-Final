@@ -41,6 +41,9 @@ session.setAttribute("obstetricsRecords", records);
 boolean isOBGYN = obstetricsAction.getPersonnelSpecialty().equalsIgnoreCase("OB/GYN");
 String day = request.getParameter("userSer");
 %>
+<form id="editForm" action="addObstetricsInfo.jsp" method="post">
+    <br />
+    <div align=center>
 	<br />
 	<div align=center>
 	<table id="ObstetricsTable" align="center" class="fTable">
@@ -134,6 +137,7 @@ else{
 	<br />
 </div>
 <br />
+</form>
 <br />
 <br />
 <br />
