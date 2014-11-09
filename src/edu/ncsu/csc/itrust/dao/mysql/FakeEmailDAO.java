@@ -73,7 +73,7 @@ public class FakeEmailDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM fakeemail WHERE ToAddr LIKE ? ORDER BY AddedDate DESC");
+			ps = conn.prepareStatement("SELECT * FROM fakeemail WHERE FromAddr LIKE ? ORDER BY AddedDate DESC");
 			ps.setString(1, "%" + email + "%");
 			ResultSet rs = ps.executeQuery();
 			List<Email> loadlist = emailBeanLoader.loadList(rs);
