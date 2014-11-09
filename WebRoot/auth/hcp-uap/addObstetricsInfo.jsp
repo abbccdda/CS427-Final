@@ -14,6 +14,7 @@
 <%@page import="edu.ncsu.csc.itrust.beans.ObstetricsBean"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PatientBean"%>
+<%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.enums.DeliveryMethod"%>
 
 <%@include file="/global.jsp" %>
@@ -27,6 +28,7 @@ pageTitle = "iTrust - Add Obstetric Record";
 <%
 //Require a Patient ID first
 String pidString = (String)session.getAttribute("pid");
+
 if (pidString == null || 1 > pidString.length()) {
 	response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/addObstetricsInfo.jsp");
 	return;
@@ -34,12 +36,13 @@ if (pidString == null || 1 > pidString.length()) {
 
 ObstetricsInfoAction obstetricsAction = new ObstetricsInfoAction(prodDAO,pidString,loggedInMID.longValue());
 String patientName = obstetricsAction.getPatientName();
+boolean isMale = obstetricsAction.getPatient().getGender()==Gender.Male;
 
 boolean formIsFilled = request.getParameter("formIsFilled") != null
 	&& request.getParameter("formIsFilled").equals("true");
 	ObstetricsBean b;
 	
-if (formIsFilled) {
+if (formIsFilled && !isMale) {
     b = new ObstetricsBean();
     b.setMID(obstetricsAction.getPatientMID());
     //Validate Year 
@@ -89,54 +92,67 @@ if (formIsFilled) {
             <%
         }
     }
-} else {
+} else if(!isMale){
     b = new ObstetricsBean();
     System.out.println(b.getMID());
     loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 }
+else{
+	b= new ObstetricsBean();
+}
+if(isMale){
+	%>
+	<p style="font-size:20px" align="center"><i>No Obstetric Information, Male Patient</i></p>
+	<%	
+}
+else{
+	%>
+	<form id="editForm" action="addObstetricsInfo.jsp" method="post"><input type="hidden"
+		name="formIsFilled" value="true">
+	<br />
+	<div align=center>
+		<table id="AddObstetricsTable" align="center" class="fTable">
+			<tr>
+				<th colspan="4" style="text-align: center;">Obstetric History for <%= patientName %></th>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Year Of Conception:</td>
+				<td><input type=text name="yearOfConception" maxlength="10"
+					size="10" value="<%= StringEscapeUtils.escapeHtml("" + (b.getYearOfConception())) %>"> </td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Weeks Pregnant-Days:</td>
+				<td><input name="weeksPregnant" value="<%= StringEscapeUtils.escapeHtml("" + (b.getWeeksPregnant())) %>" type="text"></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Hours Labor:</td>
+				<td><input name="hoursLabor" value="<%= StringEscapeUtils.escapeHtml("" + (b.getHoursLabor())) %>" type="text"></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Delivery Method:</td>
+					<td><select name="deliveryMethod">
+						<%
+						String selected = "";
+							for (DeliveryMethod dm : DeliveryMethod.values()) {
+								selected = (dm.equals(b.getDeliveryMethod())) ? "selected=selected"
+										: "";
+						%>
+						<option value="<%=dm.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (dm.getName())) %></option>
+						<%
+							}
+						%>
+					</select></td>
+			</tr>
+		</table>
+	</div>
+	<div align=center>
+		<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetrics Info">
+	</div>
+	</form>
+	<%
+	
+}
 
 %>
-<form id="editForm" action="addObstetricsInfo.jsp" method="post"><input type="hidden"
-	name="formIsFilled" value="true">
-<br />
-<div align=center>
-	<table id="AddObstetricsTable" align="center" class="fTable">
-		<tr>
-			<th colspan="4" style="text-align: center;">Obstetric History for <%= patientName %></th>
-		</tr>
-		<tr>
-			<td class="subHeaderVertical">Year Of Conception:</td>
-			<td><input type=text name="yearOfConception" maxlength="10"
-				size="10" value="<%= StringEscapeUtils.escapeHtml("" + (b.getYearOfConception())) %>"> </td>
-		</tr>
-		<tr>
-			<td class="subHeaderVertical">Weeks Pregnant-Days:</td>
-			<td><input name="weeksPregnant" value="<%= StringEscapeUtils.escapeHtml("" + (b.getWeeksPregnant())) %>" type="text"></td>
-		</tr>
-		<tr>
-			<td class="subHeaderVertical">Hours Labor:</td>
-			<td><input name="hoursLabor" value="<%= StringEscapeUtils.escapeHtml("" + (b.getHoursLabor())) %>" type="text"></td>
-		</tr>
-		<tr>
-			<td class="subHeaderVertical">Delivery Method:</td>
-				<td><select name="deliveryMethod">
-					<%
-					String selected = "";
-						for (DeliveryMethod dm : DeliveryMethod.values()) {
-							selected = (dm.equals(b.getDeliveryMethod())) ? "selected=selected"
-									: "";
-					%>
-					<option value="<%=dm.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (dm.getName())) %></option>
-					<%
-						}
-					%>
-				</select></td>
-		</tr>
-	</table>
-</div>
-<div align=center>
-	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetrics Info">
-</div>
-</form>
 
 <%@include file="/footer.jsp" %>

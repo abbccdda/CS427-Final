@@ -5,6 +5,7 @@ package edu.ncsu.csc.itrust.action;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.HtmlEncoder;
@@ -100,10 +101,12 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	 * @throws Exception 
 	 */
 	public static String[]  calculateEDDAndWeek(String LMP) throws Exception{
+		System.out.println("LMP: " + LMP);
 		String result[] = new String[3];
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		// note this will parse all kinds of good stuff like 1/11/11 as 01/11/11 or 9/1/1992 as 09/01/92
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
 		try {
-			java.util.Date date = formatter.parse(LMP);
+			Date date = formatter.parse(LMP); 
 			Calendar cal = Calendar.getInstance();
 			String[] tokens = LMP.split("/");
 			int m = Integer.parseInt(tokens[0]);
@@ -111,6 +114,7 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 			int y = Integer.parseInt(tokens[2]);
 			
 			if(date.after(cal.getTime()) || d > 31 || d < 0 || m < 0 ||m > 12 || y < 0){
+				System.out.println("invalid day times");
 				throw new Exception("Invalid Input");
 			}
 			/*step 1, go to calendar to find current date*/
@@ -128,9 +132,11 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 			result[0] = formatter.format(cal.getTime());
 		} 
 		catch (java.text.ParseException e) {
+			System.out.println("prolly in here");
 			throw e;
 		}
 		catch (Exception e) {
+			System.out.println("prolly in here2");
 			throw e;
 		}
 		return result;

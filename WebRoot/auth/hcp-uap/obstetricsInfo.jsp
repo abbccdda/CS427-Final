@@ -11,6 +11,7 @@
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.beans.ObstetricsBean"%>
+<%@page import="edu.ncsu.csc.itrust.beans.ObstetricsVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException" %>
@@ -18,7 +19,6 @@
 <%
 pageTitle = "iTrust - View Obstetric Record";
 %>
-
 <%@include file="/header.jsp" %>
 <itrust:patientNav thisTitle="Obstetrics" />
 <%
@@ -36,7 +36,7 @@ List<ObstetricsBean> records = obstetricsAction.getAllObstetricsRecords();
 //Save the list of health records in the session
 session.setAttribute("obstetricsRecords", records);
 boolean isOBGYN = obstetricsAction.getPersonnelSpecialty().equalsIgnoreCase("OB/GYN");
-String day = request.getParameter("userSer");
+boolean isMale = obstetricsAction.getPatient().getGender()==Gender.Male;
 %>
     <br />
     <div align=center>
@@ -45,7 +45,7 @@ String day = request.getParameter("userSer");
 	<table id="ObstetricsTable" align="center" class="fTable">
 	<%
 //If OBGYN the "Add Obstetrics Info" Button and "Document Obstetrics Visit" will show
-if (isOBGYN){
+if (isOBGYN && !isMale){
 	%>			
 	<input type="submit" id="submitAdd" name="submitAdd" value="Add Obstetrics Info" 
 	onclick="window.location='addObstetricsInfo.jsp'"> &nbsp&nbsp
@@ -54,47 +54,62 @@ if (isOBGYN){
 	onclick="window.location='addObstetricsVisit.jsp'">
 	<%
 }
-%>
-<br />
-<div align=center>
-<table id="ObstetricsRecordsTable" align="center" class="fTable">
-<%
-if(!records.isEmpty()){
-	if(day == null){
-		%>
-		<form id="userSearchForm" action="obstetricsInfo.jsp" >
-			 
-			<td><input type="submit" value="Calculate the EDD:" /></td>
-			<td><input name = "userSer" type="text" maxlength="20" size="50" value="enter a valid date: dd/mm/yy" /></td>
-		</form>
-		<%
+String day = request.getParameter("userSer");
+if(day==null && !isMale){ // The user has not entered in an EDD
+	%>
+	<br><br>
+	<div align=center>
+			<form id="userSearchForm" action="obstetricsInfo.jsp" >
+				<td><input type="submit" value="Calculate the EDD:" /></td>
+				<td><input name = "userSer" type="text" maxlength="20" size="50" value="Last menstrual period: dd/mm/yyyy" /></td>
+			</form>
+	</div>
+	<%
+}
+else if (!isMale){
+	//The user has already clicked the Calculate the EDD: button
+	String[] res=null;
+	boolean invalidEDDInput =false;
+	try{
+		System.out.println("day: " + day);
+		res=ObstetricsInfoAction.calculateEDDAndWeek(day);
 	}
-	else{
-		String[] res;
-		try{
-			res=ObstetricsInfoAction.calculateEDDAndWeek(day);
+	catch(Exception e){
+		if(day.length()==8){
+			%>
+			<p style="font-size:20px"><i><%= "Invalid Input, Please enter mm/dd/yyyy " %></i></p>
+			<form id="again" action="obstetricsInfo.jsp" >
+				<td><input type="submit" value="Calculate another date" /></td>
+			</form>
+			<%	
 		}
-		catch(Exception e){
+		else{
 			%>
 			<p style="font-size:20px"><i><%= "Invalid Input, Please try again" %></i></p>
 			<form id="again" action="obstetricsInfo.jsp" >
 				<td><input type="submit" value="Calculate another date" /></td>
 			</form>
 			<%
-			throw e;
 		}
-			%>
-				<p style="font-size:20px"><i> EDD(estimated due date) is <%= res[0] %></i></p>
-				<p style="font-size:20px"><i> weeks of pregnant is <%= res[1] %></i></p>
-				<p style="font-size:20px"><i> days difference is <%= res[2] %></i></p>
-				<form id="again" action="obstetricsInfo.jsp" >
-					<td><input type="submit" value="Calculate another date" /></td>
-				</form>
-			<%
+		
+		invalidEDDInput =true;	
 	}
+	if(!invalidEDDInput){
+		%>
+		<p style="font-size:20px"><i> EDD(estimated due date): <%= res[0] %></i></p>
+		<p style="font-size:20px"><i> <%= res[1]%> weeks <%= " and " +res[1]  %> days pregnant</i></p>
+		<form id="again" action="obstetricsInfo.jsp" >
+			<td><input type="submit" value="Calculate another date" /></td>
+		</form>
+		<%	
+	}
+}
+if(!records.isEmpty()){
 	%>
+	<div align=center>
+	<table id="ObstetricsRecordsTable" align="center" class="fTable">
 	<tr>
-		<th colspan="4" style="text-align: center;">Obstetric History</th>
+		<th colspan="4" style="text-align: center;">Obstetrics Information</th>
 	</tr>
 	<tr class = "subHeader">
 		<td>Delivery Method</td>
@@ -120,7 +135,7 @@ if(!records.isEmpty()){
 else{
 	//Records was empty -- We can put our exception cases here (like being a male)
 	//If male display a seperate message
-	if(obstetricsAction.getPatient().getGender()==Gender.Male){
+	if(isMale){
 		%>
 			<p style="font-size:20px"><i>No Obstetric Information, Male Patient</i></p>
 		<%
@@ -130,10 +145,48 @@ else{
 		<p style="font-size:20px"><i>No Obstetric Information</i></p>
 		<%
 	}
+	%>
+	</table></div>
+	<%
+}
+
+//Obstetrics Visit History Table
+List<ObstetricsVisitBean> visitHistory = obstetricsAction.getObstetricsVisits();
+if(!isMale && visitHistory.size()!=0){
+	%> 
+	<br>
+	<div align=center>
+	<table id="ObstetricsVisitHistoryRecords" align="center" class="fTable">
+	<tr>
+		<th colspan="5" style="text-align: center;">Obstetrics Visit History</th>
+	</tr>
+	<tr class = "subHeader">
+		<td>Visit Date</td>
+		<td>Weeks Pregnant - Days</td>
+		<td>Blood Pressure</td>
+		<td>Fetal Heart Rate</td>
+		<td>Fundal Uterus Height</td>
+	</tr>
+	<%
+	for(ObstetricsVisitBean bean : visitHistory){
+		//For each record in the visit history populate a row in the table
+		%>
+		
+		<tr>
+			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getVisitDate())) %></td>
+			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getWeeksPregnant())) %></td>
+			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getBloodPressure())) %></td>
+			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getFetalHeartRate())) %></td>
+			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getFundalHeightUterus())) %></td>
+		</tr>
+		<%
+	}
+	%>
+	</table></div>
+	<%
 }
 %>
-		</table>
-		</div>
+		
 	</table>
 	<br />
 </div>
