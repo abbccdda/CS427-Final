@@ -24,7 +24,7 @@ if (request.getParameter("msg") != null) {
 	int msgIndex = 0;
 	try{
 		msgIndex = Integer.parseInt(msgParameter);
-		List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("noreply@itrust.com");
+		List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("System Reminder");
 		if(emails.size() <= msgIndex){
 			response.sendRedirect("/iTrust/auth/admin/viewAppointmentReminders.jsp");
 		}
