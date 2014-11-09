@@ -20,7 +20,7 @@
 	<h1>View Reminders</h1>
 	<h3>Here all the reminders sent</h3>
 <%
-List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("System Reminder");
+List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("system Reminder");
 %>
 <br />
 <table class="results">
