@@ -1,10 +1,18 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
 import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
+
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.beans.Email;
 import edu.ncsu.csc.itrust.beans.loaders.EmailBeanLoader;
@@ -130,6 +138,45 @@ public class FakeEmailDAO {
 			rs.close();
 			ps.close();
 			return loadlist;
+		} catch (SQLException e) {
+			
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	
+	/**
+	 * helper function used to send appointments
+	 */
+	public void sendReminderEmails(int days) throws DBException{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try{
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT appointment.sched_date, patients.email,patients.firstName as patientsFirst, patients.lastName as patientsLast,personnel.firstName as doctorFirst,personnel.lastName as doctorLast FROM (appointment LEFT JOIN (patients) on appointment.patient_id = patients.MID) LEFT JOIN personnel on appointment.doctor_id=personnel.MID where appointment.sched_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL ? DAY)");
+			ps.setInt(1, days);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Email email = new Email();
+				String patient = rs.getString("patientsFirst") + " " + rs.getString("patientsLast");
+				String doctor = rs.getString("doctorFirst") + " " + rs.getString("doctorLast");
+				Date date = rs.getDate("sched_date");
+				Date today = new Date();
+				@SuppressWarnings("deprecation")
+				int days_remain = date.getDate() - today.getDate();
+				Time time = rs.getTime("sched_date");
+				String patientEmail = rs.getString("email");
+				List<String> patientEmails = new ArrayList<String>();
+				patientEmails.add(patientEmail);
+				email.setToList(patientEmails);
+				email.setSubject("Reminder: upcoming appointment in "+ days_remain +" day(s)");
+				email.setFrom("System Reminder");
+				email.setBody(patient + ", You have an appointment on "+time.toString()+", "+date.toString()+" with Dr. "+ doctor);
+				this.sendEmailRecord(email);
+			}
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
 			
 			throw new DBException(e);
