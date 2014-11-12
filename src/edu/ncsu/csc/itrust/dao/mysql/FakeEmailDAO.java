@@ -1,11 +1,7 @@
 package edu.ncsu.csc.itrust.dao.mysql;
 
 import java.sql.Connection;
-import java.util.Calendar;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

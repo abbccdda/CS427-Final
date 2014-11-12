@@ -30,11 +30,12 @@
 			}
 			else{
 				DAOFactory.getProductionInstance().getFakeEmailDAO().sendReminderEmails(days);
+				loggingAction.logEvent(TransactionType.SEND_REMINDERS, loggedInMID.longValue(), 0l, "");
 				%><h1 align="center">Appointments Sent Successfully</h1><%
 			}
 		}
 		catch (NumberFormatException e){
-			%> <h1 align="center">the input was not a number</h1> <%
+			%> <h1 align="center">The input was not a number</h1> <%
 		}
 	}%>
 
