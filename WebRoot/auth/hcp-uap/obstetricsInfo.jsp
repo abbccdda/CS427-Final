@@ -72,7 +72,6 @@ else if (!isMale){
 	String[] res=null;
 	boolean invalidEDDInput =false;
 	try{
-		System.out.println("day: " + day);
 		res=ObstetricsInfoAction.calculateEDDAndWeek(day);
 	}
 	catch(Exception e){

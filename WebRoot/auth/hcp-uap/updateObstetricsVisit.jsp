@@ -64,7 +64,6 @@ if (formIsFilled && !isMale) {
 		
 	}
 	catch(Exception e){
-		System.out.println("parseError");
 		validVisitDate =false;
 	}
 	//This is to fix the fact I can't get mm-dd-yy only mm-dd-yyyy to come out
@@ -82,7 +81,6 @@ if (formIsFilled && !isMale) {
     Pattern bpPattern = Pattern.compile(BLOOD_PRESSURE_PATTERN);
     Matcher bpMatcher = bpPattern.matcher(bloodPressureString);
     boolean validBloodPressure = bpMatcher.matches();
-    System.out.println("bp: " +bloodPressureString);
     //Validate Heart Rate
     int fetalHeartRate=0;
     boolean validFetalHeartRate;
@@ -168,7 +166,6 @@ if (formIsFilled && !isMale) {
     }
 } else {
     b = obstetricsAction.getVisitById(Integer.parseInt(request.getParameter("visitId")));
-    System.out.println(b.getMID());
     loggingAction.logEvent(TransactionType.ADD_OBSTETRICS_VISIT, loggedInMID.longValue(), b.getMID(), "");
 }
 
