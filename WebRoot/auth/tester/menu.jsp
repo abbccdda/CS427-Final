@@ -6,6 +6,8 @@
 		<ul class="nav nav-sidebar">
 			<li><a href="/iTrust/auth/tester/home.jsp">Operational Profile</a></li>
 			<li><a href="/iTrust/auth/tester/queryLog.jsp">View transaction log</a></li>
+			<li><a href="/iTrust/auth/tester/viewCharts.jsp">See charts total</a></li>
+			
 		</ul>
 	</div>
 </div>
