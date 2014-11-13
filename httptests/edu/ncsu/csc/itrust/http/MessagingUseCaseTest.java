@@ -139,7 +139,7 @@ public class MessagingUseCaseTest extends iTrustHTTPTest {
 		assertTrue(wr.getTableWithID("mailbox").getRows()[1].getText().contains(stamp));
 	}
 	
-	/*
+	
 	public void testHCPSortInboxBySender() throws Exception {
 		// Create DB for this test case
 		String DIR = "sql/data";
@@ -190,7 +190,7 @@ public class MessagingUseCaseTest extends iTrustHTTPTest {
 		assertTrue(wr.getTableWithID("mailbox").getRows()[7].getText().contains("2010-01-07 09:15"));
 	}
 	
-	public void testPatientSortOutboxByTimestamp() throws Exception {
+/*	public void testPatientSortOutboxByTimestamp() throws Exception {
 		// Create DB for this test case
 		String DIR = "sql/data";
 		DAOFactory factory = TestDAOFactory.getTestInstance();
@@ -234,7 +234,7 @@ public class MessagingUseCaseTest extends iTrustHTTPTest {
 		assertTrue(wr.getTableWithID("mailbox").getRows()[6].getText().contains("Kelly Doctor"));
 		assertTrue(wr.getTableWithID("mailbox").getRows()[6].getText().contains("Old Medicine"));
 		assertTrue(wr.getTableWithID("mailbox").getRows()[6].getText().contains("2009-12-02 11:15"));
-	}
+	}*/
 	
 	public void testHCPtestMessageFilter() throws Exception {
 		// Create DB for this test case
@@ -330,9 +330,8 @@ public class MessagingUseCaseTest extends iTrustHTTPTest {
 		wr.getForms()[0].setParameter("notWords", "");
 		wr.getForms()[0].setParameter("endDate", "04/07/2010");
 		wr = wr.getForms()[0].submit(wr.getForms()[0].getSubmitButton("test"));
-		
 		// Make sure error message is displayed
-		assertTrue(wr.getText().contains("Error: The end date cannot be before the start date."));	
+		assertTrue(wr.getText().contains("Error saving filter"));
 	}
 	
 	public void testHCPtestMessageFilter2 () throws Exception {
@@ -366,7 +365,7 @@ public class MessagingUseCaseTest extends iTrustHTTPTest {
 		assertTrue(wr.getTables()[2].getRows()[1].getText().contains("Influenza Vaccine"));
 		assertTrue(wr.getTables()[2].getRows()[1].getText().contains("2010-03-25 16:15"));
 	}
-*/
+
 	public void testPatientSendMessageMultiRecipients() throws Exception {
 		gen.messagingCcs();
 		

@@ -420,7 +420,9 @@ public enum TransactionType {
 	/**VIEW_OBSTETRICS*/
 	VIEW_OBSTETRICS(6301,"HCP View of Obstetrics Information","viewed obstetrics",true),
 	/**ADD_OBSTETRICS*/
-	ADD_OBSTETRICS(6302,"HCP Added Obstetrics Information","added obstetrics",true);
+	ADD_OBSTETRICS(6302,"HCP Added Obstetrics Information","added obstetrics",true),
+	/**SEND_REMINDERS*/
+	SEND_REMINDERS(6501, "Admin sent Appointment Reminders", "sent appointments", false);
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
 	 * display in a patient's Access Log

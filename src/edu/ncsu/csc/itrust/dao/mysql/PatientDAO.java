@@ -209,7 +209,7 @@ public class PatientDAO {
 					+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 					+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 					+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=?, WHERE MID=?");
+					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=? where MID=?");
 
 			patientLoader.loadParameters(ps, p);
 			ps.setLong(38, p.getMID());
@@ -1093,42 +1093,4 @@ public class PatientDAO {
 			DBUtil.closeConnection(conn, ps);
 		}
 	}
-	
-	public List<ObstetricsBean> getObstetricsForPatient(long mid) throws DBException {
-		Connection conn = null;
-		PreparedStatement ps = null;
-		
-		try {
-			conn = factory.getConnection();
-			
-			ps = conn.prepareStatement("SELECT * FROM obstetrics WHERE MID = ?");
-			ps.setLong(1, mid);
-			
-			ResultSet rs = ps.executeQuery();
-			
-			List<ObstetricsBean> loadlist = new ArrayList<ObstetricsBean>();
-			while (rs.next()) {
-				ObstetricsBean ob = new ObstetricsBean();
-				
-				ob.setMID(rs.getLong("MID"));
-				ob.setYearOfConception(rs.getInt("yearOfConception"));
-				ob.setWeeksPregnant(rs.getString("weeksPregnant"));
-				ob.setHoursLabor(rs.getDouble("hoursLabor"));
-				ob.setDeliveryMethod(rs.getString("deliveryMethod"));
-				loadlist.add(ob);
-			}		
-			
-			rs.close();
-			ps.close();
-			return loadlist;
-		} catch (SQLException e) {
-			
-			throw new DBException(e);
-		} finally {
-			DBUtil.closeConnection(conn, ps);
-		}
-	
-	}
-
-	
 }
