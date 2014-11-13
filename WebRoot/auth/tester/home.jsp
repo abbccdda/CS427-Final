@@ -10,8 +10,10 @@ pageTitle = "iTrust - Tester Home";
 
 <%@include file="/header.jsp" %>
 
+
 <div style="text-align: center;">
 <h1>Operational Profile</h1>
+
 <%
 	try {
 		OperationalProfile op = prodDAO.getTransactionDAO().getOperationalProfile();
@@ -61,6 +63,9 @@ pageTitle = "iTrust - Tester Home";
 
 </div>
 
+<div style="text-align: center;">
+<h1>See transaction log</h1>
+</div>
 <%
 	} catch (Exception e) {
 %>
