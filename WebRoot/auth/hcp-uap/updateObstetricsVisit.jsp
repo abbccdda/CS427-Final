@@ -24,7 +24,7 @@
 <%@include file="/global.jsp" %>
 
 <%
-pageTitle = "iTrust - Add Obstetric Visit Record";
+pageTitle = "iTrust - Update Obstetric Visit Record";
 %>
 
 <%@include file="/header.jsp" %>
