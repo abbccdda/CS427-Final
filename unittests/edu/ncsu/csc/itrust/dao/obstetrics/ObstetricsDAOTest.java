@@ -82,6 +82,20 @@ public class ObstetricsDAOTest extends TestCase{
 		princessPeachGotKnockedUp.setMID(21);
 		oDAO.add(princessPeachGotKnockedUp);
 	}
+	
+	/**
+	 * Tests that we can add an obstetrics record and access it as the most recent
+	 * record.
+	 * @throws Exception
+	 */
+	public void testGetMostRecentRecord() throws Exception{
+		List<ObstetricsBean> records = oDAO.getAllObstetricsRecords(21);
+		assertEquals(0,records.size());
+		ObstetricsBean princess = new ObstetricsBean();
+		addPrincessPeach();
+		ObstetricsBean testBean = oDAO.getMostRecentRecord(21);
+		assertNotNull(testBean);
+	}
 
 	/**
 	 * Tests that off-color input will throw a SQLException/DBException.
@@ -112,6 +126,14 @@ public class ObstetricsDAOTest extends TestCase{
 		catch(Exception e) {
 			//Ignore, no message testing needed
 		}
+		
+		try{
+			ObstetricsBean testBean = oDAO.getMostRecentRecord(-1);
+		}
+		catch(Exception e){
+			
+		}
+		
 	}
 
 }

@@ -50,6 +50,10 @@ public class ObstetricsInfoActionTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * Tests that we can get a list of all obstetrics records.
+	 * @throws ITrustException
+	 */
 	public void testGetAllObstetrics() throws ITrustException {
 		List<ObstetricsBean> obstetrics = action.getAllObstetricsRecords();
 		assertTrue(obstetrics.size() != 0);
@@ -89,6 +93,23 @@ public class ObstetricsInfoActionTest extends TestCase {
 		testBean.setFetalHeartRate(150);
 		testBean.setFundalHeightUterus(5.0);
 		action.addObstetricsVisitInfo(testBean);
+	}
+	
+	/**
+	 * Tests that we can successfully update obstetrics visit info.
+	 * @throws ITrustException
+	 */
+	public void testUpdateObbstetricsVisitInfo() throws ITrustException {
+		ObstetricsVisitBean testBean = new ObstetricsVisitBean();
+		testBean.setMID(21);
+		testBean.setVisitDate("11/11/11");
+		testBean.setWeeksPregnant("35-2");
+		testBean.setBloodPressure("180/70");
+		testBean.setFetalHeartRate(150);
+		testBean.setFundalHeightUterus(5.0);
+		action.addObstetricsVisitInfo(testBean);
+		testBean.setVisitDate("09/14/82");
+		action.updateObstetricsVisitInfo(testBean);
 	}
 	
 	/**

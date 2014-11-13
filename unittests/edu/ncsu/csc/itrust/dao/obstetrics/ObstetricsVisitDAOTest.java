@@ -43,7 +43,10 @@ public class ObstetricsVisitDAOTest extends TestCase{
 		assertEquals(1,records.size());
 	}
 	
-	
+	/**
+	 *	Tests that obstetric information can correctly be edited in the database via ObstetricsDAO 
+	 * @throws Exception
+	 */
 	public void testEditObstetricsVisitBean() throws Exception{
 		List<ObstetricsVisitBean> records = oDAO.getAllObstetricsVisitRecords(21);
 		assertEquals(0,records.size());
@@ -52,9 +55,72 @@ public class ObstetricsVisitDAOTest extends TestCase{
 		records = oDAO.getAllObstetricsVisitRecords(21);
 		assertEquals(1,records.size());
 		ObstetricsVisitBean testBean = records.get(0);
-		testBean.setVisitDate("11/11/11");;
+		testBean.setVisitDate("11/11/11");
 		oDAO.edit(testBean);
 	}
+	
+	/**
+	 * Tests invalid input and insures that they throw exceptions.
+	 * @throws Exception
+	 */
+	public void testBadInput() throws Exception {
+		ObstetricsVisitBean evilBean = new ObstetricsVisitBean();
+		try{
+			String badWeekInput = "sdfdfsdf";
+			evilBean.setWeeksPregnant(badWeekInput);
+			oDAO.add(evilBean);
+		}
+		catch(Exception e){
+			//Ignore, no message testing needed
+		}
+		
+		try{
+			List<ObstetricsVisitBean> records = oDAO.getAllObstetricsVisitRecords(21);
+			assertEquals(0,records.size());
+			ObstetricsVisitBean visit = new ObstetricsVisitBean();
+			addPeachVisit();
+			records = oDAO.getAllObstetricsVisitRecords(21);
+			assertEquals(1,records.size());
+			ObstetricsVisitBean testBean = records.get(0);
+			String badWeekInput = "sdfdfsdf";
+			testBean.setWeeksPregnant(badWeekInput);
+			oDAO.edit(testBean);
+		}
+		catch(Exception e){
+			
+		}
+		
+		try{
+			ObstetricsVisitBean testBean = oDAO.getObstetricsVisitByID(-1);
+		}
+		catch(Exception e){
+			
+		}
+	}
+	
+
+	/**
+	 * Tests that we can get an instance of an ObstetricsVisit by its ID.
+	 * @throws Exception
+	 */
+	public void testGetObstetricsVisitByID() throws Exception{
+		try {
+			List<ObstetricsVisitBean> records = oDAO.getAllObstetricsVisitRecords(21);
+			assertEquals(0,records.size());
+			ObstetricsVisitBean visit = new ObstetricsVisitBean();
+			addPeachVisit();
+			records = oDAO.getAllObstetricsVisitRecords(21);
+			assertEquals(1,records.size());
+			System.out.println(records.get(0).getId());
+			ObstetricsVisitBean testBean = oDAO.getObstetricsVisitByID(records.get(0).getId());
+			assertNotNull(testBean);
+		}
+		catch(Exception e){
+			
+		}
+	}
+
+	
 	
 	
 		/**
