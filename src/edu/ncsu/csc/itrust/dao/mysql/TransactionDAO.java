@@ -34,6 +34,7 @@ import edu.ncsu.csc.itrust.exception.DBException;
  * 
  * 
  */
+//Cite from T817 for log query implementation
 @SuppressWarnings("unused")
 public class TransactionDAO {
 	private DAOFactory factory;

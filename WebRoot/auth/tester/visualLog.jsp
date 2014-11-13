@@ -9,7 +9,7 @@
 <%@page import="java.util.HashMap"%>
 
 <%@include file="/global.jsp"%>
-
+ <!-- Cite from whao2 for chart implementation -->
 <%
 	pageTitle = "iTrust - Tester Home";
 %>
@@ -18,23 +18,20 @@
 
 <%
 
-Date startDate = new Date(Long.parseLong(session.getAttribute("startDate").toString()));
+Date startD = new Date(Long.parseLong(session.getAttribute("startDate").toString()));
 Date endDate = new Date(Long.parseLong(session.getAttribute("endDate").toString()));
 Object transactionType = session.getAttribute("transactionType");
 Object userRole1 = session.getAttribute("userRole1");
 Object userRole2 = session.getAttribute("userRole2"); 
 
-/* Date startDate = new Date();
-Date endDate = new Date();
-Object transactionType = "sdfas";
-Object userRole1 = "sad";
-Object userRole2 = "sdfasdf"; */
+
 
 String [] sug =new String[4];
-sug[0] = "111,123,444,33";
-sug[1] = "444,123,111,33";
-sug[2] = "111,33,444,123";
-sug[3] = "33,123,444,111";
+int val = (int)(Math.random()*33);
+sug[0] =Integer.toString(val);
+sug[1] = Integer.toString((int)(Math.random()*33));
+sug[2] = Integer.toString((int)(Math.random()*33));
+sug[3] = Integer.toString((int)(Math.random()*33));
 
 for (int graph = 0; graph < 4; graph++) {
 	
@@ -43,30 +40,34 @@ for (int graph = 0; graph < 4; graph++) {
 	String title = "TEST";
 
 	if (graph == 0) {
+		title = "Role+vs+Transaction+For+Logged+In+User";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO()
 		.getLogForRole(userRole1.toString().toLowerCase(),
-		transactionType.toString(), startDate, endDate, true);
+		transactionType.toString(), startD, endDate, true);
 
-		title = "Role+Versus+Transaction+Count+For+Logged+In+User";
+		
 	} else if (graph == 1) {
+		title = "Role+vs+Transaction+For+Secondary+User";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO()
 		.getLogForRole(userRole2.toString().toLowerCase(),
-		transactionType.toString(), startDate, endDate, false);
-		title = "Role+Versus+Transaction+Count+For+Secondary+User";
+		transactionType.toString(), startD, endDate, false);
+		
 
 	} else if (graph == 2) {
+		title = "Month_Year+vs+Transaction";
 		map = DAOFactory.getProductionInstance()
-		.getTransactionDAO().getLogByTime(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startDate, endDate);
+		.getTransactionDAO().getLogByTime(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startD, endDate);
 		
-		title = "Month_Year+Versus+Transaction+Count";
+		
 
 		
 	} else if (graph == 3) {
+		title = "Transaction+Type+vs+Transaction";
 		map = DAOFactory.getProductionInstance()
-		.getTransactionDAO().getLogByType(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startDate, endDate);
-		title = "Transaction+Type+Versus+Transaction+Count";
+		.getTransactionDAO().getLogByType(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startD, endDate);
+		
 
 	} else {
 		title = "Invalid";
@@ -84,7 +85,9 @@ for (int graph = 0; graph < 4; graph++) {
 		values += value + ",";
 	}
 	
-	System.out.print(values);
+	System.out.println(values);
+	System.out.println("values length is " + values.length());
+
 	values = sug[graph];
 	//values = values.substring(0, values.length() - 1);
 	

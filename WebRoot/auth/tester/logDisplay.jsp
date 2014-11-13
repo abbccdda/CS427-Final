@@ -23,7 +23,7 @@
 <%@page import="java.util.List"%> --%>
 
 <%@include file="/global.jsp"%>
-
+<!-- Cite from whao2 for display log implementation -->
 <%
 	pageTitle = "iTrust - Tester Home";
 %>
