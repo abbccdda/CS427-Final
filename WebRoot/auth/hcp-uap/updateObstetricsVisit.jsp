@@ -16,7 +16,6 @@
 <%@page import="edu.ncsu.csc.itrust.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ObstetricsInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.beans.ObstetricsVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.beans.ObstetricsBean"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.enums.Gender"%>
@@ -25,7 +24,7 @@
 <%@include file="/global.jsp" %>
 
 <%
-pageTitle = "iTrust - Add Obstetric Visit Record";
+pageTitle = "iTrust - Update Obstetric Visit Record";
 %>
 
 <%@include file="/header.jsp" %>
@@ -106,14 +105,13 @@ if (formIsFilled && !isMale) {
     boolean allAreValid = validVisitDate && validWeeks && validBloodPressure && validFetalHeartRate && validFundalHeightUterus;
   
     if (allAreValid){
-    	ObstetricsBean ob = obstetricsAction.getMostRecentRecord();
-    	b.setObid(ob.getID());
+    	b = obstetricsAction.getVisitById(Integer.parseInt(request.getParameter("visitId")));
         b.setWeeksPregnant(weeks);
         b.setVisitDate(visitDate);
         b.setBloodPressure(bloodPressureString);
         b.setFetalHeartRate(fetalHeartRate);
         b.setFundalHeightUterus(fundalHeightUterus);
-        obstetricsAction.addObstetricsVisitInfo(b);
+        obstetricsAction.updateObstetricsVisitInfo(b);
         loggingAction.logEvent(TransactionType.ADD_OBSTETRICS_VISIT, loggedInMID.longValue(), b.getMID(), "");
         response.sendRedirect("/iTrust/auth/hcp-uap/obstetricsInfo.jsp");
     } else {
@@ -167,27 +165,29 @@ if (formIsFilled && !isMale) {
         }
     }
 } else {
-    b = new ObstetricsVisitBean();
+    b = obstetricsAction.getVisitById(Integer.parseInt(request.getParameter("visitId")));
     loggingAction.logEvent(TransactionType.ADD_OBSTETRICS_VISIT, loggedInMID.longValue(), b.getMID(), "");
 }
+
+
 //Default values for making the form look pretty
-if(b.getWeeksPregnant() == null)b.setWeeksPregnant("00-0");
-if(b.getVisitDate() == null){
-	String visitDate = "";
-	Date today = new Date();
-	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YY");
-	visitDate = formatter.format(today);
-	if(visitDate.length()==10){
-		visitDate = visitDate.substring(0,6) + visitDate.substring(8);	
-	}
-	b.setVisitDate(visitDate);
-}
-if(b.getBloodPressure() == null){
-	b.setBloodPressure("100/50");
-}
+// if(b.getWeeksPregnant() == null) b.setWeeksPregnant("00-0");
+// if(b.getVisitDate() == null){
+// 	String visitDate = "";
+// 	Date today = new Date();
+// 	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YY");
+// 	visitDate = formatter.format(today);
+// 	if(visitDate.length()==10){
+// 		visitDate = visitDate.substring(0,6) + visitDate.substring(8);	
+// 	}
+// 	b.setVisitDate(visitDate);
+// }
+// if(b.getBloodPressure() == null){
+// 	b.setBloodPressure("100/50");
+// }
 if(!isMale){
 	%>
-	<form id="editVisitForm" action="addObstetricsVisit.jsp" method="post"><input type="hidden" name="formIsFilled" value="true">
+	<form id="editVisitForm" action="updateObstetricsVisit.jsp" method="post"><input type="hidden" name="formIsFilled" value="true">
 	<br />
 	<div align=center>
 		<table id="AddObstetricsVisitTable" align="center" class="fTable">
@@ -222,6 +222,7 @@ if(!isMale){
 	<div align=center>
 		<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetrics Visit Info">
 	</div>
+		<input type="hidden" name="visitId" value="<%=request.getParameter("visitId") %>" />
 	</form>
 <%
 }else{

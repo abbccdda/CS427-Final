@@ -22,6 +22,7 @@ public class ObstetricsLoader implements BeanLoader<ObstetricsBean> {
 	@Override
 	public ObstetricsBean loadSingle(ResultSet rs) throws SQLException {
 		ObstetricsBean bean = new ObstetricsBean();
+		bean.setID(rs.getLong("id"));
 		bean.setMID(rs.getLong("MID"));
 		bean.setDeliveryMethod(rs.getString("deliveryMethod"));
 		bean.setYearOfConception(rs.getInt("yearOfConception"));

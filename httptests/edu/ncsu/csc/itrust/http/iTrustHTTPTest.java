@@ -2,11 +2,15 @@ package edu.ncsu.csc.itrust.http;
 
 import java.net.ConnectException;
 import java.util.List;
+
 import junit.framework.TestCase;
+
 import com.meterware.httpunit.HttpUnitOptions;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebForm;
 import com.meterware.httpunit.WebResponse;
+import com.meterware.httpunit.WebTable;
+
 import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.enums.TransactionType;
@@ -112,6 +116,20 @@ abstract public class iTrustHTTPTest extends TestCase {
 					fail("Event was logged, but should NOT have been logged");
 					return;
 				}
+		}
+	}
+	
+	public static void dumpWebTable(WebTable[] t) {
+		for(int i = 0; i < t.length; i++) {
+			System.out.println("Table " + i + ":");
+			for(int j = 0; j < t[i].getRowCount(); j++) {
+				System.out.print("Row " + j + ": [ ");
+				for(int k = 0; k < t[i].getColumnCount(); k++) {
+					System.out.print("{" + t[i].getCellAsText(j, k) + "} ");
+				}
+				System.out.println("]");
+			}
+			System.out.println("___________________________");
 		}
 	}
 }

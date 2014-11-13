@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 import edu.ncsu.csc.itrust.DBUtil;
+import edu.ncsu.csc.itrust.beans.ObstetricsBean;
 import edu.ncsu.csc.itrust.beans.ObstetricsVisitBean;
 import edu.ncsu.csc.itrust.beans.loaders.ObstetricsVisitLoader;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
@@ -20,10 +22,12 @@ import edu.ncsu.csc.itrust.exception.ITrustException;
 public class ObstetricsVisitDAO {
 	private DAOFactory factory;
 	private ObstetricsVisitLoader obstetricsVisitLoader;
+	private ObstetricsDAO obDAO;
 	
 	public ObstetricsVisitDAO(DAOFactory factory){
 		this.factory = factory;
 		this.obstetricsVisitLoader = new ObstetricsVisitLoader();
+		this.obDAO = new ObstetricsDAO(factory);
 	}
 	
 	public long add(ObstetricsVisitBean ob) throws DBException, ITrustException {
@@ -35,39 +39,57 @@ public class ObstetricsVisitDAO {
 			conn = factory.getConnection();
 			//Insert into the database, and update weeksPregnant in obstetrics
 			ps = conn.prepareStatement(""
-					+ "INSERT INTO obstetricsvisit (visitDate, weeksPregnant, bloodPressure, fetalHeartRate, fundalHeightUterus, MID) VALUES (?,?,?,?,?,?);");
+					+ "INSERT INTO obstetricsvisit (visitDate, weeksPregnant, bloodPressure, fetalHeartRate, fundalHeightUterus, MID, obstetricsID) VALUES (?,?,?,?,?,?,?);");
 			ps = obstetricsVisitLoader.loadParameters(ps, ob);
-			ps2 = conn.prepareStatement("UPDATE obstetrics,obstetricsvisit SET obstetrics.weeksPregnant = obstetricsvisit.weeksPregnant where obstetrics.MID=?");
-			ps2.setLong(1, ob.getMID());
-			ps2.executeUpdate();
+			ps.setFloat(7, ob.getObid());
 			ps.executeUpdate();
 			ps.close();
+			
+			ps2 = conn.prepareStatement("UPDATE obstetrics SET obstetrics.weeksPregnant =? where obstetrics.id=?");
+			ps2.setString(1, ob.getWeeksPregnant());
+			ps2.setLong(2, ob.getObid());
+			ps2.executeUpdate();
+			ps2.close();
+			
 			return DBUtil.getLastInsert(conn);
 		} catch (SQLException e) {
 			throw new DBException(e);
 		} finally {
 			DBUtil.closeConnection(conn, ps);
+			DBUtil.closeConnection(conn, ps2);
 		}
 	}
 	
 	public void edit(ObstetricsVisitBean ob) throws DBException {
 		Connection conn = null;
 		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
 		
 		try{
 			conn = factory.getConnection();
 			//Update the information into obstetricsvisit database, then update weeksPregnant accordingly in obstetrics
-			ps = conn.prepareStatement(""
-						+"UPDATE obstetricsvisit SET visitDate=?, weeksPregnant=?, bloodPressure=?, fetalHeartRate=?, fundalHeightUterus=? WHERE MID=?;"
-						+"UPDATE obstetrics,obstetricsvisit SET obstetrics.weeksPregnant = obstetricsvisit.weeksPregnant"
-						+"WHERE obstetrics.MID=obstetricsvisit.MID");
-			ps = obstetricsVisitLoader.loadParameters(ps, ob);
+			ps = conn.prepareStatement("UPDATE obstetricsvisit SET visitDate=?, weeksPregnant=?, bloodPressure=?, fetalHeartRate=?, fundalHeightUterus=? WHERE id=?;");
+			ps.setString(1, ob.getVisitDate());
+			ps.setString(2, ob.getWeeksPregnant());
+			ps.setString(3, ob.getBloodPressure());
+			ps.setInt(4, ob.getFetalHeartRate());
+			ps.setDouble(5, ob.getFundalHeightUterus());
+			ps.setLong(6, ob.getId());
 			ps.executeUpdate();
+			ps.close();
+			
+			ps2 = conn.prepareStatement("UPDATE obstetrics SET obstetrics.weeksPregnant =? where obstetrics.id=?");
+			ps2.setString(1, ob.getWeeksPregnant());
+			ps2.setLong(2, ob.getObid());
+			ps2.executeUpdate();
+			ps2.close();
+			
 		} catch (SQLException e) {
 			System.out.println(e.getLocalizedMessage());
 			throw new DBException(e);
 		} finally {
 			DBUtil.closeConnection(conn, ps);
+			DBUtil.closeConnection(conn, ps2);
 		}
 	}
 
@@ -99,6 +121,26 @@ public class ObstetricsVisitDAO {
 		return records;
 	}
 
-
+	public ObstetricsVisitBean getObstetricsVisitByID(long id) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ObstetricsVisitBean record = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM obstetricsvisit WHERE id=?");
+			ps.setLong(1, id);
+			ResultSet rs;
+			rs = ps.executeQuery();
+			rs.next();
+			record = obstetricsVisitLoader.loadSingle(rs);
+			rs.close();
+		} catch (SQLException e) {
+			
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+		return record;
+	}
 	
 }

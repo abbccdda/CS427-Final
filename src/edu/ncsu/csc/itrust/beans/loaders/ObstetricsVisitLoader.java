@@ -23,6 +23,8 @@ public class ObstetricsVisitLoader implements BeanLoader<ObstetricsVisitBean> {
 	@Override
 	public ObstetricsVisitBean loadSingle(ResultSet rs) throws SQLException {
 		ObstetricsVisitBean bean = new ObstetricsVisitBean();
+		bean.setId(rs.getLong("id"));
+		bean.setObid(rs.getLong("obstetricsID"));
 		bean.setMID(rs.getLong("MID"));
 		bean.setVisitDate(rs.getString("visitDate"));
 		bean.setWeeksPregnant(rs.getString("weeksPregnant"));

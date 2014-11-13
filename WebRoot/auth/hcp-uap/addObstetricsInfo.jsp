@@ -94,7 +94,6 @@ if (formIsFilled && !isMale) {
     }
 } else if(!isMale){
     b = new ObstetricsBean();
-    System.out.println(b.getMID());
     loggingAction.logEvent(TransactionType.ADD_OBSTETRICS, loggedInMID.longValue(), b.getMID(), "");
 }
 else{

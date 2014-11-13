@@ -21,11 +21,11 @@ public class EmailTest extends TestCase {
 
 	public void testListAllEmails() throws Exception {
 		List<Email> emails = factory.getFakeEmailDAO().getAllEmails();
-		assertEquals(4, emails.size());
+		assertEquals(6, emails.size());
 		Email email = getTestEmail();
 		new EmailUtil(factory).sendEmail(email);
 		emails = factory.getFakeEmailDAO().getAllEmails();
-		assertEquals(5, emails.size());
+		assertEquals(7, emails.size());
 		assertEquals(getTestEmail(), emails.get(0));
 	}
 

@@ -56,6 +56,16 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	}
 	
 	/**
+	 * Get a single ObstetricsVisitBean
+	 * @param id the id of the visit
+	 * @return the single record.
+	 * @throws DBException
+	 */
+	public ObstetricsVisitBean getVisitById(long id) throws DBException {
+		return obstetricsVisitDAO.getObstetricsVisitByID(id);
+	}
+	
+	/**
 	 * Get all Obstetrics Records for a specific patient by theirMID.
 	 * @param mid
 	 * @return
@@ -64,6 +74,11 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	public List<ObstetricsBean> getAllObstetricsRecords() throws ITrustException{
 		List<ObstetricsBean> obstetricsList = obstetricsDAO.getAllObstetricsRecords(patientMID);
 		return obstetricsList;
+	}
+	
+	public ObstetricsBean getMostRecentRecord() throws ITrustException {
+		ObstetricsBean record = obstetricsDAO.getMostRecentRecord(patientMID);
+		return record;
 	}
 	
 
@@ -91,6 +106,11 @@ public class ObstetricsInfoAction extends PatientBaseAction {
 	public void addObstetricsVisitInfo(ObstetricsVisitBean ob) throws ITrustException{
 		ob.setMID(patientMID);
 		obstetricsVisitDAO.add(ob);
+	}
+	
+	public void updateObstetricsVisitInfo(ObstetricsVisitBean ob) throws ITrustException {
+		ob.setMID(patientMID);
+		obstetricsVisitDAO.edit(ob);
 	}
 	
 	
