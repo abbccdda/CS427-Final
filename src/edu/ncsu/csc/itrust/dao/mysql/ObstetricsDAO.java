@@ -92,7 +92,6 @@ public class ObstetricsDAO {
 			records = obstetricsLoader.loadList(rs);
 			rs.close();
 		} catch (SQLException e) {
-			
 			throw new DBException(e);
 		} finally {
 			DBUtil.closeConnection(conn, ps);

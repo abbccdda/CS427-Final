@@ -192,7 +192,7 @@ if(!isMale){
 	<div align=center>
 		<table id="AddObstetricsVisitTable" align="center" class="fTable">
 			<tr>
-				<th colspan="4" style="text-align: center;">Add Obstetrics Visit Info For <%= patientName %></th>
+				<th colspan="4" style="text-align: center;">Update Obstetrics Visit Info For <%= patientName %></th>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Visit Date</td>
@@ -220,7 +220,7 @@ if(!isMale){
 		</table>
 	</div>
 	<div align=center>
-		<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetrics Visit Info">
+		<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Update Obstetrics Visit Info">
 	</div>
 		<input type="hidden" name="visitId" value="<%=request.getParameter("visitId") %>" />
 	</form>
