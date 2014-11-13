@@ -205,11 +205,11 @@ public class PatientDAO {
 			ps = conn.prepareStatement("UPDATE patients SET firstName=?,lastName=?,email=?,"
 					+ "address1=?,address2=?,city=?,state=?,zip=?,phone=?,"
 					+ "eName=?,ePhone=?,iCName=?,iCAddress1=?,iCAddress2=?,iCCity=?,"
-					+ "ICState=?,iCZip=?,iCPhone=?,iCID=?,DateOfBirth=?,"
+					+ "ICState=?,iCZip=?,iCPhone=?,iCID=?, messagefilter=?, DateOfBirth=?,"
 					+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 					+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 					+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=? where MID=?");
+					+ "AlternateName=?, DateOfDeactivation=? WHERE MID=?");
 
 			patientLoader.loadParameters(ps, p);
 			ps.setLong(38, p.getMID());

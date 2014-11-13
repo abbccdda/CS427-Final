@@ -26,9 +26,9 @@ public class ObstetricsVisitLoader implements BeanLoader<ObstetricsVisitBean> {
 		bean.setMID(rs.getLong("MID"));
 		bean.setVisitDate(rs.getString("visitDate"));
 		bean.setWeeksPregnant(rs.getString("weeksPregnant"));
-		bean.setBloodPressure(rs.getInt("bloodPressure"));
+		bean.setBloodPressure(rs.getString("bloodPressure"));
 		bean.setFetalHeartRate(rs.getInt("fetalHeartRate"));
-		bean.setFundalHeightUterus(rs.getLong("fundalHeightUterus"));
+		bean.setFundalHeightUterus(rs.getDouble("fundalHeightUterus"));
 		return bean;
 	}
 
@@ -36,9 +36,9 @@ public class ObstetricsVisitLoader implements BeanLoader<ObstetricsVisitBean> {
 	public PreparedStatement loadParameters(PreparedStatement ps, ObstetricsVisitBean ob) throws SQLException {
 		ps.setString(1, ob.getVisitDate());
 		ps.setString(2, ob.getWeeksPregnant());
-		ps.setInt(3, ob.getBloodPressure());
+		ps.setString(3, ob.getBloodPressure());
 		ps.setInt(4, ob.getFetalHeartRate());
-		ps.setLong(5, ob.getFundalHeightUterus());
+		ps.setDouble(5, ob.getFundalHeightUterus());
 		ps.setLong(6, ob.getMID());
 		return ps;
 	}

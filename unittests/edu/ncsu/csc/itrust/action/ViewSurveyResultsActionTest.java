@@ -26,12 +26,12 @@ public class ViewSurveyResultsActionTest extends TestCase {
 	public void testGetResultsByZipAndSpecialty() throws Exception {
 		SurveyResultBean bean = new SurveyResultBean();
 		bean.setHCPzip("10453");
-		bean.setHCPspecialty(SurveyResultBean.SURGEON_SPECIALTY);
+		bean.setHCPspecialty(SurveyResultBean.OBGYN_SPECIALTY);
 		List<SurveyResultBean> list = action.getSurveyResultsForZip(bean);
 		SurveyResultBean bean0 = list.get(0);
 		assertEquals("10453", bean0.getHCPzip());
 		assertEquals("Doctor", bean0.getHCPLastName());
-		assertEquals("surgeon", bean0.getHCPspecialty()); // hardcoded surgeon b/c of the capitalization
+		assertEquals("OB/GYN", bean0.getHCPspecialty()); // hardcoded surgeon b/c of the capitalization
 															// difference
 
 	}
@@ -44,7 +44,7 @@ public class ViewSurveyResultsActionTest extends TestCase {
 		SurveyResultBean bean0 = list.get(0);
 		assertEquals("10453", bean0.getHCPzip());
 		assertEquals("Doctor", bean0.getHCPLastName());
-		assertEquals("surgeon", bean0.getHCPspecialty()); // hardcoded surgeon b/c of the capitalization
+		assertEquals("OB/GYN", bean0.getHCPspecialty()); // hardcoded surgeon b/c of the capitalization
 															// difference
 	}
 

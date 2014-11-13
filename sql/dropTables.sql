@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS ndcodes;
 DROP TABLE IF EXISTS druginteractions;
 DROP TABLE IF EXISTS patients;
 DROP TABLE IF EXISTS obstetrics;
-DROP TABLE IF EXISTS obstetricsofficevisit;
+DROP TABLE IF EXISTS obstetricsvisit;
 DROP TABLE IF EXISTS historypatients;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userprefs;

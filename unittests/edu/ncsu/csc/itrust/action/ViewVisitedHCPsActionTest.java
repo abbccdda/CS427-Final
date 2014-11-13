@@ -102,8 +102,8 @@ public class ViewVisitedHCPsActionTest extends TestCase {
 		// Filter on specialty only.
 		List<HCPVisitBean> beanslist = action.filterHCPList("", "surgeon", "");
 		ArrayList<HCPVisitBean> beans = new ArrayList<HCPVisitBean>(beanslist);
-		assertEquals(3, beans.size());
-		assertEquals("Kelly Doctor", beans.get(2).getHCPName());
+		assertEquals(2, beans.size());
+//		assertEquals("Kelly Doctor", beans.get(2).getHCPName());
 		assertEquals("Jason Frankenstein", beans.get(1).getHCPName());
 		assertEquals("Mary Shelley", beans.get(0).getHCPName());
 	}

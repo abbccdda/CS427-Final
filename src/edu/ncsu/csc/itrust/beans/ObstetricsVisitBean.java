@@ -7,9 +7,9 @@ public class ObstetricsVisitBean implements Serializable, Comparable<ObstetricsB
 	private long MID = 0;
 	String visitDate;
 	String weeksPregnant;
-	int bloodPressure;
+	String bloodPressure;
 	int fetalHeartRate;
-	long fundalHeightUterus;
+	double fundalHeightUterus;
 	
 	@Override
 	public int compareTo(ObstetricsBean o) {
@@ -36,10 +36,10 @@ public class ObstetricsVisitBean implements Serializable, Comparable<ObstetricsB
 	public void setWeeksPregnant(String weeksPregnant) {
 		this.weeksPregnant = weeksPregnant;
 	}
-	public int getBloodPressure() {
+	public String getBloodPressure() {
 		return bloodPressure;
 	}
-	public void setBloodPressure(int bloodPressure) {
+	public void setBloodPressure(String bloodPressure) {
 		this.bloodPressure = bloodPressure;
 	}
 	public int getFetalHeartRate() {
@@ -48,10 +48,10 @@ public class ObstetricsVisitBean implements Serializable, Comparable<ObstetricsB
 	public void setFetalHeartRate(int fetalHeartRate) {
 		this.fetalHeartRate = fetalHeartRate;
 	}
-	public long getFundalHeightUterus() {
+	public double getFundalHeightUterus() {
 		return fundalHeightUterus;
 	}
-	public void setFundalHeightUterus(long fundalHeightUterus) {
+	public void setFundalHeightUterus(double fundalHeightUterus) {
 		this.fundalHeightUterus = fundalHeightUterus;
 	}
 	
