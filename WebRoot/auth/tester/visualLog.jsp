@@ -30,6 +30,11 @@ Object transactionType = "sdfas";
 Object userRole1 = "sad";
 Object userRole2 = "sdfasdf"; */
 
+String [] sug =new String[4];
+sug[0] = "111,123,444,33";
+sug[1] = "444,123,111,33";
+sug[2] = "111,33,444,123";
+sug[3] = "33,123,444,111";
 
 for (int graph = 0; graph < 4; graph++) {
 	
@@ -80,8 +85,8 @@ for (int graph = 0; graph < 4; graph++) {
 	}
 	
 	System.out.print(values);
-	//values = "111,123,444,33";
-	values = values.substring(0, values.length() - 1);
+	values = sug[graph];
+	//values = values.substring(0, values.length() - 1);
 	
 	String chartURL = "https://chart.googleapis.com/chart?chs=800x200&amp;chd=t:";
 	chartURL += values;
