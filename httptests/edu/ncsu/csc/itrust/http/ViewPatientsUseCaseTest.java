@@ -33,6 +33,7 @@ public class ViewPatientsUseCaseTest extends iTrustHTTPTest {
 	 * Random Person, 1247 Noname Dr Suite 106 Raleigh NC 27606, 2005-10-10.
 	 */
 	/**
+	 * UPDATE: Typo on line 60 (2 spaces between address and city instead of 1)
 	 * testViewLHCPPatients
 	 * @throws Exception
 	 */
@@ -57,7 +58,7 @@ public class ViewPatientsUseCaseTest extends iTrustHTTPTest {
 		assertEquals("06/10/2007", wt.getTableCell(9, 2).getText());
 		assertEquals("06/09/2007", wt.getTableCell(10, 2).getText());
 		assertEquals("", wt.getTableCell(11, 2).getText());
-		assertEquals("344 Bob Street  Raleigh NC 27607", wt.getTableCell(2, 1).getText());
+		assertEquals("344 Bob Street Raleigh NC 27607", wt.getTableCell(2, 1).getText());
 		wr = wr.getLinkWith("Andy Programmer").click();
 		assertEquals("iTrust - Edit Personal Health Record", wr.getTitle());
 	}

@@ -27,7 +27,8 @@ public class PhysicianSatisfactionUseCaseTest extends iTrustHTTPTest {
 	 *  1. Patient 2 chooses to view satisfaction survey results.
 	 *  2. Patient 2 inputs Surgeon for physician type and zip code 12377.
 	 *  3. Submit.
-	 * 
+	 *  UPDATE: Changed lines 46 and 57 to reflect the fact that Kelly Doctor
+	 *  (MID 9000000000) is now being generated as an OB/GYN instead of a surgeon.
 	 */
 
 	public void testSearchForHCPSurveyResults1() throws Exception {
@@ -43,7 +44,7 @@ public class PhysicianSatisfactionUseCaseTest extends iTrustHTTPTest {
 		
 		WebForm form = wr.getForms()[0];
 		form.setParameter("hcpZip", "10453");
-		form.setParameter("hcpSpecialty", SurveyResultBean.SURGEON_SPECIALTY);
+		form.setParameter("hcpSpecialty", SurveyResultBean.OBGYN_SPECIALTY);
 		//view current page to ensure data is correct
 		wr = form.submit();
 		assertTrue(wr.getText().contains("Survey Results"));
@@ -54,7 +55,7 @@ public class PhysicianSatisfactionUseCaseTest extends iTrustHTTPTest {
 		assertTrue(wr.getText().contains("New York"));
 		assertTrue(wr.getText().contains("NY"));
 		assertTrue(wr.getText().contains("10453"));
-		assertTrue(wr.getText().contains("surgeon"));
+		assertTrue(wr.getText().contains("OB/GYN"));
 		assertLogged(TransactionType.SATISFACTION_SURVEY_VIEW, 2L, 0L, "");		
 	}
 	

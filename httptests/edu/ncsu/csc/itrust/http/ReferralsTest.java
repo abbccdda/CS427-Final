@@ -57,7 +57,8 @@ public class ReferralsTest extends iTrustHTTPTest {
 		form.setParameter("LAST_NAME", "Stormcrow");
 		form.getButtons()[0].click();
 		wr = wc.getCurrentPage();
-		wr.getForms()[2].getButtons()[0].click();
+		System.out.println(wr.getForms()[1].getButtons()[0].getID());
+		wr.getForms()[1].getButtons()[2].click();
 		
 		// we should be on the edit referral page now
 		wr = wc.getCurrentPage();

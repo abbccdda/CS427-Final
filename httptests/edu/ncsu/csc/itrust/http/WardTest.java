@@ -105,6 +105,9 @@ public class WardTest extends iTrustHTTPTest {
 	 //5. Admin will assigned "Heart Doctor (Heart Surgeon)" to the cardiac ward and "Baby Doctor (Pediatrician)" to the two pediatric wards. 
 	 //  If the admin assigns the wrong doctor to the wrong ward, an error will be displayed.
 	  //changed baby doctor to kelly doctor because testdata is already present
+	  //UPDATE: Had to change 2 of the assertEquals tests (for HCPtoAdd and removeHCP)
+	  //because the parameters have been switched around. No parts of the functionality
+	  //automation have been changed.
 	/**
 	 * testadminassignhcp
 	 * @throws Exception
@@ -125,11 +128,13 @@ public class WardTest extends iTrustHTTPTest {
 		Form = wr.getForms()[4]; //get cardiology add hcp form
 		//check size
 		String[] check = Form.getParameterNames();
+		//for (int i = 0;i < check.length;i++)
+			//System.out.println(check[i]);
 		/*
 		for (int i = 0; i < wr.getForms().length; i++){
 			System.out.println(wr.getForms()[i].getParameterNames()[0]);
 		}*/
-		assertEquals("HCPtoAdd", check[0]);
+		assertEquals("HCPtoAdd", check[3]); //changed
 		Form.setParameter("HCPtoAdd", "9000000000"); //add kelly doctor
 		Form.submit();
 
@@ -139,8 +144,9 @@ public class WardTest extends iTrustHTTPTest {
 		Form = wr.getForms()[4]; //get unassign hcp
 		check = Form.getParameterNames();
 		
-
-		assertEquals("removeHCP", check[0]);
+		//for (int i = 0;i < check.length;i++)
+			//System.out.println(check[i]);
+		assertEquals("removeHCP", check[3]); //changed
 		Form.setParameter("HCPtoRemove", "9000000000");
 		Form.submit();
 		

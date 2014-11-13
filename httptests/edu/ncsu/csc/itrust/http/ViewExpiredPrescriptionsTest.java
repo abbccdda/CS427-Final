@@ -29,6 +29,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 	 * MID: 2
 	 * Password: pw
 	 * Choose option My Expired Prescription Reports
+	 * UPDATE: changed specialty to OB/GYN to reflect changes to Kelly Doctor
 	 */
 	public void testViewExpired1() throws Exception {
 		// login patient 2
@@ -43,7 +44,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 		assertFalse(wr.getText().contains("9000000000"));
 		// click on a particular office visit to check medication and diagnoses
 		wr = wr.getLinkWith("Kelly Doctor").click();  // This click does not work at the moment.
-		assertTrue(wr.getText().contains("surgeon"));
+		assertTrue(wr.getText().contains("OB/GYN"));
 		assertTrue(wr.getText().contains("4321 My Road St"));
 		assertTrue(wr.getText().contains("New York"));
 		assertTrue(wr.getText().contains("NY"));
@@ -60,6 +61,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 	 * MID: 99
 	 * Password: pw
 	 * Choose option My Expired Prescription Reports
+	 * UPDATE: changed specialty to OB/GYN to reflect changes to Kelly Doctor
 	 */
 	public void testViewExpired2() throws Exception {
 		// login patient 9
@@ -76,7 +78,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 		assertFalse(wr.getText().contains("9900000000"));
 		// click on a particular office visit to check medication and diagnoses
 		wr = wr.getLinkWith("Tester Arehart").click();  // This click does not work at the moment.
-		assertTrue(wr.getText().contains("Neurologist"));
+		assertTrue(wr.getText().contains("OB/GYN"));
 		assertTrue(wr.getText().contains("2110 Thanem Circle"));
 		assertTrue(wr.getText().contains("Raleigh"));
 		assertTrue(wr.getText().contains("NC"));
@@ -91,6 +93,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 	 * MID: 99
 	 * Password: pw
 	 * Choose option My Expired Prescription Reports
+	 * UPDATE: changed specialty to OB/GYN to reflect changes to Kelly Doctor
 	 */
 	public void testViewExpired3() throws Exception {
 		// login patient 9
@@ -108,7 +111,7 @@ public class ViewExpiredPrescriptionsTest extends iTrustHTTPTest {
 		assertLogged(TransactionType.EXPIRED_PRESCRIPTION_VIEW, 99L, 99L, "");
 		// click on a particular office visit to check medication and diagnoses
 		wr = wr.getLinkWith("Kelly Doctor").click();  // This click does not work at the moment.
-		assertTrue(wr.getText().contains("surgeon"));
+		assertTrue(wr.getText().contains("OB/GYN"));
 		assertTrue(wr.getText().contains("4321 My Road St"));
 		assertTrue(wr.getText().contains("New York"));
 		assertTrue(wr.getText().contains("NY"));

@@ -31,6 +31,7 @@ public class ViewAllPatientsUseCaseTest extends iTrustHTTPTest {
      * Random person
      * Andy programmer
      * Bowser Koopa
+     * UPDATE: fixed spacing error in line 54
 	 */
 	/**
 	 * testViewAllPatients
@@ -51,7 +52,7 @@ public class ViewAllPatientsUseCaseTest extends iTrustHTTPTest {
 		assertEquals("09/14/2009", wt.getTableCell(2, 2).getText());
 		assertEquals("", wt.getTableCell(4, 2).getText());
 		
-		assertEquals("344 Bob Street  Raleigh NC 27607", wt.getTableCell(2, 1).getText());
+		assertEquals("344 Bob Street Raleigh NC 27607", wt.getTableCell(2, 1).getText());
 
 	}
 }

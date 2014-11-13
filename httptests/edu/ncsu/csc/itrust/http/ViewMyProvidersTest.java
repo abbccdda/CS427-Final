@@ -73,12 +73,13 @@ public class ViewMyProvidersTest extends iTrustHTTPTest {
 		assertEquals("Kelly Doctor", wt.getCellAsText(2, 0));
 		
 		// Filter on specialty.
-		wr.getForms()[1].setParameter("filter_specialty", "surgeon");
+		wr.getForms()[1].setParameter("filter_specialty", "OB/GYN");
 		wr = wr.getForms()[1].submit();
 
 		// Only Kelly Doctor should be listed now... no more Gandalf Stormcrow.
 		assertEquals("iTrust - My Providers", wr.getTitle());
 		wt = wr.getTableStartingWith("HCP Name");
+		//System.out.println(wt.getRowCount());
 		assertEquals(3, wt.getRowCount());
 		assertEquals("Kelly Doctor", wt.getCellAsText(1, 0));
 		assertFalse("Gandalf Stormcrow".equals(wt.getCellAsText(2, 0)));

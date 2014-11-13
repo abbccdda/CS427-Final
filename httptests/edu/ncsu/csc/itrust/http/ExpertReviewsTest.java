@@ -73,6 +73,7 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 	public void testOverallRating() throws Exception{
 		WebConversation wc = login("22", "pw");
 		WebResponse wr = wc.getCurrentPage();
+		assertNotNull(wr.getLinkWith("Expert's Reviews"));
 		wr = wr.getLinkWith("Expert's Reviews").click();
 		//The links are never on the webpage, so we need to manually do this, sorry.
 		wr = wc.getResponse(ADDRESS + "auth/patient/reviewsPage.jsp?expertID=9000000003");
