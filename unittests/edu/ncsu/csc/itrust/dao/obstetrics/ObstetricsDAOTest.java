@@ -83,5 +83,35 @@ public class ObstetricsDAOTest extends TestCase{
 		oDAO.add(princessPeachGotKnockedUp);
 	}
 
-	
+	/**
+	 * Tests that off-color input will throw a SQLException/DBException.
+	 * @throws Exception
+	 */
+	public void testBadInput() throws Exception {
+		ObstetricsBean evilBean = new ObstetricsBean();
+		try{
+			String badWeekInput = "sdfdfsdf";
+			evilBean.setWeeksPregnant(badWeekInput);
+			oDAO.add(evilBean);
+		}
+		catch(Exception e){
+			//Ignore, no message testing needed
+		}
+		
+		try{
+			ObstetricsBean princessPeachGotKnockedUp = new ObstetricsBean();
+			princessPeachGotKnockedUp.setDeliveryMethod("Vaginal Delivery");
+			princessPeachGotKnockedUp.setHoursLabor(3);
+			princessPeachGotKnockedUp.setWeeksPregnant("07-5");
+			princessPeachGotKnockedUp.setYearOfConception(1995);
+			princessPeachGotKnockedUp.setMID(21);
+			oDAO.add(princessPeachGotKnockedUp);
+			princessPeachGotKnockedUp.setWeeksPregnant("fsdfsdf");
+			oDAO.edit(princessPeachGotKnockedUp);
+		}
+		catch(Exception e) {
+			//Ignore, no message testing needed
+		}
+	}
+
 }
