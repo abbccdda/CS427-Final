@@ -209,7 +209,7 @@ public class PatientDAO {
 					+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 					+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 					+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=?, WHERE MID=?");
+					+ "AlternateName=?, DateOfDeactivation=?, messagefilter=? where MID=?");
 
 			patientLoader.loadParameters(ps, p);
 			ps.setLong(38, p.getMID());

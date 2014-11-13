@@ -76,11 +76,11 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		p.setLanguage(rs.getString("Language"));
 		p.setSpiritualPractices(rs.getString("SpiritualPractices"));
 		p.setAlternateName(rs.getString("AlternateName"));
-		p.setMessageFilter(rs.getString("messagefilter"));
 		Date dateOfDeactivation = rs.getDate("DateOfDeactivation");
 		if (dateOfDeactivation != null){
 			p.setDateOfDeactivationStr(DATE_FORMAT.format(dateOfDeactivation));
 		}
+		p.setMessageFilter(rs.getString("messagefilter"));
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		ps.setString(i++, p.getIcZip());
 		ps.setString(i++, p.getIcPhone());
 		ps.setString(i++, p.getIcID());
-		ps.setString(i++, p.getMessageFilter());
+		
 		Date date = null;
 		try {
 			date = new java.sql.Date(DATE_FORMAT.parse(p.getDateOfBirthStr())
@@ -192,6 +192,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 			}
 		}
 		ps.setDate(i++, date);
+		ps.setString(i++, p.getMessageFilter());
 		return ps;
 	}
 }

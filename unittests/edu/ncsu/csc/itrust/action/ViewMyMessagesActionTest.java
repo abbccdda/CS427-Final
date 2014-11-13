@@ -235,6 +235,18 @@ public class ViewMyMessagesActionTest extends TestCase {
 		assertEquals(1, mbList.size());
 	}
 	
+	public void testFilterValidateError(){
+		String filter = "Random Person,Appointment,Appointment,Lab,01a/01/2010,01/31/2010";
+		String f2 = action2.validateAndCreateFilter(filter);
+		assertEquals(true, f2.startsWith("Error"));
+	}
+	
+	public void testFilterValidateSuccess(){
+		String filter = "Random Person,Appointment,Appointment,Lab,01/01/2010,01/31/2010";
+		String f2 = action2.validateAndCreateFilter(filter);
+		assertEquals(f2,filter);
+	}
+	
 	/**
 	 * testGetUnreadCount
 	 * @throws DBException
@@ -297,4 +309,6 @@ public class ViewMyMessagesActionTest extends TestCase {
 			assertNull(resultList);
 		}
 	}
+	
+	
 }

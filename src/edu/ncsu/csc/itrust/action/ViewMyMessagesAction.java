@@ -223,6 +223,31 @@ public class ViewMyMessagesAction {
 	}
 	
 	public String validateAndCreateFilter(String filter){
+		List<MessageBean> filtered = new ArrayList<MessageBean>();
+		String[] f = filter.split(",", -1);
+		if(!f[4].equals("")) {
+			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+			try{
+				
+				Date s = format.parse(f[4]);
+			}
+			catch(ParseException e){
+				return "Error saving filter: "+filter;
+			}
+		}
+		if(!f[5].equals("")) {
+			DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+			try{
+				Date s = format.parse(f[5]);
+				if(!f[4].equals("")) {
+						Date s2 = format.parse(f[4]);
+						if(s.before(s2)) return "Error saving filter[END DATE BEFORE START DATE]: "+filter;
+					}
+			}
+			catch (ParseException e) {
+				return "Error saving filter: "+filter;
+			}
+		}
 		return filter;
 	}
 	
