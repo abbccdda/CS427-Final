@@ -25,7 +25,7 @@
 %>
 
 <%@include file="/header.jsp"%>
-
+<!-- Cite from T817 for query log implementation -->
 
 <%
 	String userRole1 = "";
