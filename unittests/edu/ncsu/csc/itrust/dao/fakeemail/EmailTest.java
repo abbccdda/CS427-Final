@@ -30,9 +30,9 @@ public class EmailTest extends TestCase {
 	}
 
 	public void testListEmailsByPerson() throws Exception {
-		String email = "gstormcrow@iTrust.org";
+		String email = "noreply@itrust.com";
 		List<Email> emails = factory.getFakeEmailDAO().getEmailsByPerson(email);
-		assertEquals(2, emails.size());
+		assertEquals(4, emails.size());
 		assertEquals("this is an email", emails.get(0).getSubject());
 		assertEquals("this is another email", emails.get(1).getSubject());
 	}
@@ -57,6 +57,15 @@ public class EmailTest extends TestCase {
 		email.setSubject("this is the subject");
 		email.setToList(Arrays.asList("ncsucsc326@gmail.com"));
 		return email;
+	}
+	
+	public void testSendReminders() throws Exception{
+		TestDataGenerator gen = new TestDataGenerator();
+		gen.appointmentCase1();
+		factory.getFakeEmailDAO().sendReminderEmails(14);
+		List<Email> emails = factory.getFakeEmailDAO().getEmailsByPerson("System Reminder");
+		Email test = emails.get(0);
+		assertEquals(test.getFrom(), "System Reminder");
 	}
 
 }
