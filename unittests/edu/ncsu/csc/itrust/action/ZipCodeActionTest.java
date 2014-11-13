@@ -28,19 +28,9 @@ public class ZipCodeActionTest extends TestCase
 	
 	public void testGetExperts() throws DBException
 	{
-		System.out.println("Begin testGetExperts");
-		List<PersonnelBean> physicians = zipCodeAction.getExperts("Surgeon", "10453", "250");
+		List<PersonnelBean> physicians = zipCodeAction.getExperts("OB/GYN", "10453", "250");
 		assertEquals(0, physicians.size());
-		System.out.println(physicians.size());
-		for(PersonnelBean pb : physicians){
-			System.out.println(pb.getFullName());
-		}
-		physicians = zipCodeAction.getExperts("Surgeon", "10453", "500");
-		System.out.println(physicians.size());
-		for(PersonnelBean pb : physicians){
-			System.out.println(pb.getFullName());
-		}
-		System.out.println("End testGetExperts");
+		physicians = zipCodeAction.getExperts("OB/GYN", "10453", "500");
 		physicians.get(0).getFullName().equals("Kelly Doctor");
 	}
 }

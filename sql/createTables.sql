@@ -134,7 +134,7 @@ CREATE TABLE historypatients(
 	zip varchar(10)  default '', 
 	phone varchar(12) default '',
 	eName varchar(40)  default '', 
-	ePhone varchar(12)  default '', 	
+	ePhone varchar(12)  default '', 
 	iCName varchar(20)  default '', 
 	iCAddress1 varchar(20)  default '', 
 	iCAddress2 varchar(20)  default '', 
@@ -160,6 +160,7 @@ CREATE TABLE historypatients(
 	SpiritualPractices varchar(512) default '',
 	AlternateName varchar(32) default '',
 	DateOfDeactivation DATE default NULL,
+	messagefilter varchar(256) default '',
 	PRIMARY KEY (ID)
 ) ENGINE=MyISAM;
 

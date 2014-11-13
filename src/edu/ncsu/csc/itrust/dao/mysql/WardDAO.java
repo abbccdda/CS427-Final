@@ -60,7 +60,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM WARDS WHERE InHospital = ? ORDER BY RequiredSpecialty");
+			ps = conn.prepareStatement("SELECT * FROM wards WHERE InHospital = ? ORDER BY RequiredSpecialty");
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			List<WardBean> loadlist =wardLoader.loadList(rs);
@@ -88,7 +88,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO Wards (RequiredSpecialty, InHospital) " + "VALUES (?,?)");
+			ps = conn.prepareStatement("INSERT INTO wards (RequiredSpecialty, InHospital) " + "VALUES (?,?)");
 			ps.setString(1, ward.getRequiredSpecialty());
 			ps.setLong(2, ward.getInHospital());
 			boolean check = (1 == ps.executeUpdate());
@@ -143,7 +143,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("DELETE FROM Wards WHERE WardID = ?");
+			ps = conn.prepareStatement("DELETE FROM wards WHERE WardID = ?");
 			ps.setLong(1, id);
 			boolean check = (1 == ps.executeUpdate());
 			ps.close();
@@ -169,7 +169,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM WARDROOMS WHERE InWard = ? ORDER BY RoomName");
+			ps = conn.prepareStatement("SELECT * FROM wardrooms WHERE InWard = ? ORDER BY RoomName");
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
 			List<WardRoomBean> loadlist = wardRoomLoader.loadList(rs);
@@ -197,7 +197,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO WardRooms (InWard, RoomName, Status) " + "VALUES (?,?,?)");
+			ps = conn.prepareStatement("INSERT INTO wardrooms (InWard, RoomName, Status) " + "VALUES (?,?,?)");
 			ps.setLong(1, wardRoom.getInWard());
 			ps.setString(2, wardRoom.getRoomName());
 			ps.setString(3, wardRoom.getStatus());
@@ -254,7 +254,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("DELETE FROM WardRooms WHERE RoomID = ?");
+			ps = conn.prepareStatement("DELETE FROM wardrooms WHERE RoomID = ?");
 			ps.setLong(1, id);
 			boolean check = (1 == ps.executeUpdate());
 			ps.close();
@@ -279,7 +279,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM HCPAssignedToWard haw INNER JOIN Wards w WHERE HCP = ? AND haw.ward = w.wardid ORDER BY RequiredSpecialty");
+			ps = conn.prepareStatement("SELECT * FROM hcpassignedtoward haw INNER JOIN wards w WHERE HCP = ? AND haw.ward = w.wardid ORDER BY RequiredSpecialty");
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
 			
@@ -307,7 +307,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("SELECT * FROM HCPAssignedToWard haw INNER JOIN Personnel p WHERE haw.HCP = p.MID AND WARD = ? ORDER BY lastName");
+			ps = conn.prepareStatement("SELECT * FROM hcpassignedtoward haw INNER JOIN personnel p WHERE haw.HCP = p.MID AND WARD = ? ORDER BY lastName");
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
 			List<PersonnelBean> loadlist =personnelLoader.loadList(rs);
@@ -335,7 +335,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO HCPAssignedToWard (HCP, WARD) Values(?,?)");
+			ps = conn.prepareStatement("INSERT INTO hcpassignedtoward (HCP, WARD) Values(?,?)");
 			ps.setLong(1, hcpID);
 			ps.setLong(2, wardID);
 			
@@ -365,7 +365,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("DELETE FROM HCPAssignedToWard WHERE Ward = ? and hcp = ?");
+			ps = conn.prepareStatement("DELETE FROM hcpassignedtoward WHERE Ward = ? and hcp = ?");
 			ps.setLong(1, wardID);
 			ps.setLong(2, hcpID);
 			boolean check = (1 == ps.executeUpdate());
@@ -391,7 +391,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("UPDATE wardRooms SET OccupiedBy=? " + "WHERE RoomID = ?");
+			ps = conn.prepareStatement("UPDATE wardrooms SET OccupiedBy=? " + "WHERE RoomID = ?");
 			if(wardRoom.getOccupiedBy() == null){
 				ps.setNull(1, java.sql.Types.BIGINT);
 			} else {
@@ -551,7 +551,7 @@ public class WardDAO {
 		PreparedStatement ps = null;
 		try {
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("INSERT INTO WardRoomCheckout (PID, Reason) Values(?,?)");
+			ps = conn.prepareStatement("INSERT INTO wardroomcheckout (PID, Reason) Values(?,?)");
 			ps.setLong(1, mid);
 			ps.setString(2, reason);
 			boolean check = (1 == ps.executeUpdate());
