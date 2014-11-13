@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class ObstetricsVisitBean implements Serializable, Comparable<ObstetricsBean> {
 	private static final long serialVersionUID = 8200500237498907126L;
+	private long id = 0;
+	private long obid = 0;
 	private long MID = 0;
 	String visitDate;
 	String weeksPregnant;
@@ -18,6 +20,26 @@ public class ObstetricsVisitBean implements Serializable, Comparable<ObstetricsB
 	}
 	
 	
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public long getObid() {
+		return obid;
+	}
+
+
+	public void setObid(long obid) {
+		this.obid = obid;
+	}
+
+
 	public long getMID() {
 		return MID;
 	}

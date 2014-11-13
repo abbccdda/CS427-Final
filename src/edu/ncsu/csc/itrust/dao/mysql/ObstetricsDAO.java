@@ -56,8 +56,13 @@ public class ObstetricsDAO {
 		
 		try{
 			conn = factory.getConnection();
-			ps = conn.prepareStatement("UPDATE obstetrics SET yearOfConception=?, weeksPregnant=?, hoursLabor=?, deliveryMethod=? WHERE MID=?");
-			ps = obstetricsLoader.loadParameters(ps, ob);
+			ps = conn.prepareStatement("UPDATE obstetrics SET yearOfConception=?, weeksPregnant=?, hoursLabor=?, deliveryMethod=? WHERE id=?");
+			ps.setInt(1, ob.getYearOfConception());
+			ps.setString(2, ob.getWeeksPregnant());
+			ps.setDouble(3, ob.getHoursLabor());
+			ps.setString(4, ob.getDeliveryMethod());
+			ps.setLong(5, ob.getID());
+			
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getLocalizedMessage());
@@ -95,6 +100,26 @@ public class ObstetricsDAO {
 		return records;
 	}
 
-
+	public ObstetricsBean getMostRecentRecord(long mid) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ObstetricsBean record = null;
+		try {
+			conn = factory.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM obstetrics WHERE MID=? ORDER BY yearOfConception DESC");
+			ps.setLong(1, mid);
+			ResultSet rs;
+			rs = ps.executeQuery();
+			rs.next();
+			record = obstetricsLoader.loadSingle(rs);
+			rs.close();
+		} catch (SQLException e) {
+			
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+		return record;
+	}
 	
 }

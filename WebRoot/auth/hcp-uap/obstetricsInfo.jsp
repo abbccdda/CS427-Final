@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.text.DecimalFormat"%>
+<%@page import="java.net.URLEncoder"%>
 <%@page import="edu.ncsu.csc.itrust.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.action.ObstetricsInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.beans.HealthRecord"%>
@@ -158,7 +159,7 @@ if(!isMale && visitHistory.size()!=0){
 	<div align=center>
 	<table id="ObstetricsVisitHistoryRecords" align="center" class="fTable">
 	<tr>
-		<th colspan="5" style="text-align: center;">Obstetrics Visit History</th>
+		<th colspan="6" style="text-align: center;">Obstetrics Visit History</th>
 	</tr>
 	<tr class = "subHeader">
 		<td>Visit Date</td>
@@ -166,6 +167,7 @@ if(!isMale && visitHistory.size()!=0){
 		<td>Blood Pressure</td>
 		<td>Fetal Heart Rate</td>
 		<td>Fundal Uterus Height</td>
+		<td></td>
 	</tr>
 	<%
 	for(ObstetricsVisitBean bean : visitHistory){
@@ -178,6 +180,12 @@ if(!isMale && visitHistory.size()!=0){
 			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getBloodPressure())) %></td>
 			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getFetalHeartRate())) %></td>
 			<td align=center><%= StringEscapeUtils.escapeHtml("" + (bean.getFundalHeightUterus())) %></td>
+			<td align=center>
+				<form method="GET" action="updateObstetricsVisit.jsp">
+					<input type="hidden" name="visitId" value="<%=bean.getId() %>" />
+					<input type="submit" value="Edit" />
+				</form>
+			</td>
 		</tr>
 		<%
 	}

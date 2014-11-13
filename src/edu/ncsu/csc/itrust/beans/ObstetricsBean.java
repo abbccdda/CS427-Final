@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ObstetricsBean implements Serializable, Comparable<ObstetricsBean> {
 	private static final long serialVersionUID = -1939805819813678364L;
 	
+	private long id = 0;
 	private long MID = 0;
 	private int yearOfConception;
 	private String weeksPregnant;
@@ -13,7 +14,15 @@ public class ObstetricsBean implements Serializable, Comparable<ObstetricsBean> 
 	
 	@Override
 	public int compareTo(ObstetricsBean o) {
-		return (int)(o.MID-this.MID);
+		return (int)(o.id-this.id);
+	}
+	
+	public long getID() {
+		return id;
+	}
+	
+	public void setID(long iD) {
+		id = iD;
 	}
 	
 	public long getMID() {

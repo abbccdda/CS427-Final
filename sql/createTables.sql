@@ -94,6 +94,7 @@ CREATE TABLE patients(
 ) ENGINE=MyISAM;
 
 CREATE TABLE obstetrics(
+	id BIGINT auto_increment PRIMARY KEY,
 	MID BIGINT unsigned NOT NULL,
 	yearOfConception INT NOT NULL,
 	weeksPregnant varchar(4) NOT NULL,
@@ -107,6 +108,8 @@ CREATE TABLE obstetrics(
 ) ENGINE=MyISAM;
 
 CREATE TABLE obstetricsvisit(
+	id BIGINT auto_increment PRIMARY KEY,
+	obstetricsID BIGINT NOT NULL,
 	MID BIGINT unsigned NOT NULL,
 	visitDate varchar(8) NOT NULL,
 	weeksPregnant varchar(4) NOT NULL,
@@ -114,7 +117,7 @@ CREATE TABLE obstetricsvisit(
 	fetalHeartRate INT NOT NULL,
 	fundalHeightUterus BIGINT unsigned NOT NULL,
 	FOREIGN KEY (MID) REFERENCES patients(MID) ON DELETE cascade ON UPDATE cascade,
-	FOREIGN KEY (weeksPregnant) REFERENCES obstetrics(weeksPregnant)
+	FOREIGN KEY (obstetricsID) REFERENCES obstetrics(id) ON DELETE cascade ON UPDATE cascade
 ) ENGINE=MyISAM;
 
 
