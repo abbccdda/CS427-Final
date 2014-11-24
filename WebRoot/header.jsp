@@ -63,11 +63,17 @@
 	
 					<ul class="nav navbar-nav navbar-right">
 						<span class="welcome">
+						<% if(userRole.equals("hcp")){ %>
 						<a href="/iTrust/auth/hcp-patient/viewHCPProfile.jsp?expertID=<%= loggedInMID %>">
 						<%out.println("Welcome, "
 							+ StringEscapeUtils.escapeHtml("" + userName)
 							+ "<BR/>");%>
 						</a>
+						<%}else{
+							out.println("Welcome, "
+							+ StringEscapeUtils.escapeHtml("" + userName)
+							+ "<BR/>");
+						}%>
 						
 						</span>
 						<li><a href="/iTrust">Home</a></li>

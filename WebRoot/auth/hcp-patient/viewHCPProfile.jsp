@@ -10,9 +10,11 @@
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.action.ReviewsAction"%>
 <%@include file="/global.jsp" %>
-<%@include file="/header.jsp" %>
 <%
 pageTitle = "iTrust - View HCP Profile";
+%>
+<%@include file="/header.jsp" %>
+<%
 boolean isHCP = userRole.equals("hcp");
 //loggingAction.logEvent(TransactionType.OUTBOX_VIEW, loggedInMID.longValue(), 0L, "");
 
