@@ -85,7 +85,7 @@
 	</div>
 	<div class="panel-body" id="other-menu">
 		<ul class="nav nav-sidebar">
-		    <li><a href="/iTrust/auth/patient/expertNameSearch.jsp">Expert&apos;s Reviews</a>
+		    <li><a href="/iTrust/auth/patient/expertNameSearch.jsp">Expert&apos;s Profile</a>
 			<li><a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a>
 			<li><a href="/iTrust/auth/patient/showEmailHistory.jsp">Show Email History</a>
 		</ul>

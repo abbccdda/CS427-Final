@@ -54,7 +54,8 @@ public class FindExpertServlet extends HttpServlet {
 				+ "<th width=\"25%\">Reviews</th></tr>");
 		for(int i = 0; i < exp.size(); i++){
 			resp.append("<tr><td>");
-			resp.append(exp.get(i).getFirstName() + " " + exp.get(i).getLastName());
+			String expertName = exp.get(i).getFirstName() + " " + exp.get(i).getLastName();
+			resp.append("<a href='/iTrust/auth/hcp-patient/viewHCPProfile.jsp?expertID=" + exp.get(i).getMID() + "'>"+ expertName + "</a>");
 			resp.append("</td><td>");
 			resp.append(exp.get(i).getSpecialty() == null ? "N/A" : exp.get(i).getSpecialty());
 			resp.append("</td><td>");

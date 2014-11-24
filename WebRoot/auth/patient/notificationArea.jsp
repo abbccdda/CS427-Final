@@ -184,8 +184,10 @@ BillingDAO bills = prodDAO.getBillingDAO();
 	if(hcps.size() > 0) {
 		for(PersonnelBean hcp : hcps) {
 			%>
-			<img class="userpic" src="/iTrust/image/user/<%= StringEscapeUtils.escapeHtml("" + (hcp.getMID() )) %>.png" alt="/iTrust/image/user/">
-			<%= StringEscapeUtils.escapeHtml("" + (hcp.getFullName() )) %><br />
+			<object class="userpic" data="/iTrust/image/user/<%= StringEscapeUtils.escapeHtml(""+(hcp.getMID())) %>.png" type="image/png">
+	    	<img class="userpic" src="/iTrust/image/user/noPhoto.png" />
+	  			</object>
+			<a href="/iTrust/auth/hcp-patient/viewHCPProfile.jsp?expertID=<%= hcp.getMID()%>"><%= hcp.getFullName()%></a><br />
 			<%= StringEscapeUtils.escapeHtml("" + (hcp.getPhone() )) %><br />
 			<%= StringEscapeUtils.escapeHtml("" + (hcp.getEmail() )) %><br />
 			<%

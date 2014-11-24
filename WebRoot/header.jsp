@@ -63,9 +63,12 @@
 	
 					<ul class="nav navbar-nav navbar-right">
 						<span class="welcome">
+						<a href="/iTrust/auth/hcp-patient/viewHCPProfile.jsp?expertID=<%= loggedInMID %>">
 						<%out.println("Welcome, "
 							+ StringEscapeUtils.escapeHtml("" + userName)
 							+ "<BR/>");%>
+						</a>
+						
 						</span>
 						<li><a href="/iTrust">Home</a></li>
 						<li><a href="/iTrust/logout.jsp">Logout</a></li>

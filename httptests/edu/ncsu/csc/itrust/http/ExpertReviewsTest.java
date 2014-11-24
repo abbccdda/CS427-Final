@@ -60,7 +60,7 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 	public void testDirectRating() throws Exception{
 		WebConversation wc = login("109", "pw");
 		WebResponse wr = wc.getCurrentPage();
-		wr = wr.getLinkWith("Expert's Reviews").click();
+		wr = wr.getLinkWith("Expert's Profile").click();
 		//The links are never on the webpage, so we need to manually do this, sorry.
 		wr = wc.getResponse(ADDRESS + "auth/patient/reviewsPage.jsp?expertID=9000000000");
 		assertEquals(ADDRESS + "auth/patient/reviewsPage.jsp", wr.getURL().toString());
@@ -73,8 +73,8 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 	public void testOverallRating() throws Exception{
 		WebConversation wc = login("22", "pw");
 		WebResponse wr = wc.getCurrentPage();
-		assertNotNull(wr.getLinkWith("Expert's Reviews"));
-		wr = wr.getLinkWith("Expert's Reviews").click();
+		assertNotNull(wr.getLinkWith("Expert's Profile"));
+		wr = wr.getLinkWith("Expert's Profile").click();
 		//The links are never on the webpage, so we need to manually do this, sorry.
 		wr = wc.getResponse(ADDRESS + "auth/patient/reviewsPage.jsp?expertID=9000000003");
 		assertEquals(ADDRESS + "auth/patient/reviewsPage.jsp", wr.getURL().toString());
