@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
 import edu.ncsu.csc.itrust.beans.DiagnosisBean;
 import edu.ncsu.csc.itrust.beans.DiagnosisStatisticsBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
@@ -95,6 +97,60 @@ public class ViewDiagnosisStatisticsAction {
 	}
 	
 	/**
+	 * 8week trend for UC14
+	 * @param lowerDate
+	 * @param upperDate
+	 * @param icdCode
+	 * @param zip
+	 * @return
+	 * @throws FormValidationException
+	 * @throws ITrustException
+	 */
+	public List<DiagnosisStatisticsBean> getEightWeekTrend(String upperDate, String icdCode, String zip) throws FormValidationException, ITrustException {
+		List<DiagnosisStatisticsBean> beans = new ArrayList<DiagnosisStatisticsBean>();
+		DiagnosisStatisticsBean dsBean;
+		for(int i=0;i<8;i++){
+			try {
+				
+				if (upperDate == null || icdCode == null)
+					return null;
+				
+				Date lower = null;
+				Date upper = null;
+				Date start = new SimpleDateFormat("MM/dd/yyyy").parse(upperDate);
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(start);
+				gc.add(Calendar.WEEK_OF_YEAR, (-1*i));
+				upper = gc.getTime();
+
+				gc.setTime(start);
+				gc.add(Calendar.WEEK_OF_YEAR, (-1*(i+1)));
+				lower = gc.getTime();
+				
+				if (!zip.matches("([0-9]{5})|([0-9]{5}-[0-9]{4})"))
+					throw new FormValidationException("Zip Code must be 5 digits!");
+	
+				boolean validCode = false;
+				for(DiagnosisBean diag : getDiagnosisCodes()) {
+						if (diag.getICDCode().equals(icdCode))
+							validCode = true;
+				}
+				if (validCode == false) {
+					throw new FormValidationException("ICDCode must be valid diagnosis!");
+				}
+	
+				dsBean = diagnosesDAO.getDiagnosisCounts(icdCode, zip, lower, upper);
+				
+			} catch (ParseException e) {
+				throw new FormValidationException("Enter dates in MM/dd/yyyy");
+			} 
+			beans.add(dsBean);
+		}
+		 return beans;
+	}
+	
+	
+	/**
 	 * Gets the local and regional counts for the specified week and calculates the prior average.
 	 * 
 	 * @param startDate a date in the week to analyze
@@ -130,7 +186,7 @@ public class ViewDiagnosisStatisticsAction {
 			throw new FormValidationException("Zip Code must be 5 digits!");
 		
 		DiagnosisStatisticsBean dbWeek = diagnosesDAO.getCountForWeekOf(icdCode, zip, lower);
-		DiagnosisStatisticsBean dbAvg = new DiagnosisStatisticsBean(zip, 0, 0, lower, lower);
+		DiagnosisStatisticsBean dbAvg = new DiagnosisStatisticsBean(zip, 0, 0, 0, 0, lower, lower);
 		
 		Calendar cal = Calendar.getInstance();
 		

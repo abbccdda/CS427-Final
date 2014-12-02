@@ -108,7 +108,27 @@ public class DiagnosesDAO {
 			rs.last();
 			int region = rs.getRow();
 			
-			dsBean = new DiagnosisStatisticsBean(zipCode, local, region, lower, upper);
+			ps = conn.prepareStatement("SELECT * FROM ovdiagnosis INNER JOIN officevisits ON ovdiagnosis.VisitID=officevisits.ID INNER JOIN patients ON officevisits.PatientID=patients.MID WHERE ICDCode=? AND zip LIKE ? AND visitDate >= ? AND visitDate <= ? ");
+			ps.setString(1, icdCode);
+			ps.setString(2, zipCode.substring(0, 2) + "%");
+			ps.setTimestamp(3, new Timestamp(lower.getTime()));
+			// add 1 day's worth to include the upper
+			ps.setTimestamp(4, new Timestamp(upper.getTime() + 1000L * 60L * 60 * 24L));
+			
+			rs = ps.executeQuery();
+			rs.last();
+			int state = rs.getRow();
+			
+			ps = conn.prepareStatement("SELECT * FROM ovdiagnosis INNER JOIN officevisits ON ovdiagnosis.VisitID=officevisits.ID INNER JOIN patients ON officevisits.PatientID=patients.MID WHERE ICDCode=? AND visitDate >= ? AND visitDate <= ?");
+			ps.setString(1, icdCode);
+			ps.setTimestamp(2, new Timestamp(lower.getTime()));
+			// add 1 day's worth to include the upper
+			ps.setTimestamp(3, new Timestamp(upper.getTime() + 1000L * 60L * 60 * 24L));
+			rs = ps.executeQuery();
+			rs.last();
+			int database = rs.getRow();
+			
+			dsBean = new DiagnosisStatisticsBean(zipCode, local, region,state,database, lower, upper);
 			rs.close();
 			ps.close();
 			return dsBean;
