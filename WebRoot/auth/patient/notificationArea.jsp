@@ -188,6 +188,7 @@ BillingDAO bills = prodDAO.getBillingDAO();
 	    	<img class="userpic" src="/iTrust/image/user/noPhoto.png" />
 	  			</object>
 			<a href="/iTrust/auth/hcp-patient/viewHCPProfile.jsp?expertID=<%= hcp.getMID()%>"><%= hcp.getFullName()%></a><br />
+			<a href="/iTrust/auth/patient/reviewsPage.jsp?expertID=<%= hcp.getMID()%>">Expert Reviews</a><br />
 			<%= StringEscapeUtils.escapeHtml("" + (hcp.getPhone() )) %><br />
 			<%= StringEscapeUtils.escapeHtml("" + (hcp.getEmail() )) %><br />
 			<%
