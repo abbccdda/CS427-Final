@@ -15,3 +15,6 @@
     
         INSERT INTO reviews(mid, pid, reviewdate, descriptivereview, rating , title) VALUES
     (106, 9000000000, '2014-01-08', 'sunny', 3, 'I am pretty happy');
+    
+    insert into reviews (mid, pid, reviewdate, descriptivereview, rating, title) 
+values (1, 9000000000, NOW(), 'Cool doc!', 5, 'Great Doc!'), (2, 9000000000, NOW(), 'OK DOC', 3, 'Not a bad Doc!');

@@ -15,9 +15,8 @@ pageTitle = "iTrust - View HCP Profile";
 %>
 <%@include file="/header.jsp" %>
 <%
-boolean isHCP = userRole.equals("hcp");
+//boolean isHCP = userRole.equals("hcp");
 //loggingAction.logEvent(TransactionType.OUTBOX_VIEW, loggedInMID.longValue(), 0L, "");
-
 
 String mid = request.getParameter("expertID");
 
@@ -29,8 +28,16 @@ if(mid == null){
 }
 long expertID = Long.parseLong(mid);
 ViewHCPProfileAction viewHCPAction = new ViewHCPProfileAction(prodDAO);
+ReviewsAction reviewsAction = new ReviewsAction(prodDAO, loggedInMID.longValue());
 PersonnelDAO pDAO = new PersonnelDAO(prodDAO);
 PersonnelBean hcp = pDAO.getPersonnel(Long.parseLong(mid)); 
+
+if(request.getParameter("reviewID") != null) {
+	long reviewID = Long.parseLong(request.getParameter("reviewID"));
+	reviewsAction.deleteReview(reviewID);
+	response.sendRedirect("viewHCPProfile.jsp?expertID=" + expertID);
+}
+
 %>
 <!-- This wrapper seperates basic info and assigned hospitals -->
 <div id="wrapper">
@@ -99,7 +106,7 @@ PersonnelBean hcp = pDAO.getPersonnel(Long.parseLong(mid));
 <div class="panel-heading"><h3 class="panel-title"> <%= hcp.getFirstName() %>'s Reviews</h3></div>
 <div class="panel-body">
 <% 
-ReviewsAction reviewsAction = new ReviewsAction(prodDAO, loggedInMID.longValue()); 
+ 
 		String reviewTitle = request.getParameter("title");
 		String reviewRating = request.getParameter("rating");
 		String description = request.getParameter("description");
@@ -133,6 +140,18 @@ ReviewsAction reviewsAction = new ReviewsAction(prodDAO, loggedInMID.longValue()
 		for(ReviewsBean reviewBean : reviews )
 		{ %> 
 			<div class="grey-border-container">
+			<%
+				if ( reviewBean.getMID() == loggedInMID) {
+						%> 
+						<div style="float:right;" >
+						<form method="post" action="viewHCPProfile.jsp">
+							<input type="hidden" name="expertID" value="<%= expertID %>" />
+							<input type="hidden" name="reviewID" value="<%= reviewBean.getId() %>" />
+							<input class="btn" type="submit" value="delete" onclick="return confirm('Delete this post?');" />
+						</form> 
+						</div>
+						<%
+				} %>
 				<p> <b><%= reviewBean.getTitle()%> </b> 
 				
 					<%

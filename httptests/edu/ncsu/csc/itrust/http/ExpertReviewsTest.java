@@ -1,5 +1,8 @@
 package edu.ncsu.csc.itrust.http;
 
+import com.meterware.httpunit.Button;
+import com.meterware.httpunit.DialogResponder;
+import com.meterware.httpunit.SubmitButton;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebForm;
 import com.meterware.httpunit.WebLink;
@@ -19,7 +22,7 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 		gen = new TestDataGenerator();
 		gen.clearAllTables();
 		gen.standardData();
-		gen.reviews();
+//		gen.reviews();
 	}
 	
 	public void testValidHCP() throws Exception{
@@ -82,5 +85,27 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 		assertTrue(wr.getText().contains("Pretty happy"));
 		assertTrue(wr.getText().contains("Good service."));
 		assertTrue(wr.getText().contains("Add a Review"));
+	}
+	
+	public void testReviewDelete() throws Exception{
+		WebConversation wc = login("1", "pw");
+		WebResponse wr = wc.getResponse(ADDRESS + "auth/patient/reviewsPage.jsp?expertID=9000000000");
+		assertEquals(ADDRESS + "auth/patient/reviewsPage.jsp", wr.getURL().toString());
+		WebForm[] x = wr.getForms();
+		WebForm f = x[0];
+		Button[] bs = f.getButtons();
+		wr = f.submit((SubmitButton)bs[0]);
+		assertFalse(wr.getText().contains("Great Doc!"));
+	}
+	
+	public void testReviewDeleteOnHCPPage() throws Exception{
+		WebConversation wc = login("1", "pw");
+		WebResponse wr = wc.getResponse(ADDRESS + "auth/hcp-patient/viewHCPProfile.jsp?expertID=9000000000");
+		
+		WebForm[] x = wr.getForms();
+		WebForm f = x[0];
+		Button[] bs = f.getButtons();
+		wr = f.submit((SubmitButton)bs[0]);
+		assertFalse(wr.getText().contains("Great Doc!"));
 	}
 }
