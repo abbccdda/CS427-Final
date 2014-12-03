@@ -30,13 +30,20 @@ import edu.ncsu.csc.itrust.dao.IConnectionDriver;
 public class TestDAOFactory extends DAOFactory implements IConnectionDriver {
 
 	private static DAOFactory testInstance;
+	private TestConnection testConn;
+	private boolean transactions = false;
 
 	public static DAOFactory getTestInstance() {
 		if (testInstance == null)
 			testInstance = new TestDAOFactory();
+		((TestDAOFactory)testInstance).transactions = false;
 		return testInstance;
 	}
 
+	public void enableTransactions() {
+		transactions = true;
+	}
+	
 	private BasicDataSource dataSource;
 
 	private TestDAOFactory() {
@@ -69,6 +76,16 @@ public class TestDAOFactory extends DAOFactory implements IConnectionDriver {
 
 	@Override
 	public Connection getConnection() throws SQLException {
-		return dataSource.getConnection();
+		if(transactions) {
+			if(testConn == null || testConn.isClosed()) {
+				Connection c = dataSource.getConnection();
+				c.setAutoCommit(false);
+				testConn = new TestConnection(c);
+			}
+			return testConn;
+		}
+		else {
+			return dataSource.getConnection();
+		}
 	}
 }

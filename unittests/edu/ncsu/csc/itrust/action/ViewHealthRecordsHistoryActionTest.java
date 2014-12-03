@@ -1,6 +1,8 @@
 package edu.ncsu.csc.itrust.action;
 
+import java.sql.Savepoint;
 import java.util.List;
+
 import junit.framework.TestCase;
 import edu.ncsu.csc.itrust.beans.CDCStatsBean;
 import edu.ncsu.csc.itrust.beans.HealthRecord;
@@ -18,26 +20,42 @@ import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
 import edu.ncsu.csc.itrust.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
+import edu.ncsu.csc.itrust.testutils.TestConnection;
 import edu.ncsu.csc.itrust.testutils.TestDAOFactory;
 
 public class ViewHealthRecordsHistoryActionTest extends TestCase{
 	
-	private DAOFactory factory = TestDAOFactory.getTestInstance();
 	private TestDataGenerator gen = new TestDataGenerator();
+	private TestDAOFactory factory = (TestDAOFactory)TestDAOFactory.getTestInstance();
 	private ViewHealthRecordsHistoryAction action;
+	
+	private boolean setup = true;
+	private Savepoint sp;
+	
 
 	@Override
 	protected void setUp() throws Exception {
-		gen.clearAllTables();
-		gen.standardData();
-		
-		action = new ViewHealthRecordsHistoryAction(factory, "102", 9000000001L);
+		factory.enableTransactions();
+		if(setup) {
+			gen.clearAllTables();
+			gen.standardData();
+			sp = factory.getConnection().setSavepoint("Start");
+			action = new ViewHealthRecordsHistoryAction(factory, "102", 9000000001L);
+			setup = false;
+		}
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		TestConnection tc = (TestConnection)factory.getConnection();
+		tc.rollback(sp);
+		tc.actuallyClose();
 	}
 	
 	public void testGetPatientID() throws Exception{			
 		action = new ViewHealthRecordsHistoryAction(factory, "101", 101L);
 		long pid = action.getPatientID();
-		assertEquals(101, pid);		
+		assertEquals(101, pid);
 	}
 	
 	public void testGetPatientName() throws Exception{
