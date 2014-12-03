@@ -78,6 +78,5 @@ DROP TABLE IF EXISTS normaltable;
 DROP TABLE IF EXISTS recordsrelease;
 DROP TABLE IF EXISTS requiredprocedures;
 DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS zipcodes;
 
 DROP TABLE IF EXISTS billing;
