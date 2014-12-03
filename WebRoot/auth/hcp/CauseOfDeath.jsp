@@ -26,7 +26,6 @@ pageTitle = "iTrust - Cause of Death Trends";
 <style type="text/css">
 	.fancyTable {
 		font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-		width:100%;
 		border-collapse:collapse;
 	}
 	.fancyTable td, .fancyTable th {
@@ -51,8 +50,10 @@ pageTitle = "iTrust - Cause of Death Trends";
 </style>
 
 <%
-	String fields = new String();
-	fields = "2014";
+	String start = new String();
+	start = "2013";
+	String end = new String();
+	end = "2014";
 %>	
 	
 <div align="center">
@@ -67,8 +68,12 @@ pageTitle = "iTrust - Cause of Death Trends";
 					</select>
 				</td>
 				<td>
-					<label for="startDate">Year: </label>
-					<input type="text" name="startDate" id="startDate" value="<%= StringEscapeUtils.escapeHtml("" + (fields )) %>" />
+					<label for="startDate">Start Date: </label>
+					<input type="text" name="startDate" id="startDate" value="<%= StringEscapeUtils.escapeHtml("" + (start )) %>" />
+				</td>
+				<td>
+					<label for="endDate">End Date: </label>
+					<input type="text" name="endDate" id="endDate" value="<%= StringEscapeUtils.escapeHtml("" + (end)) %>" />
 				</td>
 				<td>
 					<input type="submit" name="find" value="Find" />
@@ -79,25 +84,19 @@ pageTitle = "iTrust - Cause of Death Trends";
 </div>
 
 <div align="center">
-	<h4>Results</h4>
-	<table class="fancyTable" id="deathtable" width="99%">
+	<h4>Results for male (2013-2014)</h4>
+	<table class="fancyTable" id="deathtable" width="80%">
 		<tr>
 			<th>Cause of Death</th>
 			<th>Number of Deaths</th>
-			<th>Gender</th>
-			<th>Year</th>
 		</tr>
 		<tr>
 			<td>Guns</td>
 			<td>500000</td>
-			<td>Male</td>
-			<td>1999</td>
 		</tr>
 		<tr>
 			<td>Knives</td>
 			<td>300000</td>
-			<td>Male</td>
-			<td>1999</td>
 		</tr>
 	</table>
 </div>
