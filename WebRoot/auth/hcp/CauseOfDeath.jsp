@@ -52,6 +52,7 @@ pageTitle = "iTrust - Cause of Death Trends";
 
 <%
 	String fields = new String();
+	fields = "2014";
 %>	
 	
 <div align="center">
