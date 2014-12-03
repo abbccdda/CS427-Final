@@ -110,6 +110,10 @@ public class DAOFactory {
 	public BillingDAO getBillingDAO() {
 		return new BillingDAO(this);
 	}
+	
+	public CauseOfDeathDAO getCauseOfDeathDAO() {
+		return new CauseOfDeathDAO(this);
+	}
 
 	/**
 	 * 
