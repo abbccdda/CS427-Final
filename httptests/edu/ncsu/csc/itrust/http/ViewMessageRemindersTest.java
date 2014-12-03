@@ -34,7 +34,34 @@ public class ViewMessageRemindersTest extends iTrustHTTPTest{
 		// click on View Appointment Reminders
 		wr = wr.getLinkWith("View Appointment Reminders").click();
 		assertEquals("iTrust - View Appointment Reminders", wr.getTitle());
+		System.out.println(wr.getTableWithID("results").getRows().length);
+		//assertTrue(wr.getTableWithID("results").getRows().length == 9);
+		
+	}
+	
+	public void testViewMessageLargeNumber() throws Exception {
+		WebConversation wc = login("9000000001", "pw");
+		WebResponse wr = wc.getCurrentPage();
+		assertEquals("iTrust - Admin Home", wr.getTitle());
+		assertLogged(TransactionType.HOME_VIEW, 9000000001L, 0L, "");
+		
+		// click on View Appointment Reminders
+		wr = wr.getLinkWith("View Appointment Reminders").click();
+		assertEquals("iTrust - View Appointment Reminders", wr.getTitle());
+
 		
 		
+		
+	}
+	
+	public void testViewMessageWithNumberID() throws Exception {
+		WebConversation wc = login("9000000001", "pw");
+		WebResponse wr = wc.getCurrentPage();
+		assertEquals("iTrust - Admin Home", wr.getTitle());
+		assertLogged(TransactionType.HOME_VIEW, 9000000001L, 0L, "");
+		
+		// click on View Appointment Reminders
+		wr = wr.getLinkWith("View Appointment Reminders").click();
+		assertEquals("iTrust - View Appointment Reminders", wr.getTitle());
 	}
 }

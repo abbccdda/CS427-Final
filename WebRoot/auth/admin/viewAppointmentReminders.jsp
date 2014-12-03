@@ -23,7 +23,7 @@
 List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("system Reminder");
 %>
 <br />
-<table class="results">
+<table class="results" id="results">
 	<tr>
 		<th>To List</th>
 		<th>Subject</th>
