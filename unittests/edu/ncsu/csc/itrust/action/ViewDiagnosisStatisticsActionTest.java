@@ -116,4 +116,29 @@ public class ViewDiagnosisStatisticsActionTest extends TestCase {
 			fail("DB Exception thrown");
 		}
 	}
+	
+	public void testGetEightWeek() throws Exception {
+		List<DiagnosisStatisticsBean> beans = action.getEightWeekTrend("06/28/2011", "487.00", "27606-1234");
+		assertEquals(8,beans.size());
+	}
+	
+	public void testEightWeekInvalidICDCode() throws Exception {
+		try {
+			action.getEightWeekTrend("06/28/2011", "11114.00", "27606");
+			fail("Should have failed but didn't");
+		} catch (FormValidationException e) {
+			assertEquals(1, e.getErrorList().size());
+			assertEquals("ICDCode must be valid diagnosis!", e.getErrorList().get(0));
+		}
+	}
+	
+	public void testEightWeekInvalidDate() throws Exception {
+		try {
+			action.getEightWeekTrend("06-28/2011", "487.00", "27606");
+			fail("Should have failed but didn't");
+		} catch (FormValidationException e) {
+			assertEquals(1, e.getErrorList().size());
+			assertEquals("Enter dates in MM/dd/yyyy", e.getErrorList().get(0));
+		}
+	}
 }
