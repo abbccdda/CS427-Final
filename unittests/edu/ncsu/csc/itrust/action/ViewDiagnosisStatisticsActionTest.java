@@ -90,7 +90,7 @@ public class ViewDiagnosisStatisticsActionTest extends TestCase {
 	public void testIsMalariaEpidemic() throws Exception {
 		gen.malaria_epidemic();
 		assertTrue(action.isMalariaEpidemic("11/02/" + thisYear, "27606", "110"));
-		assertFalse(action.isMalariaEpidemic("11/16/" + thisYear, "27606", "110"));
+		assertFalse(action.isMalariaEpidemic("12/20/" + thisYear, "27606", "110"));
 	}
 	
 	public void testIsFluEpidemic() throws Exception {
