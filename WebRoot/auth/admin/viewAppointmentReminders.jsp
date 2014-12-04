@@ -23,7 +23,7 @@
 List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEmailsByPerson("System Reminder");
 %>
 <br />
-<table class="results">
+<table class="fancytable" id="resultstable">
 	<tr>
 		<th>To List</th>
 		<th>Subject</th>
@@ -37,7 +37,7 @@ List<Email> emails = DAOFactory.getProductionInstance().getFakeEmailDAO().getEma
 		<td><%= StringEscapeUtils.escapeHtml("" + (email.getToListStr() )) %></td>
 		<td><%= StringEscapeUtils.escapeHtml("" + (email.getSubject() )) %></td>
 		<td><%= StringEscapeUtils.escapeHtml("" + (email.getTimeAdded().toString())) %></td>
-		<td><a href="/iTrust/auth/admin/viewEmail.jsp?msg=<%= String.valueOf(index) %>">Read</a></td>
+		<td><a href="/iTrust/auth/admin/viewEmail.jsp?msg=<%= String.valueOf(index) %>" id=<%= String.valueOf(index) %>>Read</a></td>
 	</tr>
 	<%
 	index++;
