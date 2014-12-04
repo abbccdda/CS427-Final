@@ -96,6 +96,9 @@ public class ViewDiagnosisStatisticsAction {
 		return dsBean;
 	}
 	
+	
+	
+	
 	/**
 	 * 8week trend for UC14
 	 * @param lowerDate
@@ -291,76 +294,42 @@ public class ViewDiagnosisStatisticsAction {
 	 * @throws ParseException
 	 */
 	public boolean isMalariaEpidemic(String weekDate, String zip, String thresholdStr) throws DBException, ParseException {
-		
-		Date wkDate = new SimpleDateFormat("MM/dd/yyyy").parse(weekDate);
-		
-		ArrayList<DiagnosisStatisticsBean> dbList = new ArrayList<DiagnosisStatisticsBean>();
-		ArrayList<DiagnosisStatisticsBean> dbListL = new ArrayList<DiagnosisStatisticsBean>();
-		ArrayList<DiagnosisStatisticsBean> dbListN = new ArrayList<DiagnosisStatisticsBean>();
-		int threshold = Integer.parseInt(thresholdStr);
-		DiagnosisStatisticsBean current = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, wkDate);
-		long weekTotal = current.getRegionStats();
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(wkDate);
-		cal.add(Calendar.HOUR, -7*24);
-		DiagnosisStatisticsBean last = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime());
-		long weekTotalL = last.getRegionStats();
-		cal.add(Calendar.HOUR, 2*7*24);
-		DiagnosisStatisticsBean next = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime());
-		long weekTotalN = next.getRegionStats();
-		
-		cal.setTime(wkDate);
-		int weekOfYr = cal.get(Calendar.WEEK_OF_YEAR);
-		
-		//Find earliest Malaria Case. Set calendar's year to that year
-		Date startData = diagnosesDAO.findEarliestIncident(ICD_MALARIA);
-		if (startData == null) {
-			if (current.getRegionStats() > 0) {
-				return true;
-			}
-			return false;
-		}
-		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.setTime(startData);
-		Calendar wkDateCal = Calendar.getInstance();
-		wkDateCal.setTime(wkDate);
-		cal.set(Calendar.YEAR, startDateCal.get(Calendar.YEAR));
-
-		while( cal.getTime().before(wkDate) && cal.get(Calendar.YEAR) != wkDateCal.get(Calendar.YEAR)) {
-			
-			dbList.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.HOUR, -7*24);
-			dbListL.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.HOUR, 2*7*24);
-			dbListN.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.YEAR, 1);
-			cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
-			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		}
-		
-		long total = 0;
-		for (DiagnosisStatisticsBean d : dbList) {
-			total += d.getRegionStats();
-		}
-		for (DiagnosisStatisticsBean d : dbListL) {
-			d.getRegionStats();
-		}
-		for (DiagnosisStatisticsBean d : dbListN) {
-			d.getRegionStats();
-		}
-		
-		long avg = 0;
-		long avgL = 0;
-		long avgN = 0;
-		if (dbList.size() != 0) {
-			avg = total / dbList.size();
-			avgL = total/ dbListL.size();
-			avgN = total/ dbListN.size();
-		} 
-			
-		return weekTotal != 0 && (weekTotal*100/threshold) > avg && 
-				(	( weekTotalL != 0 && (weekTotalL*100/threshold) > avgL ) || 
-					( weekTotalN != 0 && (weekTotalN*100/threshold) > avgN ) );
+	Date wkDate = new SimpleDateFormat("MM/dd/yyyy").parse(weekDate);
+	int threshold = Integer.parseInt(thresholdStr);
+	DiagnosisStatisticsBean current = diagnosesDAO.getPreviousTwoWeeksRecord(ICD_MALARIA, zip, wkDate);
+	long total = current.getRegionStats();
+	Calendar cal = Calendar.getInstance();
+	cal.setTime(wkDate);
+	int weekOfYr = cal.get(Calendar.WEEK_OF_YEAR);
+	int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	  //Find earliest Malaria Case. Set calendar's year to that year
+	Date startData = diagnosesDAO.findEarliestIncident(ICD_MALARIA);
+	if (startData == null) {
+	if (current.getRegionStats() > 0) {
+	    return true;
+	}
+	   return false;
+	}
+	Calendar startDateCal = Calendar.getInstance();
+	  startDateCal.setTime(startData);
+	Calendar wkDateCal = Calendar.getInstance();
+	  wkDateCal.setTime(wkDate);
+	cal.set(Calendar.YEAR, startDateCal.get(Calendar.YEAR));
+	ArrayList<DiagnosisStatisticsBean> dbList = new ArrayList<DiagnosisStatisticsBean>();
+	while( cal.getTime().before(wkDate) && cal.get(Calendar.YEAR) != wkDateCal.get(Calendar.YEAR)) {
+	dbList.add( diagnosesDAO.getPreviousTwoWeeksRecord(ICD_MALARIA, zip, cal.getTime()) );
+	cal.add(Calendar.YEAR, 1);
+	cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
+	cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+	}
+	  long historicalTotal = 0;
+	for (DiagnosisStatisticsBean d : dbList) {
+	historicalTotal += d.getRegionStats();
+	}
+	long avg = 0;
+	if (dbList.size() != 0) {
+	   avg = historicalTotal / dbList.size();
+	}
+	return (total*100/threshold) > avg && total != 0;
 	}
 }

@@ -818,6 +818,10 @@ public class TestDataGenerator {
 		uc56();
 		uc63();
 		uc64();
+		
+		influenza_epidemic();
+		malaria_epidemic();
+		
 		if(!checkIfZipsExists()){
 			zipCodes();
 		}

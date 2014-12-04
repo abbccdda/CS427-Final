@@ -141,6 +141,18 @@ public class DiagnosesDAO {
 		
 	}
 	
+	
+	public DiagnosisStatisticsBean getPreviousTwoWeeksRecord(String icdCode, 
+			String zipCode, java.util.Date end) throws DBException {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(end);
+			Date upperDate = cal.getTime();
+			cal.add(Calendar.HOUR, -24*14);
+			Date lowerDate = cal.getTime();
+			  return getDiagnosisCounts(icdCode, zipCode, lowerDate, upperDate);
+			}
+	
+	
 	/**
 	 * Gets a weekly local zip code count and regional count of a specified diagnosis code over a time period
 	 * 
