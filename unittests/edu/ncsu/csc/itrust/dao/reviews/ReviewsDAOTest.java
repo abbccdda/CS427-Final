@@ -59,6 +59,32 @@ public class ReviewsDAOTest {
 	public void tearDown() throws Exception {
 	
 	}
+	
+	@Test
+	public void testGetAllReviewsThrows() throws Exception {
+		try {
+			setUp();
+			rdao = new ReviewsDAO(null);
+			List<ReviewsBean> l = rdao.getAllReviews();
+		} catch (Exception e) {
+			assertTrue(true);
+		}
+		
+	}
+	
+	@Test
+	public void testDeleteReviews() throws Exception {
+		try {
+			List<ReviewsBean> l = rdao.getAllReviews();
+			ReviewsBean delBean = l.get(0);
+			rdao.deleteReview(delBean.getId(), delBean.getMID());
+	    	//sanity check for the initial size of the entries in the reviews table
+	    	l = rdao.getAllReviews();
+	    	assertEquals(15, l.size());
+		} catch (DBException e) {
+			fail();
+		}
+	}
 
 	/**
 	 * Tests adding a review to the reviewsTable by comparing sizes of 
@@ -71,12 +97,12 @@ public class ReviewsDAOTest {
 	    try {
 	    	//sanity check for the initial size of the entries in the reviews table
 	    	List<ReviewsBean> l = rdao.getAllReviews();
-	    	assertEquals(6, l.size());
+	    	assertEquals(16, l.size());
 	    	//try adding a valid bean
 	    	assertTrue(rdao.addReview(beanValid));
 			//check the number of reviews table entries went up by 1
 			l = rdao.getAllReviews();
-			assertEquals(7, l.size());
+			assertEquals(17, l.size());
 		} catch (DBException e) {
 			fail();
 		}
@@ -93,11 +119,11 @@ public class ReviewsDAOTest {
 		try {
 			//test getting reviews for Kelly Doctor
 			l = rdao.getReviews(PID1);
-			assertEquals(4, l.size());
+			assertEquals(12, l.size());
 			
 			//test getting reviews for Gandolf Stormcloud
 			l=rdao.getReviews(PID2);
-			assertEquals(2, l.size());
+			assertEquals(4, l.size());
 		} catch (DBException e) {
 			fail();
 		}
@@ -106,11 +132,23 @@ public class ReviewsDAOTest {
 	/**
 	 * Tests that ALL in table reviews are retrieved when called.
 	 */
+	@Test
 	public final void testGetAllReviews(){
 		try {
 			setUp();
 			List<ReviewsBean> l = rdao.getAllReviews();
-			assertEquals(5, l.size());
+			assertEquals(16, l.size());
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public final void testGetAllReviewsByPid() {
+		try {
+			setUp();
+			List<ReviewsBean> l = rdao.getAllReviews(9000000000l);
+			assertEquals(12, l.size());
 		} catch (Exception e) {
 			fail();
 		}
@@ -123,7 +161,7 @@ public class ReviewsDAOTest {
 	@Test
 	public final void testGetTotalAverageRating() {
 	    /** expected average rating for Kelly Doctor */
-		final double PID1AVG = 2.5;
+		final double PID1AVG = 3;
 		/** expected average rating for Gandolf Stomcloud */
 		final double PID2AVG = 4.5;
 	    try {

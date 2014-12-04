@@ -45,6 +45,13 @@ public class ExpertReviewsTest extends iTrustHTTPTest {
 		assertTrue(wr.getText().contains("Too bored?"));
 	}
 	
+	public void testReviewPage() throws Exception{
+		WebConversation wc = login("1", "pw");
+		WebResponse wr = wc.getCurrentPage();
+		wr = wr.getLinkWith("Expert Reviews").click();
+		assertEquals(ADDRESS + "auth/patient/reviewsPage.jsp", wr.getURL().toString());
+		
+	}
 	public void testInvalidHCP() throws Exception{
 		WebConversation wc = login("109", "pw");
 		WebResponse wr = wc.getCurrentPage();
