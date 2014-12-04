@@ -27,22 +27,23 @@ public class ViewHealthRecordsHistoryActionTest extends TestCase{
 	
 	private TestDataGenerator gen = new TestDataGenerator();
 	private TestDAOFactory factory = (TestDAOFactory)TestDAOFactory.getTestInstance();
+	//private DAOFactory factory = TestDAOFactory.getTestInstance();
 	private ViewHealthRecordsHistoryAction action;
 	
-	private boolean setup = true;
+	private static boolean setup = true;
 	private Savepoint sp;
 	
 
 	@Override
 	protected void setUp() throws Exception {
-		factory.enableTransactions();
+		
 		if(setup) {
-			gen.clearAllTables();
-			gen.standardData();
-			sp = factory.getConnection().setSavepoint("Start");
-			action = new ViewHealthRecordsHistoryAction(factory, "102", 9000000001L);
+			oneTimeSetup();
 			setup = false;
 		}
+		factory.enableTransactions();
+		sp = factory.getConnection().setSavepoint("Start");
+		action = new ViewHealthRecordsHistoryAction(factory, "102", 9000000001L);
 	}
 	
 	@Override
@@ -51,6 +52,13 @@ public class ViewHealthRecordsHistoryActionTest extends TestCase{
 		tc.rollback(sp);
 		tc.actuallyClose();
 	}
+	
+	private void oneTimeSetup() throws Exception {
+		gen.clearAllTables();
+		gen.standardData();
+	}
+	
+	
 	
 	public void testGetPatientID() throws Exception{			
 		action = new ViewHealthRecordsHistoryAction(factory, "101", 101L);

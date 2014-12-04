@@ -1,27 +1,55 @@
 package edu.ncsu.csc.itrust.report;
 
+import java.sql.Savepoint;
 import java.util.List;
 
+import edu.ncsu.csc.itrust.action.ViewHealthRecordsHistoryAction;
 import edu.ncsu.csc.itrust.beans.PatientBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
 import edu.ncsu.csc.itrust.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.report.DemographicReportFilter.DemographicReportFilterType;
+import edu.ncsu.csc.itrust.testutils.TestConnection;
 import edu.ncsu.csc.itrust.testutils.TestDAOFactory;
 import junit.framework.TestCase;
 
 public class DemographicReportFilterTest extends TestCase {
 
-	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDAOFactory factory = (TestDAOFactory)TestDAOFactory.getTestInstance();
+//	private DAOFactory factory = TestDAOFactory.getTestInstance();
 	private PatientDAO pDAO = factory.getPatientDAO();
 	private List<PatientBean> allPatients;
 	private DemographicReportFilter filter;
 	private TestDataGenerator gen = new TestDataGenerator();
 
+	
+	private static boolean setup = true;
+	private Savepoint sp;
+	
+	@Override
 	protected void setUp() throws Exception {
+		
+		if(setup) {
+			oneTimeSetup();
+			setup = false;
+		}
+		factory.enableTransactions();
+		sp = factory.getConnection().setSavepoint("Start");
+//		gen.clearAllTables();
+//		gen.standardData();
+		allPatients = pDAO.getAllPatients();
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		TestConnection tc = (TestConnection)factory.getConnection();
+		tc.rollback(sp);
+		tc.actuallyClose();
+	}
+	
+	private void oneTimeSetup() throws Exception {
 		gen.clearAllTables();
 		gen.standardData();
-		allPatients = pDAO.getAllPatients();
 	}
 
 	public void testFilterByLastName() throws Exception {

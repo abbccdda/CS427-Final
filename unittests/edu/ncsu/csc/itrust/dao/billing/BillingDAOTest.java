@@ -5,24 +5,34 @@ package edu.ncsu.csc.itrust.dao.billing;
 
 import static org.junit.Assert.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.ncsu.csc.itrust.DBBuilder;
+import edu.ncsu.csc.itrust.DBUtil;
+import edu.ncsu.csc.itrust.action.ViewHealthRecordsHistoryAction;
 import edu.ncsu.csc.itrust.beans.BillingBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
 import edu.ncsu.csc.itrust.dao.mysql.BillingDAO;
 import edu.ncsu.csc.itrust.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.testutils.TestConnection;
 import edu.ncsu.csc.itrust.testutils.TestDAOFactory;
 
 /**
  */
-public class BillingDAOTest {
+public class BillingDAOTest extends TestCase {
 
-	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDAOFactory factory = (TestDAOFactory)TestDAOFactory.getTestInstance();
 	private BillingDAO billingDAO = factory.getBillingDAO();
 	private BillingBean b1;
 	private BillingBean b2;
@@ -30,16 +40,20 @@ public class BillingDAOTest {
 	private static final int OV_ID = 3;
 	private static final long DOCTOR_MID = 9000000000L;
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		DBBuilder tables = new DBBuilder();
-		tables.dropTables();
-		tables.createTables();
-		TestDataGenerator gen = new TestDataGenerator();
-		gen.clearAllTables();
+	private static boolean setup = true;
+	private Savepoint sp;
+	
+
+	@Override
+	protected void setUp() throws Exception {
+		
+		if(setup) {
+			oneTimeSetup();
+			setup = false;
+		}
+		factory.enableTransactions();
+		sp = factory.getConnection().setSavepoint("Start");
+		
 		b1 = new BillingBean();
 		b1.setAmt(40);
 		b1.setApptID(OV_ID);
@@ -82,6 +96,35 @@ public class BillingDAOTest {
 		b2.setInsZip("27607");
 		b2.setPatient(PATIENT_MID);
 		b2.setStatus("Unsubmitted");
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		TestConnection tc = (TestConnection)factory.getConnection();
+		tc.rollback(sp);
+		tc.actuallyClose();
+		
+		Connection conn = null;
+		PreparedStatement pstring = null;
+		try {
+			conn = factory.getConnection();
+		
+			pstring = conn.prepareStatement("TRUNCATE billing;");
+		
+			pstring.execute();
+		} catch (SQLException e) {
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, pstring);
+		}
+	}
+	
+	private void oneTimeSetup() throws Exception {
+		DBBuilder tables = new DBBuilder();
+		tables.dropTables();
+		tables.createTables();
+		TestDataGenerator gen = new TestDataGenerator();
+		gen.clearAllTables();
 	}
 
 	/**
