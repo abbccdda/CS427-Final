@@ -21,6 +21,8 @@ public class DiagnosisStatisticsBean {
 	/** The diagnosis count for the region */
 	long regionStats;
 	/** The beginning of the time period covered */
+	long stateStats;
+	long databaseStats;
 	Date startDate;
 	/** The end of the time period covered */
 	Date endDate;
@@ -37,10 +39,12 @@ public class DiagnosisStatisticsBean {
 	 * @param zipStats The count of diagnoses for the zip code
 	 * @param regionStats The count of diagnoses for the region
 	 */
-	public DiagnosisStatisticsBean(String zipCode, long zipStats, long regionStats) {
+	public DiagnosisStatisticsBean(String zipCode, long zipStats, long regionStats, long stateStats, long databaseStats) {
 		this.zipCode = zipCode;
 		this.zipStats = zipStats;
 		this.regionStats = regionStats;
+		this.stateStats = stateStats;
+		this.databaseStats = databaseStats;
 		
 	}
 	
@@ -52,10 +56,12 @@ public class DiagnosisStatisticsBean {
 	 * @param startDate The beginning of the data's time period
 	 * @param endDate The end of the data's time period
 	 */
-	public DiagnosisStatisticsBean(String zipCode, long zipStats, long regionStats, Date startDate, Date endDate) {
+	public DiagnosisStatisticsBean(String zipCode, long zipStats, long regionStats, long stateStats, long databaseStats, Date startDate, Date endDate) {
 		this.zipCode = zipCode;
 		this.zipStats = zipStats;
 		this.regionStats = regionStats;
+		this.stateStats = stateStats;
+		this.databaseStats = databaseStats;
 		this.startDate = (Date) startDate.clone();
 		this.endDate = (Date) endDate.clone();
 	}
@@ -108,6 +114,21 @@ public class DiagnosisStatisticsBean {
 		this.regionStats = regionStats;
 	}
 	
+	public long getStateStats(){
+		return stateStats;
+	}
+	
+	public void setStateStats(long state){
+		this.stateStats = state;
+	}
+	
+	public long getDatabaseStats(){
+		return databaseStats;
+	}
+	
+	public void setDatabaseStats(long databaseStats){
+		this.databaseStats = databaseStats;
+	}
 	/**
 	 * Getter for Start Date
 	 * @return The start date for the data

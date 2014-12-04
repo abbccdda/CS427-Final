@@ -59,6 +59,10 @@ public class ReviewsAction {
         return dao.addReview(b);
   }
   
+  public void deleteReview(long id) throws DBException {
+	  dao.deleteReview(id, loggedInMID);
+  }
+  
   /**
    * Method that returns physician based on a mid.
    * @param mid of physician

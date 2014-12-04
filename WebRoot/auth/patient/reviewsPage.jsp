@@ -45,6 +45,14 @@
 	}
 	
 	ReviewsAction reviewsAction = new ReviewsAction(prodDAO, loggedInMID.longValue()); 
+
+	// Check if we're deleting a review.
+	if(request.getParameter("reviewID") != null) {
+		long reviewID = Long.parseLong(request.getParameter("reviewID"));
+		reviewsAction.deleteReview(reviewID);
+		response.sendRedirect("reviewsPage.jsp?expertID=" + expertID);
+	}
+	
 		String reviewTitle = request.getParameter("title");
 		String reviewRating = request.getParameter("rating");
 		String description = request.getParameter("description");
@@ -78,6 +86,17 @@
 		for(ReviewsBean reviewBean : reviews )
 		{ %> 
 			<div class="grey-border-container">
+			<%
+				if ( reviewBean.getMID() == loggedInMID) {
+						%> 
+						<div style="float:right;" >
+						<form method="post" action="reviewsPage.jsp">
+							<input type="hidden" name="reviewID" value="<%= reviewBean.getId() %>" />
+							<input class="btn" type="submit" value="delete" onclick="return confirm('Delete this post?');" />
+						</form> 
+						</div>
+						<%
+				} %>
 				<p> <b><%= reviewBean.getTitle()%> </b> <span style="margin-right:10px"></span>
 				
 					<%

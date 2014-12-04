@@ -41,6 +41,7 @@ public class ReviewsBeanLoader implements BeanLoader<ReviewsBean> {
 	@Override
 	public ReviewsBean loadSingle(ResultSet rs) throws SQLException {
 		ReviewsBean rev = new ReviewsBean();
+		rev.setId(rs.getLong("id"));
 		rev.setMID(rs.getLong("mid"));
 		rev.setPID(rs.getLong("pid"));
 		rev.setDateOfReview(rs.getDate("reviewdate"));

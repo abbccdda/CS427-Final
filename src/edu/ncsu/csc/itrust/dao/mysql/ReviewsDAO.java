@@ -29,6 +29,29 @@ public class ReviewsDAO {
 	  loader = new ReviewsBeanLoader();
   }
   
+  /**
+   * Deletes a review given the review's ID.
+   * 
+   * @param id The ID of the review to delete.
+   * @return
+   * @throws DBException
+   */
+  public void deleteReview(long id, long mid) throws DBException {
+	  Connection conn = null;
+	  PreparedStatement ps = null;
+	  try {
+		  conn = factory.getConnection();
+		  ps = conn.prepareStatement("DELETE FROM reviews WHERE id=? AND mid=?");
+		  ps.setLong(1, id);
+		  ps.setLong(2, mid);
+		  ps.execute();
+	  } catch (SQLException e) {
+		  throw new DBException(e);
+	  } finally {
+		  DBUtil.closeConnection(conn, ps);
+	  }
+  }
+  
   
   /**
    * Based on the information from the ReviewsBean, add 

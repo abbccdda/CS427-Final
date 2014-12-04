@@ -23,11 +23,25 @@ public class DiagnosisStatisticsBeanTest extends TestCase {
 		assertEquals(4, dsBean.getRegionStats());
 	}
 	
+	public void testStateCount() throws Exception {
+		DiagnosisStatisticsBean dsBean = new DiagnosisStatisticsBean();
+		dsBean.setStateStats(4);
+		assertEquals(4, dsBean.getStateStats());
+	}
+
+	public void testDatabaseCount() throws Exception {
+		DiagnosisStatisticsBean dsBean = new DiagnosisStatisticsBean();
+		dsBean.setDatabaseStats(4);
+		assertEquals(4, dsBean.getDatabaseStats());
+	}
+	
 	public void testAll() throws Exception {
-		DiagnosisStatisticsBean dsBean = new DiagnosisStatisticsBean("12346", 2, 5);
+		DiagnosisStatisticsBean dsBean = new DiagnosisStatisticsBean("12346", 2, 5, 3, 4);
 		assertEquals("12346", dsBean.getZipCode());
 		assertEquals(2, dsBean.getZipStats());
 		assertEquals(5, dsBean.getRegionStats());
+		assertEquals(3, dsBean.getStateStats());
+		assertEquals(4, dsBean.getDatabaseStats());
 	}
 	
 }

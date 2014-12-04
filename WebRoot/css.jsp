@@ -110,6 +110,13 @@ body {
 	float: left;
 	margin-right: 16px;
 }
+.profilepic {
+	max-width: 150px;
+	border-radius: 10px;
+	border: 1px solid grey;
+	float: left;
+	margin-right: 16px;
+}
 .home-row {
 	background: url('/iTrust/image/doc1.jpg') no-repeat;
 	background-size: cover;

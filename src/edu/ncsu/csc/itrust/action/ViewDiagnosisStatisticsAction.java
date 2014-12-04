@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
 import edu.ncsu.csc.itrust.beans.DiagnosisBean;
 import edu.ncsu.csc.itrust.beans.DiagnosisStatisticsBean;
 import edu.ncsu.csc.itrust.dao.DAOFactory;
@@ -94,6 +96,63 @@ public class ViewDiagnosisStatisticsAction {
 		return dsBean;
 	}
 	
+	
+	
+	
+	/**
+	 * 8week trend for UC14
+	 * @param lowerDate
+	 * @param upperDate
+	 * @param icdCode
+	 * @param zip
+	 * @return
+	 * @throws FormValidationException
+	 * @throws ITrustException
+	 */
+	public List<DiagnosisStatisticsBean> getEightWeekTrend(String upperDate, String icdCode, String zip) throws FormValidationException, ITrustException {
+		List<DiagnosisStatisticsBean> beans = new ArrayList<DiagnosisStatisticsBean>();
+		DiagnosisStatisticsBean dsBean;
+		for(int i=0;i<8;i++){
+			try {
+				
+				if (upperDate == null || icdCode == null)
+					return null;
+				
+				Date lower = null;
+				Date upper = null;
+				Date start = new SimpleDateFormat("MM/dd/yyyy").parse(upperDate);
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(start);
+				gc.add(Calendar.WEEK_OF_YEAR, (-1*i));
+				upper = gc.getTime();
+
+				gc.setTime(start);
+				gc.add(Calendar.WEEK_OF_YEAR, (-1*(i+1)));
+				lower = gc.getTime();
+				
+				if (!zip.matches("([0-9]{5})|([0-9]{5}-[0-9]{4})"))
+					throw new FormValidationException("Zip Code must be 5 digits!");
+	
+				boolean validCode = false;
+				for(DiagnosisBean diag : getDiagnosisCodes()) {
+						if (diag.getICDCode().equals(icdCode))
+							validCode = true;
+				}
+				if (validCode == false) {
+					throw new FormValidationException("ICDCode must be valid diagnosis!");
+				}
+	
+				dsBean = diagnosesDAO.getDiagnosisCounts(icdCode, zip, lower, upper);
+				
+			} catch (ParseException e) {
+				throw new FormValidationException("Enter dates in MM/dd/yyyy");
+			} 
+			beans.add(dsBean);
+		}
+		 return beans;
+	}
+	
+	
 	/**
 	 * Gets the local and regional counts for the specified week and calculates the prior average.
 	 * 
@@ -130,7 +189,7 @@ public class ViewDiagnosisStatisticsAction {
 			throw new FormValidationException("Zip Code must be 5 digits!");
 		
 		DiagnosisStatisticsBean dbWeek = diagnosesDAO.getCountForWeekOf(icdCode, zip, lower);
-		DiagnosisStatisticsBean dbAvg = new DiagnosisStatisticsBean(zip, 0, 0, lower, lower);
+		DiagnosisStatisticsBean dbAvg = new DiagnosisStatisticsBean(zip, 0, 0, 0, 0, lower, lower);
 		
 		Calendar cal = Calendar.getInstance();
 		
@@ -235,76 +294,42 @@ public class ViewDiagnosisStatisticsAction {
 	 * @throws ParseException
 	 */
 	public boolean isMalariaEpidemic(String weekDate, String zip, String thresholdStr) throws DBException, ParseException {
-		
-		Date wkDate = new SimpleDateFormat("MM/dd/yyyy").parse(weekDate);
-		
-		ArrayList<DiagnosisStatisticsBean> dbList = new ArrayList<DiagnosisStatisticsBean>();
-		ArrayList<DiagnosisStatisticsBean> dbListL = new ArrayList<DiagnosisStatisticsBean>();
-		ArrayList<DiagnosisStatisticsBean> dbListN = new ArrayList<DiagnosisStatisticsBean>();
-		int threshold = Integer.parseInt(thresholdStr);
-		DiagnosisStatisticsBean current = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, wkDate);
-		long weekTotal = current.getRegionStats();
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(wkDate);
-		cal.add(Calendar.HOUR, -7*24);
-		DiagnosisStatisticsBean last = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime());
-		long weekTotalL = last.getRegionStats();
-		cal.add(Calendar.HOUR, 2*7*24);
-		DiagnosisStatisticsBean next = diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime());
-		long weekTotalN = next.getRegionStats();
-		
-		cal.setTime(wkDate);
-		int weekOfYr = cal.get(Calendar.WEEK_OF_YEAR);
-		
-		//Find earliest Malaria Case. Set calendar's year to that year
-		Date startData = diagnosesDAO.findEarliestIncident(ICD_MALARIA);
-		if (startData == null) {
-			if (current.getRegionStats() > 0) {
-				return true;
-			}
-			return false;
-		}
-		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.setTime(startData);
-		Calendar wkDateCal = Calendar.getInstance();
-		wkDateCal.setTime(wkDate);
-		cal.set(Calendar.YEAR, startDateCal.get(Calendar.YEAR));
-
-		while( cal.getTime().before(wkDate) && cal.get(Calendar.YEAR) != wkDateCal.get(Calendar.YEAR)) {
-			
-			dbList.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.HOUR, -7*24);
-			dbListL.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.HOUR, 2*7*24);
-			dbListN.add( diagnosesDAO.getCountForWeekOf(ICD_MALARIA, zip, cal.getTime()) );
-			cal.add(Calendar.YEAR, 1);
-			cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
-			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		}
-		
-		long total = 0;
-		for (DiagnosisStatisticsBean d : dbList) {
-			total += d.getRegionStats();
-		}
-		for (DiagnosisStatisticsBean d : dbListL) {
-			d.getRegionStats();
-		}
-		for (DiagnosisStatisticsBean d : dbListN) {
-			d.getRegionStats();
-		}
-		
-		long avg = 0;
-		long avgL = 0;
-		long avgN = 0;
-		if (dbList.size() != 0) {
-			avg = total / dbList.size();
-			avgL = total/ dbListL.size();
-			avgN = total/ dbListN.size();
-		} 
-			
-		return weekTotal != 0 && (weekTotal*100/threshold) > avg && 
-				(	( weekTotalL != 0 && (weekTotalL*100/threshold) > avgL ) || 
-					( weekTotalN != 0 && (weekTotalN*100/threshold) > avgN ) );
+	Date wkDate = new SimpleDateFormat("MM/dd/yyyy").parse(weekDate);
+	int threshold = Integer.parseInt(thresholdStr);
+	DiagnosisStatisticsBean current = diagnosesDAO.getPreviousTwoWeeksRecord(ICD_MALARIA, zip, wkDate);
+	long total = current.getRegionStats();
+	Calendar cal = Calendar.getInstance();
+	cal.setTime(wkDate);
+	int weekOfYr = cal.get(Calendar.WEEK_OF_YEAR);
+	int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	  //Find earliest Malaria Case. Set calendar's year to that year
+	Date startData = diagnosesDAO.findEarliestIncident(ICD_MALARIA);
+	if (startData == null) {
+	if (current.getRegionStats() > 0) {
+	    return true;
+	}
+	   return false;
+	}
+	Calendar startDateCal = Calendar.getInstance();
+	  startDateCal.setTime(startData);
+	Calendar wkDateCal = Calendar.getInstance();
+	  wkDateCal.setTime(wkDate);
+	cal.set(Calendar.YEAR, startDateCal.get(Calendar.YEAR));
+	ArrayList<DiagnosisStatisticsBean> dbList = new ArrayList<DiagnosisStatisticsBean>();
+	while( cal.getTime().before(wkDate) && cal.get(Calendar.YEAR) != wkDateCal.get(Calendar.YEAR)) {
+	dbList.add( diagnosesDAO.getPreviousTwoWeeksRecord(ICD_MALARIA, zip, cal.getTime()) );
+	cal.add(Calendar.YEAR, 1);
+	cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
+	cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+	}
+	  long historicalTotal = 0;
+	for (DiagnosisStatisticsBean d : dbList) {
+	historicalTotal += d.getRegionStats();
+	}
+	long avg = 0;
+	if (dbList.size() != 0) {
+	   avg = historicalTotal / dbList.size();
+	}
+	return (total*100/threshold) > avg && total != 0;
 	}
 }
