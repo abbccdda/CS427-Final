@@ -6,6 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.jfree.data.category.CategoryDataset;
@@ -40,6 +41,8 @@ public class DiagnosisTrendData implements DatasetProducer, Externalizable, Cate
 	private String diagnosisName;
 	
 	private Boolean epidemic = false;
+	
+	private Boolean eight = false;
 
 	/**
 	 * hasData
@@ -74,6 +77,20 @@ public class DiagnosisTrendData implements DatasetProducer, Externalizable, Cate
 	    values[1] = (int) dsBean.getRegionStats();
 	    	
 	}
+	
+	
+	public void initializeEightWeekStatistics( List<DiagnosisStatisticsBean> DiagnosisBeans , String name){
+		this.diagnosisName = name;
+		this.eight = true;
+		values = new int[24];
+		for(int i=0; i<8; i++){
+			this.dsBean = DiagnosisBeans.get((8-(i+1)));
+		    values[3*i] = (int) dsBean.getRegionStats();
+		    values[3*i+1] = (int) dsBean.getStateStats();
+		    values[3*i+2] = (int) dsBean.getDatabaseStats();
+		}
+	}
+	
 	
 	/**
 	 * initializeAvgDiagnosisStatistics
@@ -115,7 +132,19 @@ public class DiagnosisTrendData implements DatasetProducer, Externalizable, Cate
 				
 	        };
 	        
-	        if ( epidemic == false ) {
+	        if(eight == true){
+	        	seriesName = new String[24];
+	    		for(int i=0; i<8; i++){
+	    			dataset.addValue(values[3*i], diagnosisName, "R"+(i+1));
+	    			dataset.addValue(values[3*i+1], diagnosisName, "S"+(i+1));
+	    			dataset.addValue(values[3*i+2], diagnosisName, "T"+(i+1));
+	    		    seriesName[3*i] = "R"+(i+1);
+	    		    seriesName[3*i+1] = "S"+(i+1);
+	    		    seriesName[3*i+2] = "T"+(i+1);
+	    		}
+	        }
+	        
+	        else if ( epidemic == false ) {
 	        	
 	        	seriesName = new String[2];
 	        	

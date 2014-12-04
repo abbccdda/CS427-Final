@@ -22,7 +22,7 @@ DiagnosisStatisticsBean avgBean = null;
 
 if ( view.equalsIgnoreCase("trends") ) {
 	
-	DSchart.initializeDiagnosisStatistics(dsBean, view);
+	DSchart.initializeEightWeekStatistics(beans, view);
 	
 } else  {
 	

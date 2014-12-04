@@ -58,8 +58,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "72.00");
 		form.getScriptableObject().setParameterValue("zipCode", "27695");
-		form.getScriptableObject().setParameterValue("startDate", "06/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
@@ -67,7 +66,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		
 		WebTable table = wr.getTableWithID("diagnosisStatisticsTable");
 		assertTrue(table.getCellAsText(1, 2).contains("0"));
-		assertTrue(table.getCellAsText(1, 3).contains("2"));
+		assertTrue(table.getCellAsText(1, 3).contains("0"));
 	}
 	
 	/*
@@ -155,17 +154,15 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "487.00");
 		form.getScriptableObject().setParameterValue("zipCode", "27695");
-		form.getScriptableObject().setParameterValue("startDate", "08/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
 		assertLogged(TransactionType.DIAGNOSIS_TRENDS_VIEW, 9000000008L, 0L, "");
 				
 		WebTable table = wr.getTableWithID("diagnosisStatisticsTable");
-		long local1 = Long.parseLong(table.getCellAsText(1, 2));
-		long region1 = Long.parseLong(table.getCellAsText(1, 3));
-		
+		long local1 = Long.parseLong(table.getCellAsText(8, 2));
+		long region1 = Long.parseLong(table.getCellAsText(8, 3));
 		
 		// click Document Office Visit
 		wr = wr.getLinkWith("Document Office Visit").click();
@@ -209,16 +206,15 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "487.00");
 		form.getScriptableObject().setParameterValue("zipCode", "27606-1234");
-		form.getScriptableObject().setParameterValue("startDate", "08/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
 		assertLogged(TransactionType.DIAGNOSIS_TRENDS_VIEW, 9000000008L, 0L, "");
 						
 		table = wr.getTableWithID("diagnosisStatisticsTable");
-		long local2 = Long.parseLong(table.getCellAsText(1, 2));
-		long region2 = Long.parseLong(table.getCellAsText(1, 3));
+		long local2 = Long.parseLong(table.getCellAsText(8, 2));
+		long region2 = Long.parseLong(table.getCellAsText(8, 3));
 		assertEquals(local1+1, local2);
 		assertEquals(region1+1, region2);
 	}
@@ -259,8 +255,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "487.00");
 		form.getScriptableObject().setParameterValue("zipCode", "276");
-		form.getScriptableObject().setParameterValue("startDate", "08/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
@@ -305,15 +300,14 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "84.50");
 		form.getScriptableObject().setParameterValue("zipCode", "27519");
-		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "08/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "0asd11");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
 		assertLogged(TransactionType.DIAGNOSIS_TRENDS_VIEW, 9000000000L, 0L, "");
 			
 		assertTrue(wr.getText().contains("Information not valid"));
-		assertTrue(wr.getText().contains("Start date must be before end date!"));
+		assertTrue(wr.getText().contains("Enter dates in MM/dd/yyyy"));
 	}
 	
 	/*
@@ -356,8 +350,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "84.50");
 		form.getScriptableObject().setParameterValue("zipCode", "27695");
-		form.getScriptableObject().setParameterValue("startDate", "06/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
@@ -369,8 +362,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "84.50");
 		form.getScriptableObject().setParameterValue("zipCode", "27606");
-		form.getScriptableObject().setParameterValue("startDate", "06/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
@@ -396,7 +388,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 	 * testViewDiagnosisTrends_SameDateStartEnd
 	 * @throws Exception
 	 */
-	public void testViewDiagnosisTrends_SameDateStartEnd() throws Exception {
+/*	public void testViewDiagnosisTrends_SameDateStartEnd() throws Exception {
 		// hcp views diagnosis statistics for malaria
 		// login hcp
 		WebConversation wc = login("9000000000", "pw");
@@ -428,7 +420,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		WebTable table = wr.getTableWithID("diagnosisStatisticsTable");
 		assertTrue(table.getCellAsText(1, 2).contains("0"));
 		assertTrue(table.getCellAsText(1, 3).contains("0"));
-	}
+	}*/
 	
 	/*
 	 * Authenticate HCP
@@ -465,17 +457,16 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "487.00");
 		form.getScriptableObject().setParameterValue("zipCode", "27607");
-		form.getScriptableObject().setParameterValue("startDate", "08/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());
 		assertLogged(TransactionType.DIAGNOSIS_TRENDS_VIEW, 9000000008L, 0L, "");
 		
 		WebTable table = wr.getTableWithID("diagnosisStatisticsTable");
-		long local = Long.parseLong(table.getCellAsText(1, 2));
-		long region = Long.parseLong(table.getCellAsText(1, 3));
-		assertTrue(local <= region);
+		long region = Long.parseLong(table.getCellAsText(1, 2));
+		long state = Long.parseLong(table.getCellAsText(1, 3));
+		assertTrue(region <= state);
 	}
 	
 	/*
@@ -514,8 +505,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 		form = wr.getFormWithID("formMain");
 		form.getScriptableObject().setParameterValue("icdCode", "");
 		form.getScriptableObject().setParameterValue("zipCode", "27695");
-		form.getScriptableObject().setParameterValue("startDate", "06/28/2011");
-		form.getScriptableObject().setParameterValue("endDate", "09/28/2011");
+		form.getScriptableObject().setParameterValue("startDate", "09/28/2011");
 		form.getSubmitButtons()[0].click();
 		wr = wc.getCurrentPage();
 		assertEquals(ADDRESS + "auth/hcp-pha/viewDiagnosisStatistics.jsp", wr.getURL().toString());

@@ -820,6 +820,9 @@ public class TestDataGenerator {
 		uc64();
 		reviews();
 		
+		influenza_epidemic();
+		malaria_epidemic();
+		
 		if(!checkIfZipsExists()){
 			zipCodes();
 		}
