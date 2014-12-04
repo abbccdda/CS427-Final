@@ -818,6 +818,8 @@ public class TestDataGenerator {
 		uc56();
 		uc63();
 		uc64();
+		reviews();
+		
 		if(!checkIfZipsExists()){
 			zipCodes();
 		}

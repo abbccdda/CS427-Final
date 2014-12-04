@@ -651,13 +651,18 @@ CREATE TABLE requiredprocedures(
 )ENGINE=innoDB;
     
 CREATE TABLE reviews(
+	id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mid  BIGINT UNSIGNED NOT NULL,
     pid  BIGINT UNSIGNED NOT NULL,
     reviewdate DATETIME NOT NULL,
     descriptivereview VARCHAR(500),
     rating INT UNSIGNED NOT NULL,
-    title VARCHAR(200)
-)ENGINE=innoDB;
+    title VARCHAR(200),
+    FOREIGN KEY (pid)
+		REFERENCES personnel(MID)
+		ON DELETE cascade
+		ON UPDATE cascade 
+)ENGINE=MyISAM;
 
 
 CREATE TABLE IF NOT EXISTS zipcodes (

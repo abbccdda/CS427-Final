@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class ReviewsBean 
 {
+	private long id;
 	private long MID;
 	private Date dateOfReview;
 	private long PID;
@@ -19,6 +20,20 @@ public class ReviewsBean
 	private String descriptiveReview;
 	private String title;
 	
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	/**
 	 * Gets the MID of the reviewer.
 	 * @return MID
