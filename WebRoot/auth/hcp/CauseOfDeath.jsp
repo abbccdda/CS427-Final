@@ -7,11 +7,13 @@
 <%@page import="edu.ncsu.csc.itrust.beans.MessageBean"%>
 <%@page import="edu.ncsu.csc.itrust.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.dao.mysql.PersonnelDAO"%>
+<%@page import="edu.ncsu.csc.itrust.dao.mysql.CauseOfDeathDAO" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Calendar"%>
+<%@page import="edu.ncsu.csc.itrust.beans.CauseOfDeathBean"%>
 
 <%@include file="/global.jsp" %>
 
@@ -51,15 +53,137 @@ pageTitle = "iTrust - Cause of Death Trends";
 
 <%
 	String start = new String();
-	start = "2013";
 	String end = new String();
-	end = "2014";
+	String type1 = new String();
+	String type2 = new String();
+	String num1 = new String();
+	String num2 = new String();
+	
+	String gender = new String();
+	String patient = new String();
+	
+	if(request.getParameter("find")!=null){
+		start = request.getParameter("startDate");
+		end = request.getParameter("endDate");
+	}
+	
+	CauseOfDeathDAO dao = new CauseOfDeathDAO(prodDAO);
+	if(request.getParameter("find") != null) {
+		if(request.getParameter("chooseby").equals("all")){
+			patient = "All Patients";
+			if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("all")) {
+				List<CauseOfDeathBean> death = dao.getTop2All(loggedInMID, null, Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "All Genders";
+			}
+			
+			else if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("male")) {
+				List<CauseOfDeathBean> death = dao.getTop2All(loggedInMID, "Male", Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "Male";
+			}
+			
+			else if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("female")) {
+				List<CauseOfDeathBean> death = dao.getTop2All(loggedInMID, "Female", Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "Female";
+			}
+		}
+		else {
+			patient = "My Patients";
+			if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("all")) {
+				List<CauseOfDeathBean> death = dao.getTop2Specific(loggedInMID, null, Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "All Genders";
+			}
+			
+			else if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("male")) {
+				List<CauseOfDeathBean> death = dao.getTop2Specific(loggedInMID, "Male", Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "Male";
+			}
+			
+			else if(start.length() == 4 && end.length() == 4 && request.getParameter("sortby").equals("female")) {
+				List<CauseOfDeathBean> death = dao.getTop2Specific(loggedInMID, "Female", Integer.parseInt(start), Integer.parseInt(end));
+				
+				if(death.size() > 0) {
+					type1 = death.get(0).getDescription();
+					num1 = ""+ death.get(0).getCount();
+				}
+				
+				if(death.size() > 1) {
+					type2 = death.get(1).getDescription();
+					num2 = ""+ death.get(1).getCount();
+				}
+				
+				gender = "Female";
+			}
+		}
+	}
+	
+	
 %>	
 	
 <div align="center">
 	<form method="post">	
 		<table>
 			<tr>
+				<td>
+					<select name="chooseby">
+						<option value="all">All Patients</option>
+						<option value="my">My Patients</option>
+					</select>
+				</td>
 				<td>
 					<select name="sortby">
 							<option value="all">All Genders</option>
@@ -83,22 +207,30 @@ pageTitle = "iTrust - Cause of Death Trends";
 	</form>
 </div>
 
+<%if(!(start.length() == 4 && end.length() == 4 && type1.length() > 0)) {%>
+	<h4 align="center">Please Enter a Valid Query.</h4>
+<%} %>
+
+<% if(start.length() == 4 && end.length() == 4 && type1.length() > 0) {%>
 <div align="center">
-	<h4>Results for male (2013-2014)</h4>
+	<h4>Results for <%= StringEscapeUtils.escapeHtml("" + (gender)) %> (<%= StringEscapeUtils.escapeHtml("" + (start)) %>-<%= StringEscapeUtils.escapeHtml("" + (end)) %>)</h4>
+	<h5><%= StringEscapeUtils.escapeHtml("" + (patient)) %></h5>
 	<table class="fancyTable" id="deathtable" width="80%">
 		<tr>
 			<th>Cause of Death</th>
 			<th>Number of Deaths</th>
 		</tr>
 		<tr>
-			<td>Guns</td>
-			<td>500000</td>
+			<td><%= StringEscapeUtils.escapeHtml("" + (type1)) %></td>
+			<td><%= StringEscapeUtils.escapeHtml("" + (num1)) %></td>
 		</tr>
 		<tr>
-			<td>Knives</td>
-			<td>300000</td>
+			<td><%= StringEscapeUtils.escapeHtml("" + (type2)) %></td>
+			<td><%= StringEscapeUtils.escapeHtml("" + (num2)) %></td>
 		</tr>
 	</table>
 </div>
+
+<% } %>
 
 <%@include file="/footer.jsp" %>

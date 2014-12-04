@@ -45,6 +45,9 @@ public class CauseOfDeathDAO {
 		Connection conn = null;
 		PreparedStatement pstring = null;
 		
+		if(lowerYear > upperYear)
+			return new ArrayList<CauseOfDeathBean>();
+		
 		try {
 			conn = factory.getConnection();
 				if (gender != null){
@@ -59,11 +62,12 @@ public class CauseOfDeathDAO {
 			
 				final ResultSet results = pstring.executeQuery();
 				List<CauseOfDeathBean> result = new ArrayList<CauseOfDeathBean>();
-				results.absolute(1);
-				result.add(this.codbloader.loadSingleWithMID(results, mid));
-				if (results.next())
+				if(results.next()) {
+					results.absolute(1);
 					result.add(this.codbloader.loadSingleWithMID(results, mid));
-			
+					if (results.next())
+						result.add(this.codbloader.loadSingleWithMID(results, mid));
+				}
 				return result;
 			}
 			else {
@@ -77,11 +81,12 @@ public class CauseOfDeathDAO {
 				
 					final ResultSet results = pstring.executeQuery();
 					List<CauseOfDeathBean> result = new ArrayList<CauseOfDeathBean>();
-					//List<CauseOfDeathBean> result = codbloader.loadSingleWithMID(results, mid);
-					results.absolute(1);
-					result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
-					if (results.next())
+					if(results.next()) {
+						results.absolute(1);
 						result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
+						if (results.next())
+							result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
+					}
 				
 					return result;
 			}
@@ -107,6 +112,9 @@ public class CauseOfDeathDAO {
 		Connection conn = null;
 		PreparedStatement pstring = null;
 		
+		if(lowerYear > upperYear)
+			return new ArrayList<CauseOfDeathBean>();
+		
 		try {
 			conn = factory.getConnection();
 			if (gender != null){
@@ -123,11 +131,12 @@ public class CauseOfDeathDAO {
 			
 				final ResultSet results = pstring.executeQuery();
 				List<CauseOfDeathBean> result = new ArrayList<CauseOfDeathBean>();
-				results.absolute(1);
-				result.add(this.codbloader.loadSingleWithMID(results, mid));
-				if (results.next())
+				if(results.next()){
+					results.absolute(1);
 					result.add(this.codbloader.loadSingleWithMID(results, mid));
-			
+					if (results.next())
+						result.add(this.codbloader.loadSingleWithMID(results, mid));
+				}
 				return result;
 			} else {
 				pstring = conn.prepareStatement("select Gender, Description, Code, count(Code) from "
@@ -142,11 +151,12 @@ public class CauseOfDeathDAO {
 					
 					final ResultSet results = pstring.executeQuery();
 					List<CauseOfDeathBean> result = new ArrayList<CauseOfDeathBean>();
-					results.absolute(1);
-					result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
-					if (results.next())
+					if(results.next()) {
+						results.absolute(1);
 						result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
-					
+						if (results.next())
+							result.add(this.codbloader.loadSingleWithMIDNullGender(results, mid));
+					}
 					return result;
 			}
 		} catch (SQLException e) {
