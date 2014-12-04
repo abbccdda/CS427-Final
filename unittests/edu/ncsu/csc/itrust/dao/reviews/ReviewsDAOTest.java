@@ -61,6 +61,18 @@ public class ReviewsDAOTest {
 	}
 	
 	@Test
+	public void testGetAllReviewsThrows() throws Exception {
+		try {
+			setUp();
+			rdao = new ReviewsDAO(null);
+			List<ReviewsBean> l = rdao.getAllReviews();
+		} catch (Exception e) {
+			assertTrue(true);
+		}
+		
+	}
+	
+	@Test
 	public void testDeleteReviews() throws Exception {
 		try {
 			List<ReviewsBean> l = rdao.getAllReviews();
