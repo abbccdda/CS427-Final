@@ -207,7 +207,7 @@ pageTitle = "iTrust - Cause of Death Trends";
 	</form>
 </div>
 
-<%if(!(start.length() == 4 && end.length() == 4 && type1.length() > 0)) {%>
+<%if(!(start.length() == 4 && end.length() == 4 && type1.length() > 0) && request.getParameter("find") != null) {%>
 	<h4 align="center">Please Enter a Valid Query.</h4>
 <%} %>
 
