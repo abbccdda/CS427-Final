@@ -5,6 +5,7 @@ if (userRole.equals("hcp")) {
 	<span>Add</span><br />
 	<a href="/iTrust/auth/hcp-uap/addPatient.jsp">Patient</a><br />
 	<a href="/iTrust/auth/hcp/addUAP.jsp">UAP</a><br />
+	<a href="/iTrust/auth/hcp-uap/causeOfDeath.jsp">Cause of Death Trends</a><br />
 </div>
 <div class="menu_category">
 	<span>Edit</span><br />
