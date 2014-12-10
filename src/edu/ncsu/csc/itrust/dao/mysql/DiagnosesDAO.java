@@ -31,7 +31,7 @@ import edu.ncsu.csc.itrust.exception.DBException;
  *  
  *  
  */
-
+//cite work with chizhou3 for previous two week implementation
 public class DiagnosesDAO {
 	private DAOFactory factory;
 	private DiagnosisBeanLoader loader = new DiagnosisBeanLoader(true);

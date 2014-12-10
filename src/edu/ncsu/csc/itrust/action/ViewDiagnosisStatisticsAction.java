@@ -21,6 +21,7 @@ import edu.ncsu.csc.itrust.exception.ITrustException;
  * Used for the View Diagnosis Statistics page. Can return a list of all Diagnoses
  * and get diagnosis statistics for a specified Zip code, Diagnosis code, and date range.
  */
+//cite work with chizhou3 for modifying the view stat epidemic
 public class ViewDiagnosisStatisticsAction {
 	/** Database access methods for ICD codes (diagnoses) */
 	private ICDCodesDAO icdDAO;
@@ -319,8 +320,9 @@ public class ViewDiagnosisStatisticsAction {
 	while( cal.getTime().before(wkDate) && cal.get(Calendar.YEAR) != wkDateCal.get(Calendar.YEAR)) {
 	dbList.add( diagnosesDAO.getPreviousTwoWeeksRecord(ICD_MALARIA, zip, cal.getTime()) );
 	cal.add(Calendar.YEAR, 1);
-	cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
 	cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+	cal.set(Calendar.WEEK_OF_YEAR, weekOfYr);
+	
 	}
 	  long historicalTotal = 0;
 	for (DiagnosisStatisticsBean d : dbList) {

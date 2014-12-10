@@ -817,7 +817,6 @@ public class TestDataGenerator {
 		uc55();
 		uc56();
 		uc63();
-		uc64();
 		reviews();
 		
 		influenza_epidemic();

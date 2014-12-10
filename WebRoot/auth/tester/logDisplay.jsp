@@ -45,7 +45,7 @@ out.print(userRole1.toString() + "<br>");
 out.print(userRole2.toString() + "<br>"); */
 %>
 
-<table border=1>
+<table border=1 id = "log">
 <tr>
 	<th>LogID</th>
 	<th>Logging time</th>
@@ -70,11 +70,11 @@ out.print(userRole2.toString() + "<br>"); */
 <tr>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionID())) %></td>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getTimeLogged())) %></td>
+	<td><%= StringEscapeUtils.escapeHtml("" + (t.getLoggedInMID())) %></td>
+	<td><%= StringEscapeUtils.escapeHtml("" + (t.getSecondaryMID())) %></td>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().name())) %></td>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().getCode())) %></td>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getTransactionType().getDescription())) %></td>
-	<td><%= StringEscapeUtils.escapeHtml("" + (t.getLoggedInMID())) %></td>
-	<td><%= StringEscapeUtils.escapeHtml("" + (t.getSecondaryMID())) %></td>
 	<td><%= StringEscapeUtils.escapeHtml("" + (t.getAddedInfo())) %></td>
 </tr>
 <%

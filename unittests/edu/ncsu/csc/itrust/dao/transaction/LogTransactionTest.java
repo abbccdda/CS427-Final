@@ -1,6 +1,8 @@
 package edu.ncsu.csc.itrust.dao.transaction;
 
+import java.sql.Date;
 import java.util.List;
+
 import junit.framework.TestCase;
 import edu.ncsu.csc.itrust.beans.TransactionBean;
 import edu.ncsu.csc.itrust.dao.mysql.TransactionDAO;
@@ -18,7 +20,7 @@ public class LogTransactionTest extends TestCase {
 		gen.clearAllTables();
 		gen.transactionLog();
 	}
-
+	
 	public void testGetAllTransactions() throws Exception {
 		List<TransactionBean> list = tranDAO.getAllTransactions();
 		assertEquals(8, list.size());

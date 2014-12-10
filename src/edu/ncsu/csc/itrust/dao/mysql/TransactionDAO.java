@@ -149,91 +149,45 @@ public class TransactionDAO {
 		return null;
 	}
 	
-	
-	
-
 	/**
-	 * query the database with month and year(added !!)
-	 * @param role1
-	 * @param role2
-	 * @param tranType
-	 * @param startD
-	 * @param endD
-	 * @return
+	 * Log a transaction, with all of the info. The meaning of secondaryMID and
+	 * addedInfo changes depending on the transaction type.
+	 * 
+	 * @param type
+	 *            The {@link TransactionType} enum representing the type this
+	 *            transaction is.
+	 * @param loggedInMID
+	 *            The MID of the user who is logged in.
+	 * @param secondaryMID
+	 *            Typically, the MID of the user who is being acted upon.
+	 * @param addedInfo
+	 *            A note about a subtransaction, or specifics of this
+	 *            transaction (for posterity).
 	 * @throws DBException
-	 * @throws SQLException
 	 */
-	public HashMap<String, Long> getLogByTime(String role1, String role2, String tranType,
-			java.util.Date startD, java.util.Date endD)
-			throws DBException, SQLException {
-		
+	public void logTransaction(TransactionType type, long loggedInMID,
+			long secondaryMID, String addedInfo) throws DBException {
 		Connection conn = null;
 		PreparedStatement ps = null;
-
 		try {
 			conn = factory.getConnection();
-			
-			String update = "CREATE OR REPLACE view table3 as SELECT * FROM transactionlog WHERE (loggedInMID IN (select MID from users where role LIKE ?)) AND (secondaryMID IN (select MID from users where role LIKE ?)) AND transactionCode LIKE ? AND timeLogged >= ? AND timeLogged <= ?;";
-
 			ps = conn
-					.prepareStatement(update);
-
-			ps.setTimestamp(4, new Timestamp(startD.getTime()));
-			ps.setTimestamp(5, new Timestamp(endD.getTime() + 1000L * 60L
-					* 60 * 24L));
-			ps.setString(1, role1);
-			ps.setString(2, role2);
-			ps.setString(3, tranType);
-			
-			System.out.println(ps);
+					.prepareStatement("INSERT INTO transactionlog(loggedInMID, secondaryMID, "
+							+ "transactionCode, addedInfo) VALUES(?,?,?,?)");
+			ps.setLong(1, loggedInMID);
+			ps.setLong(2, secondaryMID);
+			ps.setInt(3, type.getCode());
+			ps.setString(4, addedInfo);
 			ps.executeUpdate();
-			
-			String query = "SELECT count(*) AS count, YEAR(timeLogged) AS year, MONTH(timeLogged) AS month FROM table3 GROUP BY YEAR(timeLogged), MONTH(timeLogged)";
-			
-			ps = conn
-					.prepareStatement(query);
-			
-			
-
-			HashMap<String, Long> map = new HashMap<String, Long>();
-			
-			ResultSet rs = ps.executeQuery();
-//			if(rs.getFetchSize() < 1){
-//				ps.close();
-//				rs.close();
-//				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE timeLogged >= ? AND timeLogged <= ?");
-//				ps.setTimestamp(1, new Timestamp(startD.getTime()));
-//				ps.setTimestamp(2, new Timestamp(endD.getTime() + 1000L * 60L
-//						* 60 * 24L));
-//				rs = ps.executeQuery();
-//				
-//			}
-			
-			
-			while (rs.next()) {
-				
-				//String dateString = rs.getString("month") + "_" + rs.getString("year");
-				//System.out.println(dateString);
-				//map.put(dateString, rs.getLong("count"));
-				System.out.println("look at it!");
-				System.out.println(rs.toString());
-			}
-		
 			ps.close();
-			rs.close();
+		} catch (SQLException e) {
 
-			 
-			
-			return map;
-			
-		}  
-		catch (Exception e) {
-		      e.printStackTrace();
-		    } finally {
+			throw new DBException(e);
+		} finally {
 			DBUtil.closeConnection(conn, ps);
 		}
-		return null;
 	}
+
 	/**
 	 * query the transaction log by given transaction type(!!added)
 	 * @param role1
@@ -317,45 +271,7 @@ public class TransactionDAO {
 		logTransaction(type, loggedInMID, 0L, "");
 	}
 
-	/**
-	 * Log a transaction, with all of the info. The meaning of secondaryMID and
-	 * addedInfo changes depending on the transaction type.
-	 * 
-	 * @param type
-	 *            The {@link TransactionType} enum representing the type this
-	 *            transaction is.
-	 * @param loggedInMID
-	 *            The MID of the user who is logged in.
-	 * @param secondaryMID
-	 *            Typically, the MID of the user who is being acted upon.
-	 * @param addedInfo
-	 *            A note about a subtransaction, or specifics of this
-	 *            transaction (for posterity).
-	 * @throws DBException
-	 */
-	public void logTransaction(TransactionType type, long loggedInMID,
-			long secondaryMID, String addedInfo) throws DBException {
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try {
-			conn = factory.getConnection();
-			ps = conn
-					.prepareStatement("INSERT INTO transactionlog(loggedInMID, secondaryMID, "
-							+ "transactionCode, addedInfo) VALUES(?,?,?,?)");
-			ps.setLong(1, loggedInMID);
-			ps.setLong(2, secondaryMID);
-			ps.setInt(3, type.getCode());
-			ps.setString(4, addedInfo);
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-
-			throw new DBException(e);
-		} finally {
-			DBUtil.closeConnection(conn, ps);
-		}
-	}
-
+	
 	/**
 	 * Return a list of all transactions in which an HCP accessed the given
 	 * patient's record
@@ -395,6 +311,96 @@ public class TransactionDAO {
 		}
 	}
 	/**
+	 * 
+	 * @param tbList
+	 * @param patientID
+	 * @param sortByRole
+	 * @return
+	 * @throws DBException
+	 */
+	private List<TransactionBean> addAndSortRoles(List<TransactionBean> tbList,
+			long patientID, boolean sortByRole) throws DBException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			conn = factory.getConnection();
+
+			for (TransactionBean t : tbList) {
+				ps = conn
+						.prepareStatement("SELECT Role FROM users WHERE MID=?");
+				ps.setLong(1, t.getLoggedInMID());
+				ResultSet rs = ps.executeQuery();
+				String role = "";
+				if (rs.next())
+					role = rs.getString("Role");
+				if (role.equals("er"))
+					role = "Emergency Responder";
+				else if (role.equals("uap"))
+					role = "UAP";
+				else if (role.equals("hcp")) {
+					role = "LHCP";
+					ps = conn
+							.prepareStatement("SELECT PatientID FROM declaredhcp WHERE HCPID=?");
+					ps.setLong(1, t.getLoggedInMID());
+					ResultSet rs2 = ps.executeQuery();
+					while (rs2.next()) {
+						if (rs2.getLong("PatientID") == patientID) {
+							role = "DLHCP";
+							break;
+						}
+					}
+					rs2.close();
+				} else if (role.equals("patient")) {
+					role = "Patient";
+					ps = conn
+							.prepareStatement("SELECT representeeMID FROM representatives WHERE representerMID=?");
+					ps.setLong(1, t.getLoggedInMID());
+					ResultSet rs2 = ps.executeQuery();
+					while (rs2.next()) {
+						if (rs2.getLong("representeeMID") == patientID) {
+							role = "Personal Health Representative";
+							break;
+						}
+					}
+					rs2.close();
+				}
+
+				t.setRole(role);
+				rs.close();
+				ps.close();
+			}
+
+			if (sortByRole) {
+				TransactionBean[] array = new TransactionBean[tbList.size()];
+				array[0] = tbList.get(0);
+				TransactionBean t;
+				for (int i = 1; i < tbList.size(); i++) {
+					t = tbList.get(i);
+					String role = t.getRole();
+					int j = 0;
+					while (array[j] != null
+							&& role.compareToIgnoreCase(array[j].getRole()) >= 0)
+						j++;
+					for (int k = i; k > j; k--) {
+						array[k] = array[k - 1];
+					}
+					array[j] = t;
+				}
+				int size = tbList.size();
+				for (int i = 0; i < size; i++)
+					tbList.set(i, array[i]);
+			}
+
+			return tbList;
+		} catch (SQLException e) {
+
+			throw new DBException(e);
+		} finally {
+			DBUtil.closeConnection(conn, ps);
+		}
+	}
+	/**
 	 * Get transaction log by specific fields(added!!) 
 	 * @param logR
 	 * @param secondR
@@ -416,40 +422,16 @@ public class TransactionDAO {
 			ps = conn
 					.prepareStatement("SELECT * FROM transactionlog WHERE (loggedInMID IN (select MID from users where role LIKE ?)) AND (secondaryMID IN (select MID from users where role LIKE ? or MID = '0') OR secondaryMID = '0')  AND transactionCode LIKE ? AND timeLogged >= ? AND timeLogged <= ? ORDER BY timeLogged DESC");
 
+			ps.setString(1, logR);
+			ps.setString(2, secondR);
 			ps.setTimestamp(4, new Timestamp(startD.getTime()));
 			ps.setTimestamp(5, new Timestamp(endD.getTime() + 1000L * 60L
 					* 60 * 24L));
-			ps.setString(1, logR);
-			ps.setString(2, secondR);
-			ps.setString(3, tranType);
 			
-//			System.out.println("The logRole is " + secondR);
-//			ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE loggedInMID IN (select MID from users where role LIKE ?) ");
-//			ps.setString(1, secondR);
+			ps.setString(3, tranType);
 			
 			ResultSet rs = ps.executeQuery();
 			System.out.println("rs size is " + rs.getFetchSize());
-//			ps.close();
-//			rs.close();
-//			ps = conn.prepareStatement("select MID from users where role LIKE ?");
-//			ps.setString(1, logR);
-//			rs = ps.executeQuery();
-//			System.out.println("rs's mid size is " + rs.getFetchSize());
-//
-//			while (rs.next()) {
-//				System.out.println("we have lines!");
-//			}
-			
-//			if(rs.getFetchSize() < 1){
-//				ps.close();
-//				rs.close();
-//				ps = conn.prepareStatement("SELECT * FROM transactionlog WHERE timeLogged >= ? AND timeLogged <= ?");
-//				ps.setTimestamp(1, new Timestamp(startD.getTime()));
-//				ps.setTimestamp(2, new Timestamp(endD.getTime() + 1000L * 60L
-//						* 60 * 24L));
-//				rs = ps.executeQuery();
-//				
-//			}
 			List<TransactionBean> logList = loader.loadList(rs);
 			rs.close();
 			ps.close();
@@ -591,95 +573,76 @@ public class TransactionDAO {
 			DBUtil.closeConnection(conn, ps);
 		}
 	}
+	
+
+	
+	
 
 	/**
-	 * 
-	 * @param tbList
-	 * @param patientID
-	 * @param sortByRole
+	 * query the database with month and year(added !!)
+	 * @param role1
+	 * @param role2
+	 * @param tranType
+	 * @param startD
+	 * @param endD
 	 * @return
 	 * @throws DBException
+	 * @throws SQLException
 	 */
-	private List<TransactionBean> addAndSortRoles(List<TransactionBean> tbList,
-			long patientID, boolean sortByRole) throws DBException {
+	public HashMap<String, Long> getLogByTime(String role1, String role2, String tranType,
+			java.util.Date startD, java.util.Date endD)
+			throws DBException, SQLException {
+		
 		Connection conn = null;
 		PreparedStatement ps = null;
 
 		try {
 			conn = factory.getConnection();
+			
+			String update = "CREATE OR REPLACE view newView as SELECT * FROM transactionlog WHERE (loggedInMID IN (select MID from users where role LIKE ?)) AND (secondaryMID IN (select MID from users where role LIKE ?)) AND transactionCode LIKE ? AND timeLogged >= ? AND timeLogged <= ?;";
 
-			for (TransactionBean t : tbList) {
-				ps = conn
-						.prepareStatement("SELECT Role FROM users WHERE MID=?");
-				ps.setLong(1, t.getLoggedInMID());
-				ResultSet rs = ps.executeQuery();
-				String role = "";
-				if (rs.next())
-					role = rs.getString("Role");
-				if (role.equals("er"))
-					role = "Emergency Responder";
-				else if (role.equals("uap"))
-					role = "UAP";
-				else if (role.equals("hcp")) {
-					role = "LHCP";
-					ps = conn
-							.prepareStatement("SELECT PatientID FROM declaredhcp WHERE HCPID=?");
-					ps.setLong(1, t.getLoggedInMID());
-					ResultSet rs2 = ps.executeQuery();
-					while (rs2.next()) {
-						if (rs2.getLong("PatientID") == patientID) {
-							role = "DLHCP";
-							break;
-						}
-					}
-					rs2.close();
-				} else if (role.equals("patient")) {
-					role = "Patient";
-					ps = conn
-							.prepareStatement("SELECT representeeMID FROM representatives WHERE representerMID=?");
-					ps.setLong(1, t.getLoggedInMID());
-					ResultSet rs2 = ps.executeQuery();
-					while (rs2.next()) {
-						if (rs2.getLong("representeeMID") == patientID) {
-							role = "Personal Health Representative";
-							break;
-						}
-					}
-					rs2.close();
-				}
+			ps = conn
+					.prepareStatement(update);
 
-				t.setRole(role);
-				rs.close();
-				ps.close();
+			ps.setTimestamp(4, new Timestamp(startD.getTime()));
+			ps.setTimestamp(5, new Timestamp(endD.getTime() + 1000L * 60L
+					* 60 * 24L));
+			ps.setString(1, role1);
+			ps.setString(2, role2);
+			ps.setString(3, tranType);
+			
+			System.out.println(ps);
+			ps.executeUpdate();
+			
+			String query = "SELECT count(*) AS count, YEAR(timeLogged) AS year, MONTH(timeLogged) AS month FROM newView GROUP BY YEAR(timeLogged), MONTH(timeLogged)";
+			
+			ps = conn
+					.prepareStatement(query);
+			
+			
+
+			HashMap<String, Long> map = new HashMap<String, Long>();
+			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				System.out.println("look at it!");
+				System.out.println(rs.toString());
 			}
+			ps.close();
+			rs.close();
 
-			if (sortByRole) {
-				TransactionBean[] array = new TransactionBean[tbList.size()];
-				array[0] = tbList.get(0);
-				TransactionBean t;
-				for (int i = 1; i < tbList.size(); i++) {
-					t = tbList.get(i);
-					String role = t.getRole();
-					int j = 0;
-					while (array[j] != null
-							&& role.compareToIgnoreCase(array[j].getRole()) >= 0)
-						j++;
-					for (int k = i; k > j; k--) {
-						array[k] = array[k - 1];
-					}
-					array[j] = t;
-				}
-				int size = tbList.size();
-				for (int i = 0; i < size; i++)
-					tbList.set(i, array[i]);
-			}
-
-			return tbList;
-		} catch (SQLException e) {
-
-			throw new DBException(e);
-		} finally {
+			 
+			
+			return map;
+			
+		}  
+		catch (Exception e) {
+		      e.printStackTrace();
+		    } finally {
 			DBUtil.closeConnection(conn, ps);
 		}
+		return null;
 	}
+
+	
 }

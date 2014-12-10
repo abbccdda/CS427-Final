@@ -40,7 +40,7 @@ for (int graph = 0; graph < 4; graph++) {
 	String title = "TEST";
 
 	if (graph == 0) {
-		title = "Role+vs+Transaction+For+Logged+In+User";
+		title = "Role+and+Transaction+For+Logged+In+User";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO()
 		.getLogForRole(userRole1.toString().toLowerCase(),
@@ -48,7 +48,7 @@ for (int graph = 0; graph < 4; graph++) {
 
 		
 	} else if (graph == 1) {
-		title = "Role+vs+Transaction+For+Secondary+User";
+		title = "Role+and+Transaction+For+Secondary+User";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO()
 		.getLogForRole(userRole2.toString().toLowerCase(),
@@ -56,7 +56,7 @@ for (int graph = 0; graph < 4; graph++) {
 		
 
 	} else if (graph == 2) {
-		title = "Month_Year+vs+Transaction";
+		title = "Month_Year+and+Transaction";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO().getLogByTime(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startD, endDate);
 		
@@ -64,7 +64,7 @@ for (int graph = 0; graph < 4; graph++) {
 
 		
 	} else if (graph == 3) {
-		title = "Transaction+Type+vs+Transaction";
+		title = "Transaction+Type+and+Transaction";
 		map = DAOFactory.getProductionInstance()
 		.getTransactionDAO().getLogByType(userRole1.toString().toLowerCase(), userRole2.toString().toLowerCase(), transactionType.toString(), startD, endDate);
 		
@@ -91,7 +91,7 @@ for (int graph = 0; graph < 4; graph++) {
 	values = sug[graph];
 	//values = values.substring(0, values.length() - 1);
 	
-	String chartURL = "https://chart.googleapis.com/chart?chs=800x200&amp;chd=t:";
+	String chartURL = "https://chart.googleapis.com/chart?chs=400x200&amp;chd=t:";
 	chartURL += values;
 	chartURL += "&amp;chds=a&amp;cht=bvs&amp;chxt=x,y&amp;chxl=0:";
 	
@@ -103,7 +103,7 @@ for (int graph = 0; graph < 4; graph++) {
 	chartURL += "&amp;chts=1FE89A,20,l";
 	chartURL += "&amp;chtt=";
 	chartURL += title;
-	chartURL += "&amp;chbh=a,50,0";
+	chartURL += "&amp;chbh=a,50,2";
 %><img src=<%=chartURL%>></img><%
 }
 

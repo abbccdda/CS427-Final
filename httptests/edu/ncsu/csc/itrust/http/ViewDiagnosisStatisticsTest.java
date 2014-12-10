@@ -551,7 +551,7 @@ public class ViewDiagnosisStatisticsTest extends iTrustHTTPTest {
 	}
 	
 	/**
-	 * viewDiagnosisEpidemics_YesEpidemic
+	 * viewDiagnosisEpidemics_YesEpidemic(customized)
 	 * @throws Exception
 	 */
 	public void viewDiagnosisEpidemics_YesEpidemic() throws Exception {
