@@ -29,15 +29,15 @@ public class LogTransactionTest extends TestCase {
 		assertEquals(TransactionType.DEMOGRAPHICS_EDIT, list.get(3).getTransactionType());
 	}
 	
-	/*public void testLogSimple() throws Exception {
-		tranDAO.logTransaction(TransactionType.PATIENT_REMINDERS, 9000000000L);
+	public void testLogSimple() throws Exception {
+		tranDAO.logTransaction(TransactionType.LOGIN_SUCCESS, 9000000000L);
 		List<TransactionBean> list = tranDAO.getAllTransactions();
 		assertEquals(9, list.size());
 		assertEquals(9000000000L, list.get(0).getLoggedInMID());
 		assertEquals(0L, list.get(0).getSecondaryMID());
 		assertEquals("", list.get(0).getAddedInfo());
-		assertEquals(TransactionType.PATIENT_REMINDERS, list.get(0).getTransactionType());
-	}*/
+		assertEquals(TransactionType.LOGIN_SUCCESS, list.get(0).getTransactionType());
+	}
 	
 	public void testLogFull() throws Exception {
 		tranDAO.logTransaction(TransactionType.OFFICE_VISIT_EDIT, 9000000000L, 1L, "added information");
